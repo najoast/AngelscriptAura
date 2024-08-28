@@ -1,5 +1,0 @@
-
-class UAuraEnemyAttributeSet : UAuraAttributeSet
-{
-	
-}

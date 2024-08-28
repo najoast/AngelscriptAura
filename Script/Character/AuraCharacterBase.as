@@ -9,7 +9,7 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 	void BeginPlay()
 	{
 		// This is how we register an attribute set with an actor.
-		AbilitySystem.RegisterAttributeSet(UAuraPlayerAttributeSet::StaticClass());
+		AbilitySystem.RegisterAttributeSet(UAuraAttributeSet::StaticClass());
 		AbilitySystem.InitAbilityActorInfo(this, this);	
 	}
 }

@@ -1,5 +1,6 @@
 
-class UAuraPlayerAttributeSet : UAuraAttributeSet
+// Add GameplayAbilities/GameplayTags/GameplayTasks to Aura.Build.cs private dependencies
+class UAuraAttributeSet : UAngelscriptAttributeSet
 {
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
 	FAngelscriptGameplayAttributeData Health;
@@ -14,7 +15,7 @@ class UAuraPlayerAttributeSet : UAuraAttributeSet
 	FAngelscriptGameplayAttributeData MaxMana;
 
 	// Constructor?
-	UAuraPlayerAttributeSet()
+	UAuraAttributeSet()
 	{
 		Health.Initialize(100);
 		MaxHealth.Initialize(100);
@@ -26,5 +27,5 @@ class UAuraPlayerAttributeSet : UAuraAttributeSet
 	void OnRep_ReplicationTrampoline(FAngelscriptGameplayAttributeData& OldAttributeData)
 	{
 		OnRep_Attribute(OldAttributeData);
-	}
+	}	
 }
