@@ -20,4 +20,12 @@ class AAuraCharacter : AAuraCharacterBase
 	default bUseControllerRotationPitch = false;
 	default bUseControllerRotationRoll = false;
 	default bUseControllerRotationYaw = false;
+
+	// --------- functions ----------
+
+	UFUNCTION(BlueprintOverride)
+	void Possessed(AController NewController)
+	{
+	}
+
 }

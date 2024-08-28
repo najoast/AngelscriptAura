@@ -13,11 +13,4 @@ class AAuraEnemy : AAuraCharacterBase
 		Weapon.RenderCustomDepth = false;
 	}
 
-	// UFUNCTION(BlueprintOverride)
-	// void Tick(float DeltaTime)
-	// {
-	// 	if (IsHighlight) {
-	// 		System::DrawDebugSphere(GetActorLocation(), 50, 12, FLinearColor::Red);
-	// 	}
-	// }
 }

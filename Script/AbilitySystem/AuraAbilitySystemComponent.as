@@ -1,5 +1,0 @@
-
-class UAuraAbilitySystemComponent : UAbilitySystemComponent
-{
-	
-}
