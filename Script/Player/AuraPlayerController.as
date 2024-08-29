@@ -20,10 +20,11 @@ class AAuraPlayerController : APlayerController
 	void BeginPlay()
 	{
 		check(AuraContext != nullptr);
-		UEnhancedInputLocalPlayerSubsystem EnhancedInput = UEnhancedInputLocalPlayerSubsystem::Get(this);
-		check(EnhancedInput != nullptr);
-		FModifyContextOptions Option;
-		EnhancedInput.AddMappingContext(AuraContext, 0, Option);
+		UEnhancedInputLocalPlayerSubsystem Subsystem = UEnhancedInputLocalPlayerSubsystem::Get(this);
+		if (Subsystem != nullptr) {
+			FModifyContextOptions Option;
+			Subsystem.AddMappingContext(AuraContext, 0, Option);
+		}
 
 		bShowMouseCursor = true;
 

@@ -8,8 +8,24 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 	UFUNCTION(BlueprintOverride)
 	void BeginPlay()
 	{
+		InitAbilityActorInfo();
+	}
+
+	// https://github.com/DruidMech/GameplayAbilitySystem_Aura/blob/main/Source/Aura/Private/Character/AuraCharacter.cpp
+	void InitAbilityActorInfo()
+	{
 		// This is how we register an attribute set with an actor.
-		AbilitySystem.RegisterAttributeSet(UAuraAttributeSet::StaticClass());
+		UAuraAttributeSet AttributeSet = Cast<UAuraAttributeSet>(AbilitySystem.RegisterAttributeSet(UAuraAttributeSet::StaticClass()));
 		AbilitySystem.InitAbilityActorInfo(this, this);	
+
+		auto PlayerController = GetLocalViewingPlayerController();
+		if (PlayerController != nullptr)
+		{
+			auto AuraHUD = Cast<AAuraHUD>(PlayerController.GetHUD());
+			if (AuraHUD != nullptr)
+			{
+				AuraHUD.InitOverlay(PlayerController, PlayerState, AbilitySystem, AttributeSet);
+			}
+		}
 	}
 }
