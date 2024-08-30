@@ -7,5 +7,10 @@ class UAuraUserWidget : UUserWidget
 	void SetWidgetController(UAuraWidgetController InWidgetController)
 	{
 		WidgetController = InWidgetController;
+		OnWidgetControllerSet();
+	}
+
+	void OnWidgetControllerSet()
+	{
 	}
 }
