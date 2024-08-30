@@ -2,11 +2,11 @@ struct FWidgetControllerParams
 {
 	APlayerController PlayerController;
 	APlayerState PlayerState;
-	UAbilitySystemComponent AbilitySystemComponent;
-	UAttributeSet AttributeSet;
+	UAngelscriptAbilitySystemComponent AbilitySystemComponent;
+	UAuraAttributeSet AttributeSet;
 
 	FWidgetControllerParams() {}
-	FWidgetControllerParams(APlayerController InPlayerController, APlayerState InPlayerState, UAbilitySystemComponent InAbilitySystemComponent, UAttributeSet InAttributeSet)
+	FWidgetControllerParams(APlayerController InPlayerController, APlayerState InPlayerState, UAngelscriptAbilitySystemComponent InAbilitySystemComponent, UAuraAttributeSet InAttributeSet)
 	{
 		PlayerController = InPlayerController;
 		PlayerState = InPlayerState;
@@ -24,10 +24,10 @@ class UAuraWidgetController : UObject
 	APlayerState PlayerState;
 
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
-	UAbilitySystemComponent AbilitySystemComponent;
+	UAngelscriptAbilitySystemComponent AbilitySystemComponent;
 
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
-	UAttributeSet AttributeSet;
+	UAuraAttributeSet AttributeSet;
 
 	UFUNCTION()
 	void SetWidgetControllerParams(const FWidgetControllerParams& Params)

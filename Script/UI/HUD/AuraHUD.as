@@ -23,7 +23,7 @@ class AAuraHUD : AHUD
 		return OverlayWidgetController;
 	}
 
-	void InitOverlay(APlayerController PC, APlayerState PS, UAbilitySystemComponent ASC, UAttributeSet AS)
+	void InitOverlay(APlayerController PC, APlayerState PS, UAngelscriptAbilitySystemComponent ASC, UAuraAttributeSet AS)
 	{
 		check(OverlayWidgetClass != nullptr);
 		check(OverlayWidgetControllerClass != nullptr);

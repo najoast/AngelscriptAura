@@ -17,9 +17,9 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	// Constructor?
 	UAuraAttributeSet()
 	{
-		Health.Initialize(100);
+		Health.Initialize(10);
 		MaxHealth.Initialize(100);
-		Mana.Initialize(50);
+		Mana.Initialize(0);
 		MaxMana.Initialize(50);
 	}
 
