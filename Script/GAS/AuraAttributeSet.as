@@ -1,7 +1,16 @@
 
+namespace AuraAttributes
+{
+	const FName Health = n"Health";
+	const FName MaxHealth = n"MaxHealth";
+	const FName Mana = n"Mana";
+	const FName MaxMana = n"MaxMana";
+}
+
 // Add GameplayAbilities/GameplayTags/GameplayTasks to Aura.Build.cs private dependencies
 class UAuraAttributeSet : UAngelscriptAttributeSet
 {
+	// Attributes
 	UPROPERTY(BlueprintReadOnly, Replicated, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
 	FAngelscriptGameplayAttributeData Health;
 
@@ -14,7 +23,7 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	UPROPERTY(BlueprintReadOnly, Replicated, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
 	FAngelscriptGameplayAttributeData MaxMana;
 
-	// Constructor?
+	// Functions
 	UAuraAttributeSet()
 	{
 		Health.Initialize(10);
@@ -26,7 +35,17 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	UFUNCTION()
 	void OnRep_ReplicationTrampoline(FAngelscriptGameplayAttributeData& OldAttributeData)
 	{
-		Print("OnRep_ReplicationTrampoline");
+		Print(f"OnRep_ReplicationTrampoline: {OldAttributeData =}");
 		OnRep_Attribute(OldAttributeData);
-	}	
+	}
+
+	const FAngelscriptGameplayAttributeData& GetAttribute(FName AttributeName)
+	{
+		if (AttributeName == AuraAttributes::Health) return Health;
+		if (AttributeName == AuraAttributes::MaxHealth) return MaxHealth;
+		if (AttributeName == AuraAttributes::Mana) return Mana;
+		if (AttributeName == AuraAttributes::MaxMana) return MaxMana;
+		check(false);
+		return Health;
+	}
 }
