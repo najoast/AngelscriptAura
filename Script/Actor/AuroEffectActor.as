@@ -1,3 +1,10 @@
+/*
+Features:
+1. Have a static mesh component that is the mesh of the actor
+2. Have a sphere component that is the collision size of the actor
+3. Have a non-infinite gameplay effect that is applied to the actor when it overlaps with another actor
+4. Destroy self when the gameplay effect is applied (overlapping with another actor)
+*/
 
 class AAuroEffectActor : AActor
 {
@@ -26,16 +33,8 @@ class AAuroEffectActor : AActor
 		// 	DestroyActor();
 		// }
 
-		UAbilitySystemComponent OtherASC = AbilitySystem::GetAbilitySystemComponent(OtherActor);
-		if (OtherASC != nullptr)
-		{
-			check(GameplayEffectClass != nullptr);
-			FGameplayEffectContextHandle EffectContextHandle = OtherASC.MakeEffectContext();
-			EffectContextHandle.AddSourceObject(this);
-			FGameplayEffectSpecHandle EffectSpecHandle = OtherASC.MakeOutgoingSpec(GameplayEffectClass, 1, EffectContextHandle);
-			OtherASC.ApplyGameplayEffectSpecToSelf(EffectSpecHandle);
-			DestroyActor();
-		}
+		AuraUtil::ApplyGameplayEffect(this, OtherActor, GameplayEffectClass);
+		DestroyActor();
 	}
 
 	UFUNCTION(BlueprintOverride)
