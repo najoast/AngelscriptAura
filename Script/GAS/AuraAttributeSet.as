@@ -48,4 +48,35 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 		check(false);
 		return Health;
 	}
+
+	// Epic suggests that only should clamp the value in PreAttributeChange,
+	// don't execute complex logic in this function, eg: ApplyGameplayEffect
+	UFUNCTION(BlueprintOverride)
+	void PreAttributeChange(FGameplayAttribute Attribute, float32& NewValue)
+	{
+		if (Attribute.AttributeName == AuraAttributes::Health) {
+			NewValue = Math::Clamp(NewValue, float32(0), MaxHealth.GetCurrentValue());
+		} else if (Attribute.AttributeName == AuraAttributes::Mana) {
+			NewValue = Math::Clamp(NewValue, float32(0), MaxMana.GetCurrentValue());
+		}
+	}
+
+	UFUNCTION(BlueprintOverride)
+	void PostGameplayEffectExecute(FGameplayEffectSpec EffectSpec,
+								   FGameplayModifierEvaluatedData& EvaluatedData,
+								   UAngelscriptAbilitySystemComponent AbilitySystemComponent)
+	{
+		Print(f"PostGameplayEffectExecute: {EffectSpec =}");
+		FEffectProperties Props;
+		// Props.EffectContextHandle = EffectSpec.GetEffectContextHandle();
+		// Props.SourceASC = AbilitySystemComponent;
+		// Props.SourceAvatarActor = AbilitySystemComponent.GetAvatarActor();
+		// Props.SourceController = AbilitySystemComponent.GetOwnerController();
+		// Props.SourceCharacter = AbilitySystemComponent.GetOwnerCharacter();
+		// Props.TargetASC = EvaluatedData.TargetASC;
+		// Props.TargetAvatarActor = EvaluatedData.TargetAvatarActor;
+		// Props.TargetController = EvaluatedData.TargetController;
+		// Props.TargetCharacter = EvaluatedData.TargetCharacter;
+		// Aura::ExecuteGameplayEffect(Props);
+	}
 }
