@@ -66,11 +66,13 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 								   FGameplayModifierEvaluatedData& EvaluatedData,
 								   UAngelscriptAbilitySystemComponent TargetASC)
 	{
-		Print(f"PostGameplayEffectExecute: {EffectSpec =}");
+		// Print(f"PostGameplayEffectExecute: {EffectSpec =}");
 		FEffectProperties Props;
 		GetEffectProperties(Props, EffectSpec, TargetASC);
 	}
 
+	// This function is just a demostration of how to retrieve ASC info in PostGameplayEffectExecute.
+	// Currently, there is no real gameplay logic in it.
 	void GetEffectProperties(FEffectProperties& Props, FGameplayEffectSpec EffectSpec, UAngelscriptAbilitySystemComponent TargetASC)
 	{
 		Props.EffectContextHandle = EffectSpec.GetContext();
