@@ -69,6 +69,18 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 		// Print(f"PostGameplayEffectExecute: {EffectSpec =}");
 		FEffectProperties Props;
 		GetEffectProperties(Props, EffectSpec, TargetASC);
+
+		OnEffectApplied(EffectSpec, EvaluatedData, TargetASC);
+	}
+
+	// This function is called by OnGameplayEffectAppliedDelegateToSelf.Brocast() in the course.
+	// Because there is no OnGameplayEffectAppliedDelegateToSelf in the Angelscript, so I just call this function via PostGameplayEffectExecute.
+	void OnEffectApplied(FGameplayEffectSpec EffectSpec, FGameplayModifierEvaluatedData& EvaluatedData, UAngelscriptAbilitySystemComponent TargetASC)
+	{
+		const FGameplayTagContainer TagContainer = EffectSpec.GetAllAssetTags();
+		for (const FGameplayTag Tag : TagContainer.GameplayTags) {
+			Print(f"OnEffectApplied: {Tag.ToString() =}");
+		}
 	}
 
 	// This function is just a demostration of how to retrieve ASC info in PostGameplayEffectExecute.
