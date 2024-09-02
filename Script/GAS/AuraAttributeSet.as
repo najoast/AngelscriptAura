@@ -64,19 +64,37 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	UFUNCTION(BlueprintOverride)
 	void PostGameplayEffectExecute(FGameplayEffectSpec EffectSpec,
 								   FGameplayModifierEvaluatedData& EvaluatedData,
-								   UAngelscriptAbilitySystemComponent AbilitySystemComponent)
+								   UAngelscriptAbilitySystemComponent TargetASC)
 	{
 		Print(f"PostGameplayEffectExecute: {EffectSpec =}");
 		FEffectProperties Props;
-		// Props.EffectContextHandle = EffectSpec.GetEffectContextHandle();
-		// Props.SourceASC = AbilitySystemComponent;
-		// Props.SourceAvatarActor = AbilitySystemComponent.GetAvatarActor();
-		// Props.SourceController = AbilitySystemComponent.GetOwnerController();
-		// Props.SourceCharacter = AbilitySystemComponent.GetOwnerCharacter();
-		// Props.TargetASC = EvaluatedData.TargetASC;
-		// Props.TargetAvatarActor = EvaluatedData.TargetAvatarActor;
-		// Props.TargetController = EvaluatedData.TargetController;
-		// Props.TargetCharacter = EvaluatedData.TargetCharacter;
-		// Aura::ExecuteGameplayEffect(Props);
+		GetEffectProperties(Props, EffectSpec, TargetASC);
+	}
+
+	void GetEffectProperties(FEffectProperties& Props, FGameplayEffectSpec EffectSpec, UAngelscriptAbilitySystemComponent TargetASC)
+	{
+		Props.EffectContextHandle = EffectSpec.GetContext();
+		Props.SourceASC = Cast<UAngelscriptAbilitySystemComponent>(Props.EffectContextHandle.GetOriginalInstigatorAbilitySystemComponent());
+		RetrieveASCInfo(Props.SourceASC, Props.SourceAvatarActor, Props.SourceController, Props.SourceCharacter);
+		Props.TargetASC = TargetASC;
+		RetrieveASCInfo(Props.TargetASC, Props.TargetAvatarActor, Props.TargetController, Props.TargetCharacter);
+	}
+
+	void RetrieveASCInfo(UAngelscriptAbilitySystemComponent ASC, AActor& AvatarActor, AController& Controller, ACharacter& Character)
+	{
+		if (!IsValid(ASC)) {
+			return;
+		}
+		AvatarActor = ASC.AbilityActorInfo.GetAvatarActor();
+		Controller = ASC.AbilityActorInfo.GetPlayerController();
+		if (Controller == nullptr && AvatarActor != nullptr) {
+			const APawn Pawn = Cast<APawn>(AvatarActor);
+			if (Pawn != nullptr) {
+				Controller = Pawn.GetController();
+			}
+		}
+		if (Controller != nullptr) {
+			Character = Cast<ACharacter>(Controller.GetControlledPawn());
+		}
 	}
 }

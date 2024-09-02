@@ -4,7 +4,7 @@ struct FEffectProperties
 	FGameplayEffectContextHandle EffectContextHandle;
 
 	UPROPERTY()
-	UAbilitySystemComponent SourceASC = nullptr;
+	UAngelscriptAbilitySystemComponent SourceASC = nullptr;
 
 	UPROPERTY()
 	AActor SourceAvatarActor = nullptr;
@@ -16,7 +16,7 @@ struct FEffectProperties
 	ACharacter SourceCharacter = nullptr;
 
 	UPROPERTY()
-	UAbilitySystemComponent TargetASC = nullptr;
+	UAngelscriptAbilitySystemComponent TargetASC = nullptr;
 
 	UPROPERTY()
 	AActor TargetAvatarActor = nullptr;
