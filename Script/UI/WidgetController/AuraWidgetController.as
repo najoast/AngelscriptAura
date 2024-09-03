@@ -36,5 +36,11 @@ class UAuraWidgetController : UObject
 		PlayerState = Params.PlayerState;
 		AbilitySystemComponent = Params.AbilitySystemComponent;
 		AttributeSet = Params.AttributeSet;
+
+		OnWidgetControllerParamsSet(Params);
+	}
+
+	void OnWidgetControllerParamsSet(const FWidgetControllerParams& Params)
+	{
 	}
 }

@@ -7,6 +7,8 @@ namespace AuraAttributes
 	const FName MaxMana = n"MaxMana";
 }
 
+event void FOnGameplayEffectApplied(FGameplayEffectSpec EffectSpec, FGameplayModifierEvaluatedData EvaluatedData, UAngelscriptAbilitySystemComponent TargetASC);
+
 // Add GameplayAbilities/GameplayTags/GameplayTasks to Aura.Build.cs private dependencies
 class UAuraAttributeSet : UAngelscriptAttributeSet
 {
@@ -22,6 +24,8 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 
 	UPROPERTY(BlueprintReadOnly, Replicated, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
 	FAngelscriptGameplayAttributeData MaxMana;
+
+	FOnGameplayEffectApplied OnGameplayEffectAppliedEvent;
 
 	// Functions
 	UAuraAttributeSet()
@@ -70,17 +74,9 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 		FEffectProperties Props;
 		GetEffectProperties(Props, EffectSpec, TargetASC);
 
-		OnEffectApplied(EffectSpec, EvaluatedData, TargetASC);
-	}
-
-	// This function is called by OnGameplayEffectAppliedDelegateToSelf.Brocast() in the course.
-	// Because there is no OnGameplayEffectAppliedDelegateToSelf in the Angelscript, so I just call this function via PostGameplayEffectExecute.
-	void OnEffectApplied(FGameplayEffectSpec EffectSpec, FGameplayModifierEvaluatedData& EvaluatedData, UAngelscriptAbilitySystemComponent TargetASC)
-	{
-		const FGameplayTagContainer TagContainer = EffectSpec.GetAllAssetTags();
-		for (const FGameplayTag Tag : TagContainer.GameplayTags) {
-			Print(f"OnEffectApplied: {Tag.ToString() =}");
-		}
+		// This event is broadcasted by OnGameplayEffectAppliedDelegateToSelf.Brocast() in the course.
+		// Because there is no OnGameplayEffectAppliedDelegateToSelf in the Angelscript, so I just call this function via PostGameplayEffectExecute.
+		OnGameplayEffectAppliedEvent.Broadcast(EffectSpec, EvaluatedData, TargetASC);
 	}
 
 	// This function is just a demostration of how to retrieve ASC info in PostGameplayEffectExecute.
