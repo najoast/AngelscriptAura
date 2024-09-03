@@ -44,6 +44,13 @@ class UOverlayWidgetController : UAuraWidgetController
 		AUW_PickupMsg.Image_Icon.SetBrushFromTexture(Item.Icon);
 		FText Text = FText::FromString(f"Picked up a {Item.Name}");
 		AUW_PickupMsg.TextBox_Msg.SetText(Text);
+		int SizeX = 0, SizeY = 0;
+		PlayerController.GetViewportSize(SizeX, SizeY);
+		AUW_PickupMsg.SetPositionInViewport(FVector2D(float(SizeX)/2, float(SizeY)/2));
 		AUW_PickupMsg.AddToViewport();
+
+		// TODO: 如何在 AS 里播放 WidgetAnimation? 目前是用蓝图实现的
+		// UWidgetAnimation Animation = AUW_PickupMsg.GetAnimation(n"FadeIn");
+		// AUW_PickupMsg.PlayAnimation(n"FadeExit");
 	}
 }
