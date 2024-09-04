@@ -21,7 +21,7 @@ class UAUW_Overlay : UAuraUserWidget
 	{
 		FSlateBrush ManaBrush;
 		ManaBrush.ResourceObject = LoadObject(this, "/Game/Assets/UI/Globes/MI_ManaGlobe");
-		WBP_GlobeMana.ProgressBar.WidgetStyle.FillImage = ManaBrush;
+		WBP_GlobeMana.ProgressBar_Main.WidgetStyle.FillImage = ManaBrush;
 	}
 
 	void OnWidgetControllerSet() override
@@ -77,10 +77,10 @@ class UAUW_Overlay : UAuraUserWidget
 	{
 		float32 Health = GetAttributeValue(AuraAttributes::Health);
 		float32 MaxHealth = GetAttributeValue(AuraAttributes::MaxHealth);
-		WBP_GlobeHealth.ProgressBar.SetPercent(Health / MaxHealth);
+		WBP_GlobeHealth.SetPercent(Health, MaxHealth);
 
 		float32 Mana = GetAttributeValue(AuraAttributes::Mana);
 		float32 MaxMana = GetAttributeValue(AuraAttributes::MaxMana);
-		WBP_GlobeMana.ProgressBar.SetPercent(Mana / MaxMana);
+		WBP_GlobeMana.SetPercent(Mana, MaxMana);
 	}
 }

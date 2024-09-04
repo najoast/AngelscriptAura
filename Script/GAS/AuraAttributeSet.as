@@ -30,9 +30,9 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	// Functions
 	UAuraAttributeSet()
 	{
-		Health.Initialize(10);
+		Health.Initialize(100);
 		MaxHealth.Initialize(100);
-		Mana.Initialize(0);
+		Mana.Initialize(50);
 		MaxMana.Initialize(50);
 	}
 
