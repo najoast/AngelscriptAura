@@ -1,6 +1,13 @@
 
 namespace AuraAttributes
 {
+	// Primary Attributes
+	const FName Strength = n"Strength"; // 力量
+	const FName Intellignce = n"Intellignce"; // 智力
+	const FName Resilience = n"Resilience"; // 抗性
+	const FName Vigor = n"Vigor"; // 精力
+
+	// Vital Attributes
 	const FName Health = n"Health";
 	const FName MaxHealth = n"MaxHealth";
 	const FName Mana = n"Mana";
@@ -12,19 +19,34 @@ event void FOnGameplayEffectApplied(FGameplayEffectSpec EffectSpec, FGameplayMod
 // Add GameplayAbilities/GameplayTags/GameplayTasks to Aura.Build.cs private dependencies
 class UAuraAttributeSet : UAngelscriptAttributeSet
 {
-	// Attributes
-	UPROPERTY(BlueprintReadOnly, Replicated, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
+	// =================================== Attributes ===================================
+	// Primary Attributes
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Primary Attributes")
+	FAngelscriptGameplayAttributeData Strength;
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Primary Attributes")
+	FAngelscriptGameplayAttributeData Intellignce;
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Primary Attributes")
+	FAngelscriptGameplayAttributeData Resilience;
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Primary Attributes")
+	FAngelscriptGameplayAttributeData Vigor;
+
+	// Vital Attributes
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
 	FAngelscriptGameplayAttributeData Health;
 
-	UPROPERTY(BlueprintReadOnly, Replicated, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
 	FAngelscriptGameplayAttributeData MaxHealth;
 
-	UPROPERTY(BlueprintReadOnly, Replicated, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
 	FAngelscriptGameplayAttributeData Mana;
 
-	UPROPERTY(BlueprintReadOnly, Replicated, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
 	FAngelscriptGameplayAttributeData MaxMana;
 
+	// Events
 	FOnGameplayEffectApplied OnGameplayEffectAppliedEvent;
 
 	// Functions
@@ -45,6 +67,10 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 
 	FAngelscriptGameplayAttributeData& GetAttribute(FName AttributeName)
 	{
+		if (AttributeName == AuraAttributes::Strength) return Strength;
+		if (AttributeName == AuraAttributes::Intellignce) return Intellignce;
+		if (AttributeName == AuraAttributes::Resilience) return Resilience;
+		if (AttributeName == AuraAttributes::Vigor) return Vigor;
 		if (AttributeName == AuraAttributes::Health) return Health;
 		if (AttributeName == AuraAttributes::MaxHealth) return MaxHealth;
 		if (AttributeName == AuraAttributes::Mana) return Mana;
