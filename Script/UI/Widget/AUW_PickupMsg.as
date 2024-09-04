@@ -7,6 +7,27 @@ class UAUW_PickupMsg : UAuraUserWidget
 	UPROPERTY(BindWidget)
 	UTextBlock TextBox_Msg;
 
+	UPROPERTY(Transient, Meta = (BindWidgetAnim), NotEditable)
+	protected UWidgetAnimation Anim_FadeExit;
+
+	UFUNCTION(BlueprintOverride)
+	void OnInitialized()
+	{
+		if (Anim_FadeExit != nullptr)
+		{
+			PlayAnimation(Anim_FadeExit);
+		}
+	}
+
+	UFUNCTION(BlueprintOverride)
+	void OnAnimationFinished(const UWidgetAnimation Animation)
+	{
+		if (Animation == Anim_FadeExit)
+		{
+			RemoveFromParent();
+		}
+	}
+
 	// UFUNCTION(BlueprintOverride)
 	// void Tick(FGeometry MyGeometry, float InDeltaTime)
 	// {
