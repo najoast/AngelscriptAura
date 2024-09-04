@@ -5,6 +5,9 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 	USkeletalMeshComponent Weapon;
 	default Weapon.SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
+	UPROPERTY(Category = "Attributes")
+	TSubclassOf<UGameplayEffect> InitDefaultAttributesClass;
+
 	UFUNCTION(BlueprintOverride)
 	void BeginPlay()
 	{
@@ -26,6 +29,11 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 			{
 				AuraHUD.InitOverlay(PlayerController, PlayerState, AbilitySystem, AttributeSet);
 			}
+		}
+		
+		if (InitDefaultAttributesClass != nullptr)
+		{
+			AuraUtil::ApplyGameplayEffect(this, this, InitDefaultAttributesClass);
 		}
 	}
 }
