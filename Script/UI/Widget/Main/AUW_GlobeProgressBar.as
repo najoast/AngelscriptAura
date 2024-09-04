@@ -86,7 +86,9 @@ class UAUW_GlobeProgressBar : UAuraUserWidget
 	UFUNCTION(BlueprintOverride)
 	void OnMouseEnter(FGeometry MyGeometry, FPointerEvent MouseEvent)
 	{
-		Text_Value.SetVisibility(ESlateVisibility::Visible);
+		if (!MouseEvent.GetEffectingButton().IsValid()) {
+			Text_Value.SetVisibility(ESlateVisibility::Visible);
+		}
 	}
 
 	UFUNCTION(BlueprintOverride)

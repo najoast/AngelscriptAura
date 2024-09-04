@@ -43,7 +43,7 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 		OnRep_Attribute(OldAttributeData);
 	}
 
-	const FAngelscriptGameplayAttributeData& GetAttribute(FName AttributeName)
+	FAngelscriptGameplayAttributeData& GetAttribute(FName AttributeName)
 	{
 		if (AttributeName == AuraAttributes::Health) return Health;
 		if (AttributeName == AuraAttributes::MaxHealth) return MaxHealth;
@@ -53,10 +53,20 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 		return Health;
 	}
 
-	// Epic suggests that only should clamp the value in PreAttributeChange,
-	// don't execute complex logic in this function, eg: ApplyGameplayEffect
+	/*
+		Clamping of `Attributes` is discussed in PreAttributeChange() for changes to the `CurrentValue`
+		and PostGameplayEffectExecute() for changes to the `BaseValue` from `GameplayEffects`.
+
+		Epic suggests that only should clamp the value in PreAttributeChange,
+		don't execute complex logic in this function, eg: ApplyGameplayEffect
+	*/
 	UFUNCTION(BlueprintOverride)
 	void PreAttributeChange(FGameplayAttribute Attribute, float32& NewValue)
+	{
+		ClampAttribute(Attribute, NewValue);
+	}
+
+	void ClampAttribute(FGameplayAttribute Attribute, float32& NewValue)
 	{
 		if (Attribute.AttributeName == AuraAttributes::Health) {
 			NewValue = Math::Clamp(NewValue, float32(0), MaxHealth.GetCurrentValue());
@@ -70,6 +80,14 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 								   FGameplayModifierEvaluatedData& EvaluatedData,
 								   UAngelscriptAbilitySystemComponent TargetASC)
 	{
+		// Clamp the attribute value in PostGameplayEffectExecute.
+		auto& Attribute = GetAttribute(FName(EvaluatedData.Attribute.AttributeName));
+		float32 BaseValue = Attribute.GetBaseValue();
+		ClampAttribute(EvaluatedData.Attribute, BaseValue);
+		if (BaseValue != Attribute.GetBaseValue()) {
+			Attribute.SetBaseValue(BaseValue);
+		}
+
 		// Print(f"PostGameplayEffectExecute: {EffectSpec =}");
 		FEffectProperties Props;
 		GetEffectProperties(Props, EffectSpec, TargetASC);
