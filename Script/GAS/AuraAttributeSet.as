@@ -2,16 +2,30 @@
 namespace AuraAttributes
 {
 	// Primary Attributes
-	const FName Strength = n"Strength"; // 力量
+	const FName Strength    = n"Strength"; // 力量
 	const FName Intellignce = n"Intellignce"; // 智力
-	const FName Resilience = n"Resilience"; // 抗性
-	const FName Vigor = n"Vigor"; // 精力
+	const FName Resilience  = n"Resilience"; // 抗性
+	const FName Vigor       = n"Vigor"; // 精力
 
-	// Vital Attributes
-	const FName Health = n"Health";
-	const FName MaxHealth = n"MaxHealth";
-	const FName Mana = n"Mana";
-	const FName MaxMana = n"MaxMana";
+	// Secondary Attributes
+
+	//  Defense Attributes
+	const FName Armor            = n"Armor"; // 护甲
+	const FName ArmorPenetration = n"ArmorPenetration"; // 护甲穿透
+	const FName BlockChance      = n"BlockChance";
+
+	//  Attack Attributes
+	const FName CriticalHitChance     = n"CriticalHitChance"; // 暴击率
+	const FName CriticalHitDamage     = n"CriticalHitDamage"; // 暴击伤害
+	const FName CriticalHitResistance = n"CriticalHitResistance"; // 暴击抗性
+
+	//  Vital Attributes
+	const FName Health      = n"Health";
+	const FName MaxHealth   = n"MaxHealth";
+	const FName HealthRegen = n"HealthRegen"; // 生命回复
+	const FName Mana        = n"Mana";
+	const FName MaxMana     = n"MaxMana";
+	const FName ManaRegen   = n"ManaRegen"; // 法力回复
 }
 
 event void FOnGameplayEffectApplied(FGameplayEffectSpec EffectSpec, FGameplayModifierEvaluatedData EvaluatedData, UAngelscriptAbilitySystemComponent TargetASC);
@@ -33,7 +47,29 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Primary Attributes")
 	FAngelscriptGameplayAttributeData Vigor;
 
-	// Vital Attributes
+	// Secondary Attributes
+
+	//  Defense Attributes
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Defense Attributes")
+	FAngelscriptGameplayAttributeData Armor;
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Defense Attributes")
+	FAngelscriptGameplayAttributeData ArmorPenetration;
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Defense Attributes")
+	FAngelscriptGameplayAttributeData BlockChance;
+
+	//  Attack Attributes
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Attack Attributes")
+	FAngelscriptGameplayAttributeData CriticalHitChance;
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Attack Attributes")
+	FAngelscriptGameplayAttributeData CriticalHitDamage;
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Attack Attributes")
+	FAngelscriptGameplayAttributeData CriticalHitResistance;
+
+	//  Vital Attributes
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
 	FAngelscriptGameplayAttributeData Health;
 
@@ -41,22 +77,23 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	FAngelscriptGameplayAttributeData MaxHealth;
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
+	FAngelscriptGameplayAttributeData HealthRegen;
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
 	FAngelscriptGameplayAttributeData Mana;
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
 	FAngelscriptGameplayAttributeData MaxMana;
 
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
+	FAngelscriptGameplayAttributeData ManaRegen;
+
+	// ======================================================================================================
+
 	// Events
 	FOnGameplayEffectApplied OnGameplayEffectAppliedEvent;
 
 	// Functions
-	UAuraAttributeSet()
-	{
-		// Health.Initialize(100);
-		// MaxHealth.Initialize(100);
-		// Mana.Initialize(50);
-		// MaxMana.Initialize(50);
-	}
 
 	UFUNCTION()
 	void OnRep_ReplicationTrampoline(FAngelscriptGameplayAttributeData& OldAttributeData)
@@ -67,14 +104,24 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 
 	FAngelscriptGameplayAttributeData& GetAttribute(FName AttributeName)
 	{
+		// Primary Attributes
 		if (AttributeName == AuraAttributes::Strength) return Strength;
 		if (AttributeName == AuraAttributes::Intellignce) return Intellignce;
 		if (AttributeName == AuraAttributes::Resilience) return Resilience;
 		if (AttributeName == AuraAttributes::Vigor) return Vigor;
+		// Secondary Attributes
+		if (AttributeName == AuraAttributes::Armor) return Armor;
+		if (AttributeName == AuraAttributes::ArmorPenetration) return ArmorPenetration;
+		if (AttributeName == AuraAttributes::BlockChance) return BlockChance;
+		if (AttributeName == AuraAttributes::CriticalHitChance) return CriticalHitChance;
+		if (AttributeName == AuraAttributes::CriticalHitDamage) return CriticalHitDamage;
+		if (AttributeName == AuraAttributes::CriticalHitResistance) return CriticalHitResistance;
 		if (AttributeName == AuraAttributes::Health) return Health;
 		if (AttributeName == AuraAttributes::MaxHealth) return MaxHealth;
+		if (AttributeName == AuraAttributes::HealthRegen) return HealthRegen;
 		if (AttributeName == AuraAttributes::Mana) return Mana;
 		if (AttributeName == AuraAttributes::MaxMana) return MaxMana;
+		if (AttributeName == AuraAttributes::ManaRegen) return ManaRegen;
 		check(false);
 		return Health;
 	}
