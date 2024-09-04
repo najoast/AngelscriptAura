@@ -6,7 +6,7 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 	default Weapon.SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	UPROPERTY(Category = "Attributes")
-	TSubclassOf<UGameplayEffect> InitDefaultAttributesClass;
+	TArray<TSubclassOf<UGameplayEffect>> InitAppliedEffects;
 
 	UFUNCTION(BlueprintOverride)
 	void BeginPlay()
@@ -31,9 +31,9 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 			}
 		}
 		
-		if (InitDefaultAttributesClass != nullptr)
+		for (auto EffectClass : InitAppliedEffects)
 		{
-			AuraUtil::ApplyGameplayEffect(this, this, InitDefaultAttributesClass);
+			AuraUtil::ApplyGameplayEffect(this, this, EffectClass);
 		}
 	}
 }
