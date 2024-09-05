@@ -116,12 +116,13 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 		if (AttributeName == AuraAttributes::CriticalHitChance) return CriticalHitChance;
 		if (AttributeName == AuraAttributes::CriticalHitDamage) return CriticalHitDamage;
 		if (AttributeName == AuraAttributes::CriticalHitResistance) return CriticalHitResistance;
-		if (AttributeName == AuraAttributes::Health) return Health;
 		if (AttributeName == AuraAttributes::MaxHealth) return MaxHealth;
 		if (AttributeName == AuraAttributes::HealthRegen) return HealthRegen;
-		if (AttributeName == AuraAttributes::Mana) return Mana;
 		if (AttributeName == AuraAttributes::MaxMana) return MaxMana;
 		if (AttributeName == AuraAttributes::ManaRegen) return ManaRegen;
+		// Vital Attributes
+		if (AttributeName == AuraAttributes::Health) return Health;
+		if (AttributeName == AuraAttributes::Mana) return Mana;
 		check(false);
 		return Health;
 	}
