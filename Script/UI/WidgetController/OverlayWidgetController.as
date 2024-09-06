@@ -26,6 +26,7 @@ class UOverlayWidgetController : UAuraWidgetController
 		EventMgr.OnItemPickedUpEvent.AddUFunction(this, n"OnItemPickedUp");
 	}
 
+	
 	UFUNCTION()
 	void OnItemPickedUp(EItemID ItemID)
 	{
@@ -34,23 +35,13 @@ class UOverlayWidgetController : UAuraWidgetController
 			Print(f"Item {ItemID} is not found");
 			return;
 		}
-		// UAUW_PickupMsg AUW_PickupMsg = Cast<UAUW_PickupMsg>(LoadObject(this, "/Game/Blueprints/UI/WBP_PickupMsg"));
-		TSubclassOf<UUserWidget> WidgetClass = SData::GetWidgetClass(n"PickupMsg");
-		UAUW_PickupMsg AUW_PickupMsg = Cast<UAUW_PickupMsg>(WidgetBlueprint::CreateWidget(WidgetClass, PlayerController));
-		if (AUW_PickupMsg == nullptr) {
-			Print(f"Failed to create AUW_PickupMsg");
-			return;
-		}
-		AUW_PickupMsg.Image_Icon.SetBrushFromTexture(Item.Icon);
-		FText Text = FText::FromString(f"Picked up a {Item.Name}");
-		AUW_PickupMsg.TextBox_Msg.SetText(Text);
-		int SizeX = 0, SizeY = 0;
-		PlayerController.GetViewportSize(SizeX, SizeY);
-		AUW_PickupMsg.SetPositionInViewport(FVector2D(float(SizeX)/2, float(SizeY)/2));
-		AUW_PickupMsg.AddToViewport();
 
-		// TODO: 如何在 AS 里播放 WidgetAnimation? 目前是用蓝图实现的
-		// UWidgetAnimation Animation = AUW_PickupMsg.GetAnimation(n"FadeIn");
-		// AUW_PickupMsg.PlayAnimation(n"FadeExit");
+		FVector2D Position = WidgetUtil::GetViewportPositionByRatio(PlayerController, 0.5);
+		UAUW_PickupMsg AUW_PickupMsg = Cast<UAUW_PickupMsg>(WidgetUtil::OpenWidget(n"PickupMsg", PlayerController, Position));
+		if (AUW_PickupMsg != nullptr) {
+			AUW_PickupMsg.Image_Icon.SetBrushFromTexture(Item.Icon);
+			FText Text = FText::FromString(f"Picked up a {Item.Name}");
+			AUW_PickupMsg.TextBox_Msg.SetText(Text);
+		}
 	}
 }
