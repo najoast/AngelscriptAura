@@ -27,6 +27,7 @@ class UAUW_Overlay : UAuraUserWidget
 		WBP_GlobeMana.ProgressBar_Main.WidgetStyle.FillImage = ManaBrush;
 
 		WBP_WideButton_Attributes.Button.OnClicked.AddUFunction(this, n"OnButton_AttributesClicked");
+		UAuraGameInstanceSubsystem::Get().EventMgr.OnWidgetClosedEvent.AddUFunction(this, n"OnWidgetClosed");
 	}
 
 	void OnWidgetControllerSet() override
@@ -96,6 +97,15 @@ class UAUW_Overlay : UAuraUserWidget
 		if (AttributeMenu != nullptr) {
 			// AttributeMenu
 			WBP_WideButton_Attributes.SetIsEnabled(false);
+		}
+	}
+
+	UFUNCTION()
+	void OnWidgetClosed(UUserWidget UserWidget)
+	{
+		if (UserWidget.IsA(UAUW_AttributeMenu))
+		{
+			WBP_WideButton_Attributes.SetIsEnabled(true);
 		}
 	}
 }

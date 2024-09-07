@@ -23,12 +23,14 @@ namespace WidgetUtil
 			UserWidget.SetPositionInViewport(Position);
 		}
 		UserWidget.AddToViewport();
+		UAuraGameInstanceSubsystem::Get().EventMgr.OnWidgetOpenedEvent.Broadcast(UserWidget);
 		return UserWidget;
 	}
 
-	void CloseWidget(UUserWidget Widget)
+	void CloseWidget(UUserWidget UserWidget)
 	{
-		// Widget.RemoveFromViewport();
+		UAuraGameInstanceSubsystem::Get().EventMgr.OnWidgetClosedEvent.Broadcast(UserWidget);
+		UserWidget.RemoveFromParent();
 	}
 
 	// Get the position of the viewport by the given position ratio

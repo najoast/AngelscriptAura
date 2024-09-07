@@ -81,7 +81,7 @@ class UAUW_AttributeMenu : UAuraUserWidget
 	UFUNCTION()
 	void OnButton_CloseClicked()
 	{
-		RemoveFromParent();
+		WidgetUtil::CloseWidget(this);
 	}
 
 	UFUNCTION(BlueprintOverride)

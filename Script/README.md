@@ -1,5 +1,6 @@
 # TODO
-- [ ] WidgetEvent
-	- [ ] Open Widget
-	- [ ] Close Widget
-- [ ] When `UAUW_AttributeMenu` closed, the `WBP_WideButton_Attributes` should be enabled
+- [x] WidgetEvent
+	- [x] Open Widget
+	- [x] Close Widget
+- [x] When `UAUW_AttributeMenu` closed, the `WBP_WideButton_Attributes` should be enabled
+- [ ] Fix WBP_Button click issue
