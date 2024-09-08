@@ -1,8 +1,11 @@
+/*
+Usage:
+	UAuraGameInstanceSubsystem::Get().SDataMgr.
+*/
 
 class UAuraGameInstanceSubsystem : UScriptGameInstanceSubsystem
 {
 	USDataMgr SDataMgr = USDataMgr();
-
 	UAuraEventMgr EventMgr = UAuraEventMgr();
 
 	UFUNCTION(BlueprintOverride)

@@ -13,27 +13,24 @@ class AAuraHUD : AHUD
 	UPROPERTY()
 	TSubclassOf<UOverlayWidgetController> OverlayWidgetControllerClass;
 
-	UOverlayWidgetController GetOverlayWidgetController(const FWidgetControllerParams& WCParams)
+	UOverlayWidgetController GetOverlayWidgetController(AAuraCharacter Character)
 	{
 		if (OverlayWidgetController == nullptr)
 		{
 			OverlayWidgetController = NewObject(this, OverlayWidgetControllerClass);
-			OverlayWidgetController.SetWidgetControllerParams(WCParams);
+			OverlayWidgetController.Init(Character);
 		}
 		return OverlayWidgetController;
 	}
 
-	void InitOverlay(APlayerController PC, APlayerState PS, UAngelscriptAbilitySystemComponent ASC, UAuraAttributeSet AS)
+	void InitOverlay(AAuraCharacter Character)
 	{
 		check(OverlayWidgetClass != nullptr);
 		check(OverlayWidgetControllerClass != nullptr);
 
 		UUserWidget Widget = WidgetBlueprint::CreateWidget(OverlayWidgetClass, OwningPlayerController);
 		OverlayWidget = Cast<UAuraUserWidget>(Widget);
-
-		const FWidgetControllerParams WCParams(PC, PS, ASC, AS);
-		OverlayWidget.SetWidgetController(GetOverlayWidgetController(WCParams));
-
+		OverlayWidget.SetWidgetController(GetOverlayWidgetController(Character));
 		Widget.AddToViewport();
 	}
 }

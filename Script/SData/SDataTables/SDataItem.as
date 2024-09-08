@@ -18,12 +18,3 @@ struct FSDataItem
 	UPROPERTY()
 	TSubclassOf<UGameplayEffect> GameplayEffectClass;
 }
-
-enum EItemID
-{
-	None          = 0,
-	HealthPotion  = 1,
-	ManaPotion    = 2,
-	HealthCrystal = 3,
-	ManaCrystal   = 4,
-}

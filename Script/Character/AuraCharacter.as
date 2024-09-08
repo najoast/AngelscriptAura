@@ -12,6 +12,8 @@ class AAuraCharacter : AAuraCharacterBase
 	UPROPERTY(DefaultComponent, Attach = "SpringArm")
 	UCameraComponent Camera;
 
+	UPlayerModuleMgr PlayerModuleMgr = UPlayerModuleMgr(this);
+
 	// --------- ctor --------
 	default CharacterMovement.bOrientRotationToMovement = true;
 	default CharacterMovement.RotationRate = FRotator(0, 400, 0);
@@ -23,9 +25,29 @@ class AAuraCharacter : AAuraCharacterBase
 
 	// --------- functions ----------
 
+	// UFUNCTION(BlueprintOverride)
+	// void Possessed(AController NewController)
+	// {
+	// }
+
+	UPROPERTY(Category = "Attributes")
+	TArray<TSubclassOf<UGameplayEffect>> InitAppliedEffects;
+
 	UFUNCTION(BlueprintOverride)
-	void Possessed(AController NewController)
+	void BeginPlay()
 	{
+		InitAbilityActorInfo();
+	}
+
+	// https://github.com/DruidMech/GameplayAbilitySystem_Aura/blob/main/Source/Aura/Private/Character/AuraCharacter.cpp
+	void InitAbilityActorInfo()
+	{
+		for (auto EffectClass : InitAppliedEffects)
+		{
+			AuraUtil::ApplyGameplayEffect(this, this, EffectClass);
+		}
+
+		PlayerModuleMgr.Init();
 	}
 
 }

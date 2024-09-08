@@ -1,28 +1,15 @@
-struct FWidgetControllerParams
-{
-	APlayerController PlayerController;
-	APlayerState PlayerState;
-	UAngelscriptAbilitySystemComponent AbilitySystemComponent;
-	UAuraAttributeSet AttributeSet;
-
-	FWidgetControllerParams() {}
-	FWidgetControllerParams(APlayerController InPlayerController, APlayerState InPlayerState, UAngelscriptAbilitySystemComponent InAbilitySystemComponent, UAuraAttributeSet InAttributeSet)
-	{
-		PlayerController = InPlayerController;
-		PlayerState = InPlayerState;
-		AbilitySystemComponent = InAbilitySystemComponent;
-		AttributeSet = InAttributeSet;
-	}
-}
 
 class UAuraWidgetController : UObject
 {
+	AAuraCharacter Character;
+
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
 	APlayerController PlayerController;
 
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
 	APlayerState PlayerState;
 
+	// The owner's ASC of this controller (Player)
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
 	UAngelscriptAbilitySystemComponent AbilitySystemComponent;
 
@@ -30,17 +17,18 @@ class UAuraWidgetController : UObject
 	UAuraAttributeSet AttributeSet;
 
 	UFUNCTION()
-	void SetWidgetControllerParams(const FWidgetControllerParams& Params)
+	void Init(AAuraCharacter InCharacter)
 	{
-		PlayerController = Params.PlayerController;
-		PlayerState = Params.PlayerState;
-		AbilitySystemComponent = Params.AbilitySystemComponent;
-		AttributeSet = Params.AttributeSet;
+		Character = InCharacter;
+		PlayerController = InCharacter.GetLocalViewingPlayerController();
+		PlayerState = InCharacter.PlayerState;
+		AbilitySystemComponent = InCharacter.AbilitySystem;
+		AttributeSet = Cast<UAuraAttributeSet>(AbilitySystemComponent.RegisterAttributeSet(UAuraAttributeSet::StaticClass()));
 
-		OnWidgetControllerParamsSet(Params);
+		OnWidgetControllerParamsSet();
 	}
 
-	void OnWidgetControllerParamsSet(const FWidgetControllerParams& Params)
+	void OnWidgetControllerParamsSet()
 	{
 	}
 }

@@ -1,10 +1,10 @@
 
 class UOverlayWidgetController : UAuraWidgetController
 {
-	void OnWidgetControllerParamsSet(const FWidgetControllerParams& Params) override
+	void OnWidgetControllerParamsSet() override
 	{
-		Super::OnWidgetControllerParamsSet(Params);
-		Print("OnWidgetControllerParamsSet");
+		Super::OnWidgetControllerParamsSet();
+
 		AttributeSet.OnGameplayEffectAppliedEvent.AddUFunction(this, n"OnGameplayEffectApplied");
 
 		RegisterAllWidgetsEvent();

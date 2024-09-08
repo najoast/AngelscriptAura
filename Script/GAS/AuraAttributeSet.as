@@ -88,12 +88,43 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
 	FAngelscriptGameplayAttributeData ManaRegen;
 
+	// Varibles
+	private TArray<FAngelscriptGameplayAttributeData> PrimaryAttributes;
+	private TArray<FAngelscriptGameplayAttributeData> SecondaryAttributes;
+	private TMap<FName, FAngelscriptGameplayAttributeData> Name2Attribute;
+
 	// ======================================================================================================
 
 	// Events
 	FOnGameplayEffectApplied OnGameplayEffectAppliedEvent;
 
 	// Functions
+
+	UAuraAttributeSet()
+	{
+		PrimaryAttributes.Add(Strength);
+		PrimaryAttributes.Add(Intellignce);
+		PrimaryAttributes.Add(Resilience);
+		PrimaryAttributes.Add(Vigor);
+
+		SecondaryAttributes.Add(Armor);
+		SecondaryAttributes.Add(ArmorPenetration);
+		SecondaryAttributes.Add(BlockChance);
+		SecondaryAttributes.Add(CriticalHitChance);
+		SecondaryAttributes.Add(CriticalHitDamage);
+		SecondaryAttributes.Add(CriticalHitResistance);
+		SecondaryAttributes.Add(MaxHealth);
+		SecondaryAttributes.Add(HealthRegen);
+		SecondaryAttributes.Add(MaxMana);
+		SecondaryAttributes.Add(ManaRegen);
+
+		for (FAngelscriptGameplayAttributeData& Attribute : PrimaryAttributes) {
+			Name2Attribute.Add(Attribute.AttributeName, Attribute);
+		}
+		for (FAngelscriptGameplayAttributeData& Attribute : SecondaryAttributes) {
+			Name2Attribute.Add(Attribute.AttributeName, Attribute);
+		}
+	}
 
 	UFUNCTION()
 	void OnRep_ReplicationTrampoline(FAngelscriptGameplayAttributeData& OldAttributeData)
@@ -104,27 +135,26 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 
 	FAngelscriptGameplayAttributeData& GetAttribute(FName AttributeName)
 	{
-		// Primary Attributes
-		if (AttributeName == AuraAttributes::Strength) return Strength;
-		if (AttributeName == AuraAttributes::Intellignce) return Intellignce;
-		if (AttributeName == AuraAttributes::Resilience) return Resilience;
-		if (AttributeName == AuraAttributes::Vigor) return Vigor;
-		// Secondary Attributes
-		if (AttributeName == AuraAttributes::Armor) return Armor;
-		if (AttributeName == AuraAttributes::ArmorPenetration) return ArmorPenetration;
-		if (AttributeName == AuraAttributes::BlockChance) return BlockChance;
-		if (AttributeName == AuraAttributes::CriticalHitChance) return CriticalHitChance;
-		if (AttributeName == AuraAttributes::CriticalHitDamage) return CriticalHitDamage;
-		if (AttributeName == AuraAttributes::CriticalHitResistance) return CriticalHitResistance;
-		if (AttributeName == AuraAttributes::MaxHealth) return MaxHealth;
-		if (AttributeName == AuraAttributes::HealthRegen) return HealthRegen;
-		if (AttributeName == AuraAttributes::MaxMana) return MaxMana;
-		if (AttributeName == AuraAttributes::ManaRegen) return ManaRegen;
-		// Vital Attributes
-		if (AttributeName == AuraAttributes::Health) return Health;
-		if (AttributeName == AuraAttributes::Mana) return Mana;
-		check(false);
-		return Health;
+		if (!Name2Attribute.Contains(AttributeName)) {
+			Print(f"GetAttribute {AttributeName} is not found");
+			check(false);
+		}
+		return Name2Attribute[AttributeName];
+	}
+
+	const TArray<FAngelscriptGameplayAttributeData>& GetPrimaryAttributes()
+	{
+		return PrimaryAttributes;
+	}
+
+	const TArray<FAngelscriptGameplayAttributeData>& GetSecondaryAttributes()
+	{
+		return SecondaryAttributes;
+	}
+
+	const TMap<FName, FAngelscriptGameplayAttributeData>& GetAllAttributes()
+	{
+		return Name2Attribute;
 	}
 
 	/*
