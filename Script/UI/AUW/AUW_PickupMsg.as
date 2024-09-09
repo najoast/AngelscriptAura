@@ -10,8 +10,7 @@ class UAUW_PickupMsg : UAuraUserWidget
 	UPROPERTY(Transient, Meta = (BindWidgetAnim), NotEditable)
 	protected UWidgetAnimation Anim_FadeExit;
 
-	UFUNCTION(BlueprintOverride)
-	void OnInitialized()
+	void OnCtor() override
 	{
 		if (Anim_FadeExit != nullptr)
 		{

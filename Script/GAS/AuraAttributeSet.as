@@ -39,7 +39,7 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	FAngelscriptGameplayAttributeData Strength;
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Primary Attributes")
-	FAngelscriptGameplayAttributeData Intellignce;
+	FAngelscriptGameplayAttributeData Intelligence;
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Primary Attributes")
 	FAngelscriptGameplayAttributeData Resilience;
@@ -104,7 +104,7 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	void InitAttributesMapping()
 	{
 		PrimaryAttributes.Add(Strength);
-		PrimaryAttributes.Add(Intellignce);
+		PrimaryAttributes.Add(Intelligence);
 		PrimaryAttributes.Add(Resilience);
 		PrimaryAttributes.Add(Vigor);
 

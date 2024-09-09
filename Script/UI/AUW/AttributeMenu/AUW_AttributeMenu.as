@@ -61,30 +61,31 @@ class UAUW_AttributeMenu : UAuraUserWidget
 	UAUW_Button WBP_Button_Close;
 
 	// ------------------------ Member Variables ------------------------
-	// UAUW_Button 
+	TMap<FName, UAUW_TextValueRow> PrimaryAttributeWidgets;
+	TMap<FName, UAUW_TextValueRow> SecondaryAttributeWidgets;
+	TMap<FName, UAUW_TextValueRow> AllAttributeWidgets;
 
 	// ------------------------ Functions ------------------------
 
-	UFUNCTION(BlueprintOverride)
-	void OnInitialized()
+
+	void OnCtor() override
 	{
-		InitWidgetsInfo();
-		Update();
+		InitWidgetsDesignInfo();
+		InitWidgetsData();
 
 		WBP_Button_Close.Button.OnClicked.AddUFunction(this, n"OnButton_CloseClicked");
+		AuraUtil::GameInstance().EventMgr.OnAttributeChangedEvent.AddUFunction(this, n"OnAttributeChanged");
 	}
 
-	void InitWidgetsInfo()
+	void InitWidgetsDesignInfo()
 	{
 		WBP_AttributePoints.Text_Text.Text = FText::FromString("Attribute Points");
 
-		TMap<FName, UAUW_TextValueRow> PrimaryAttributeWidgets;
 		PrimaryAttributeWidgets.Add(AuraAttributes::Strength, WBP_Strength);
 		PrimaryAttributeWidgets.Add(AuraAttributes::Intelligence, WBP_Intelligence);
 		PrimaryAttributeWidgets.Add(AuraAttributes::Resilience, WBP_Resislience);
 		PrimaryAttributeWidgets.Add(AuraAttributes::Vigor, WBP_Vigor);
 
-		TMap<FName, UAUW_TextValueRow> SecondaryAttributeWidgets;
 		SecondaryAttributeWidgets.Add(AuraAttributes::Armor, WBP_Armor);
 		SecondaryAttributeWidgets.Add(AuraAttributes::ArmorPenetration, WBP_ArmorPenetration);
 		SecondaryAttributeWidgets.Add(AuraAttributes::BlockChance, WBP_BlockChance);
@@ -96,12 +97,20 @@ class UAUW_AttributeMenu : UAuraUserWidget
 		SecondaryAttributeWidgets.Add(AuraAttributes::MaxMana, WBP_MaxMana);
 		SecondaryAttributeWidgets.Add(AuraAttributes::ManaRegen, WBP_ManaRegen);
 
+		// Add to AllAttributeWidgets
+		for (auto Element : PrimaryAttributeWidgets) {
+			AllAttributeWidgets.Add(Element.Key, Element.Value);
+		}
+		for (auto Element : SecondaryAttributeWidgets) {
+			AllAttributeWidgets.Add(Element.Key, Element.Value);
+		}
+
 		// Primary Attributes
 		for (auto Element : PrimaryAttributeWidgets)
 		{
 			FName AttributeName = Element.Key;
 			Element.Value.Text_Text.Text = FText::FromString(AttributeName.ToString());
-			Element.Value.WBP_Button_AddPoint.Button.SetVisibility(ESlateVisibility::Visible);
+			Element.Value.WBP_Button_AddPoint.SetVisibility(ESlateVisibility::Visible);
 			Element.Value.WBP_Button_AddPoint.Button.OnClicked.AddUFunction(this, FName(f"OnButton_Add{AttributeName}Clicked"));
 		}
 
@@ -111,11 +120,18 @@ class UAUW_AttributeMenu : UAuraUserWidget
 			FName AttributeName = Element.Key;
 			Element.Value.Text_Text.Text = FText::FromString(AttributeName.ToString());
 		}
+
+		WBP_Button_Close.Text.Text = FText::FromString("x");
 	}
 
-	void Update()
+	void InitWidgetsData()
 	{
-
+		UPlayerGasModule PlayerGasModule = AuraUtil::GetPlayerGasModule(Character);
+		for (auto Element : AllAttributeWidgets)
+		{
+			float32 Value = PlayerGasModule.GetAttributeValue(Element.Key);
+			Element.Value.WBP_FramedValue.Text_Value.SetText(FText::FromString(f"{Value :.0}"));
+		}
 	}
 
 	UFUNCTION()
@@ -146,5 +162,18 @@ class UAUW_AttributeMenu : UAuraUserWidget
 	void OnButton_AddVigorClicked()
 	{
 		Print("OnButton_AddVigorClicked");
+	}
+
+	UFUNCTION()
+	private void OnAttributeChanged(FAngelscriptModifiedAttribute AttributeChangeData)
+	{
+		if (!AllAttributeWidgets.Contains(AttributeChangeData.Name)) {
+			return;
+		}
+
+		UPlayerGasModule PlayerGasModule = AuraUtil::GetPlayerGasModule(Character);
+		UAUW_TextValueRow TextValueRow = AllAttributeWidgets[AttributeChangeData.Name];
+		float32 Value = PlayerGasModule.GetAttributeValue(AttributeChangeData.Name);
+		TextValueRow.Text_Text.SetText(FText::FromString(f"{Value :.0}"));
 	}
 }

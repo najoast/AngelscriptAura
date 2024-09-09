@@ -1,6 +1,6 @@
 
 
-class UAUW_Overlay : UAuraUserWidget
+class UAUW_HUD : UAuraUserWidget
 {
 	// -------------------------------------
 
@@ -15,8 +15,7 @@ class UAUW_Overlay : UAuraUserWidget
 
 	// -------------------------------------
 
-	UFUNCTION(BlueprintOverride)
-	void Construct()
+	void OnCtor() override
 	{
 		FSlateBrush ManaBrush;
 		ManaBrush.ResourceObject = LoadObject(this, "/Game/Assets/UI/Globes/MI_ManaGlobe");
@@ -25,19 +24,9 @@ class UAUW_Overlay : UAuraUserWidget
 		WBP_WideButton_Attributes.Button.OnClicked.AddUFunction(this, n"OnButton_AttributesClicked");
 		AuraUtil::GameInstance().EventMgr.OnWidgetClosedEvent.AddUFunction(this, n"OnWidgetClosed");
 		AuraUtil::GameInstance().EventMgr.OnAttributeChangedEvent.AddUFunction(this, n"OnAttributeChanged");
+
+		RegisterAllWidgetsEvent();
 	}
-
-	// void OnWidgetControllerSet() override
-	// {
-	// 	Print("OnWidgetControllerSet");
-	// 	check(WidgetController.AbilitySystemComponent != nullptr);
-	// }
-
-	// UFUNCTION()
-	// void OnAttributeSetRegistered(UAngelscriptAttributeSet NewAttributeSet)
-	// {
-	// 	UpdateWidgets();
-	// }
 
 	// https://github.com/Hazelight/UnrealEngine-Angelscript/blob/angelscript-master/Script-Examples/GASExamples/Example_GASAnimInstance.as
 	UFUNCTION()
@@ -48,7 +37,7 @@ class UAUW_Overlay : UAuraUserWidget
 
 	void UpdateWidgets(FAngelscriptModifiedAttribute AttributeChangeData)
 	{
-		UPlayerGasModule PlayerGasModule = AuraUtil::GetPlayerGasModule(WidgetController.Character);
+		UPlayerGasModule PlayerGasModule = AuraUtil::GetPlayerGasModule(Character);
 		if (AttributeChangeData.Name == AuraAttributes::Health || AttributeChangeData.Name == AuraAttributes::MaxHealth)
 		{
 			float32 Health = PlayerGasModule.GetAttributeValue(AuraAttributes::Health);
@@ -67,7 +56,7 @@ class UAUW_Overlay : UAuraUserWidget
 	UFUNCTION()
 	void OnButton_AttributesClicked()
 	{
-		UAUW_AttributeMenu AttributeMenu = Cast<UAUW_AttributeMenu>(WidgetUtil::OpenWidget(n"AttributeMenu", WidgetController.PlayerController, FVector2D(30, 30)));
+		UAUW_AttributeMenu AttributeMenu = Cast<UAUW_AttributeMenu>(WidgetUtil::OpenWidget(n"AttributeMenu", Character, FVector2D(30, 30)));
 		if (AttributeMenu != nullptr)
 		{
 			// AttributeMenu
@@ -81,6 +70,31 @@ class UAUW_Overlay : UAuraUserWidget
 		if (UserWidget.IsA(UAUW_AttributeMenu))
 		{
 			WBP_WideButton_Attributes.SetIsEnabled(true);
+		}
+	}
+
+	void RegisterAllWidgetsEvent()
+	{
+		auto EventMgr = AuraUtil::GameInstance().EventMgr;
+		EventMgr.OnItemPickedUpEvent.AddUFunction(this, n"OnItemPickedUp");
+	}
+
+	UFUNCTION()
+	void OnItemPickedUp(EItemID ItemID)
+	{
+		FSDataItem Item = SData::GetItem(ItemID);
+		if (Item.ID == EItemID::None) {
+			Print(f"Item {ItemID} is not found");
+			return;
+		}
+
+		APlayerController PlayerController = Character.GetLocalViewingPlayerController();
+		FVector2D Position = WidgetUtil::GetViewportPositionByRatio(PlayerController, 0.5);
+		UAUW_PickupMsg AUW_PickupMsg = Cast<UAUW_PickupMsg>(WidgetUtil::OpenWidget(n"PickupMsg", Character, Position));
+		if (AUW_PickupMsg != nullptr) {
+			AUW_PickupMsg.Image_Icon.SetBrushFromTexture(Item.Icon);
+			FText Text = FText::FromString(f"Picked up a {Item.Name}");
+			AUW_PickupMsg.TextBox_Msg.SetText(Text);
 		}
 	}
 }

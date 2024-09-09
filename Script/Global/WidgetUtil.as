@@ -6,17 +6,17 @@ namespace WidgetUtil
 
 	// delegate void PreOpenWidgetDelegate(UUserWidget Widget);
 
-	UUserWidget OpenWidget(FName WidgetClassName, APlayerController PlayerController, FVector2D Position = FVector2D::ZeroVector)
+	UUserWidget OpenWidgetByClass(TSubclassOf<UUserWidget> WidgetClass, AAuraCharacter AuraCharacter, FVector2D Position = FVector2D::ZeroVector)
 	{
-		TSubclassOf<UUserWidget> WidgetClass = SData::GetWidgetClass(WidgetClassName);
-		if (WidgetClass == nullptr) {
-			Print(f"Widget {WidgetClassName} is not found");
+		UUserWidget UserWidget = WidgetBlueprint::CreateWidget(WidgetClass, AuraCharacter.GetLocalViewingPlayerController());
+		if (UserWidget == nullptr) {
+			Print(f"Failed to create UserWidget {WidgetClass}");
 			return nullptr;
 		}
-		UUserWidget UserWidget = WidgetBlueprint::CreateWidget(WidgetClass, PlayerController);
-		if (UserWidget == nullptr) {
-			Print(f"Failed to create UserWidget {WidgetClassName}");
-			return nullptr;
+
+		UAuraUserWidget AuraUserWidget = Cast<UAuraUserWidget>(UserWidget);
+		if (AuraUserWidget != nullptr) {
+			AuraUserWidget.Ctor(AuraCharacter);
 		}
 
 		if (Position != FVector2D::ZeroVector) {
@@ -25,6 +25,16 @@ namespace WidgetUtil
 		UserWidget.AddToViewport();
 		AuraUtil::GameInstance().EventMgr.OnWidgetOpenedEvent.Broadcast(UserWidget);
 		return UserWidget;
+	}
+
+	UUserWidget OpenWidget(FName WidgetClassName, AAuraCharacter AuraCharacter, FVector2D Position = FVector2D::ZeroVector)
+	{
+		TSubclassOf<UUserWidget> WidgetClass = SData::GetWidgetClass(WidgetClassName);
+		if (WidgetClass == nullptr) {
+			Print(f"Widget {WidgetClassName} is not found");
+			return nullptr;
+		}
+		return OpenWidgetByClass(WidgetClass, AuraCharacter, Position);
 	}
 
 	void CloseWidget(UUserWidget UserWidget)

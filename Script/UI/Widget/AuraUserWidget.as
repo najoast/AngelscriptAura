@@ -1,16 +1,30 @@
 
 class UAuraUserWidget : UUserWidget
 {
-	UPROPERTY(BlueprintReadOnly, Category = "UserWidget")
-	UAuraWidgetController WidgetController;
+	AAuraCharacter Character;
 
-	void SetWidgetController(UAuraWidgetController InWidgetController)
+	void Ctor(AAuraCharacter InCharacter)
 	{
-		WidgetController = InWidgetController;
-		OnWidgetControllerSet();
+		Character = InCharacter;
+		OnCtor();
 	}
 
-	void OnWidgetControllerSet()
+	void OnCtor()
 	{
+	}
+
+	APlayerController GetPlayerController()
+	{
+		return Character.GetLocalViewingPlayerController();
+	}
+
+	APlayerState GetPlayerState()
+	{
+		return Character.PlayerState;
+	}
+
+	UAngelscriptAbilitySystemComponent GetAbilitySystemComponent()
+	{
+		return Character.AbilitySystem;
 	}
 }
