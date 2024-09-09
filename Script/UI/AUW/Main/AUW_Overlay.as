@@ -15,10 +15,6 @@ class UAUW_Overlay : UAuraUserWidget
 
 	// -------------------------------------
 
-	TMap<FName, float32> CachedAttributeValues;
-
-	// -------------------------------------
-
 	UFUNCTION(BlueprintOverride)
 	void Construct()
 	{
@@ -51,22 +47,15 @@ class UAUW_Overlay : UAuraUserWidget
 		UpdateWidgets();
 	}
 
-	float32 GetAttributeValue(FName AttributeName)
-	{
-		if (!CachedAttributeValues.Contains(AttributeName)) {
-			CachedAttributeValues.Add(AttributeName, WidgetController.AttributeSet.GetAttribute(AttributeName).GetCurrentValue());
-		}
-		return CachedAttributeValues[AttributeName];
-	}
-
 	void UpdateWidgets()
 	{
-		float32 Health = GetAttributeValue(AuraAttributes::Health);
-		float32 MaxHealth = GetAttributeValue(AuraAttributes::MaxHealth);
+		UPlayerGasModule PlayerGasModule = AuraUtil::GetPlayerGasModule(WidgetController.Character);
+		float32 Health = PlayerGasModule.GetAttributeValue(AuraAttributes::Health);
+		float32 MaxHealth = PlayerGasModule.GetAttributeValue(AuraAttributes::MaxHealth);
 		WBP_GlobeHealth.SetPercent(Health, MaxHealth);
 
-		float32 Mana = GetAttributeValue(AuraAttributes::Mana);
-		float32 MaxMana = GetAttributeValue(AuraAttributes::MaxMana);
+		float32 Mana = PlayerGasModule.GetAttributeValue(AuraAttributes::Mana);
+		float32 MaxMana = PlayerGasModule.GetAttributeValue(AuraAttributes::MaxMana);
 		WBP_GlobeMana.SetPercent(Mana, MaxMana);
 	}
 

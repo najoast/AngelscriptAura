@@ -18,6 +18,11 @@ class UPlayerModuleMgr : UObject
 		}
 	}
 
+	UPlayerModuleBase GetPlayerModule(EPlayerModule Module)
+	{
+		return PlayerModules[Module];
+	}
+
 	AAuraCharacter GetOwnerCharacter()
 	{
 		return OwnerCharacter;

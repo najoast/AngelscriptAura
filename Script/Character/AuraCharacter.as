@@ -23,33 +23,23 @@ class AAuraCharacter : AAuraCharacterBase
 	default bUseControllerRotationRoll = false;
 	default bUseControllerRotationYaw = false;
 
-	// --------- functions ----------
 
 	// UFUNCTION(BlueprintOverride)
 	// void Possessed(AController NewController)
 	// {
 	// }
 
-	UPROPERTY(Category = "Attributes")
-	TArray<TSubclassOf<UGameplayEffect>> InitAppliedEffects;
+	// --------- functions ----------
 
 	UFUNCTION(BlueprintOverride)
 	void BeginPlay()
 	{
 		PlayerModuleMgr = Cast<UPlayerModuleMgr>(NewObject(this, UPlayerModuleMgr::StaticClass(), n"UPlayerModuleMgr"));
 		PlayerModuleMgr.Ctor(this);
-
-		InitAbilityActorInfo();
-	}
-
-	// https://github.com/DruidMech/GameplayAbilitySystem_Aura/blob/main/Source/Aura/Private/Character/AuraCharacter.cpp
-	void InitAbilityActorInfo()
-	{
-		for (auto EffectClass : InitAppliedEffects)
-		{
-			AuraUtil::ApplyGameplayEffect(this, this, EffectClass);
-		}
-
 		PlayerModuleMgr.Init();
+
+		// 因为是在 PlayerGasModule 里注册 AuraAttributeSet 的，所以 PlayerModuleMgr 必须在 Super::BeginPlay 之前调用，否则会导致这里面在 Apply 初始 GE 时失效
+		// Because AuraAttributeSet is registered in PlayerGasModule, PlayerModuleMgr must be called before Super::BeginPlay, otherwise it will fail when Apply initial GE.
+		Super::BeginPlay();
 	}
 }
