@@ -43,27 +43,33 @@ class UAUW_Overlay : UAuraUserWidget
 	UFUNCTION()
 	private void OnAttributeChanged(FAngelscriptModifiedAttribute AttributeChangeData)
 	{
-		// TODO: Only vital attributes need update
-		UpdateWidgets();
+		UpdateWidgets(AttributeChangeData);
 	}
 
-	void UpdateWidgets()
+	void UpdateWidgets(FAngelscriptModifiedAttribute AttributeChangeData)
 	{
 		UPlayerGasModule PlayerGasModule = AuraUtil::GetPlayerGasModule(WidgetController.Character);
-		float32 Health = PlayerGasModule.GetAttributeValue(AuraAttributes::Health);
-		float32 MaxHealth = PlayerGasModule.GetAttributeValue(AuraAttributes::MaxHealth);
-		WBP_GlobeHealth.SetPercent(Health, MaxHealth);
+		if (AttributeChangeData.Name == AuraAttributes::Health || AttributeChangeData.Name == AuraAttributes::MaxHealth)
+		{
+			float32 Health = PlayerGasModule.GetAttributeValue(AuraAttributes::Health);
+			float32 MaxHealth = PlayerGasModule.GetAttributeValue(AuraAttributes::MaxHealth);
+			WBP_GlobeHealth.SetPercent(Health, MaxHealth);
+		}
 
-		float32 Mana = PlayerGasModule.GetAttributeValue(AuraAttributes::Mana);
-		float32 MaxMana = PlayerGasModule.GetAttributeValue(AuraAttributes::MaxMana);
-		WBP_GlobeMana.SetPercent(Mana, MaxMana);
+		if (AttributeChangeData.Name == AuraAttributes::Mana || AttributeChangeData.Name == AuraAttributes::MaxMana)
+		{
+			float32 Mana = PlayerGasModule.GetAttributeValue(AuraAttributes::Mana);
+			float32 MaxMana = PlayerGasModule.GetAttributeValue(AuraAttributes::MaxMana);
+			WBP_GlobeMana.SetPercent(Mana, MaxMana);
+		}
 	}
 
 	UFUNCTION()
 	void OnButton_AttributesClicked()
 	{
 		UAUW_AttributeMenu AttributeMenu = Cast<UAUW_AttributeMenu>(WidgetUtil::OpenWidget(n"AttributeMenu", WidgetController.PlayerController, FVector2D(30, 30)));
-		if (AttributeMenu != nullptr) {
+		if (AttributeMenu != nullptr)
+		{
 			// AttributeMenu
 			WBP_WideButton_Attributes.SetIsEnabled(false);
 		}
