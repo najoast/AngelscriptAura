@@ -2,10 +2,10 @@
 namespace AuraAttributes
 {
 	// Primary Attributes
-	const FName Strength    = n"Strength"; // 力量
-	const FName Intellignce = n"Intellignce"; // 智力
-	const FName Resilience  = n"Resilience"; // 抗性
-	const FName Vigor       = n"Vigor"; // 精力
+	const FName Strength     = n"Strength"; // 力量
+	const FName Intelligence = n"Intelligence"; // 智力
+	const FName Resilience   = n"Resilience"; // 抗性
+	const FName Vigor        = n"Vigor"; // 精力
 
 	// Secondary Attributes
 
@@ -91,6 +91,7 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	// Varibles
 	private TArray<FAngelscriptGameplayAttributeData> PrimaryAttributes;
 	private TArray<FAngelscriptGameplayAttributeData> SecondaryAttributes;
+	private TArray<FAngelscriptGameplayAttributeData> VitalAttributes;
 	private TMap<FName, FAngelscriptGameplayAttributeData> Name2Attribute;
 
 	// ======================================================================================================
@@ -100,7 +101,7 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 
 	// Functions
 
-	UAuraAttributeSet()
+	void InitAttributesMapping()
 	{
 		PrimaryAttributes.Add(Strength);
 		PrimaryAttributes.Add(Intellignce);
@@ -118,10 +119,16 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 		SecondaryAttributes.Add(MaxMana);
 		SecondaryAttributes.Add(ManaRegen);
 
+		VitalAttributes.Add(Health);
+		VitalAttributes.Add(Mana);
+
 		for (FAngelscriptGameplayAttributeData& Attribute : PrimaryAttributes) {
 			Name2Attribute.Add(Attribute.AttributeName, Attribute);
 		}
 		for (FAngelscriptGameplayAttributeData& Attribute : SecondaryAttributes) {
+			Name2Attribute.Add(Attribute.AttributeName, Attribute);
+		}
+		for (FAngelscriptGameplayAttributeData& Attribute : VitalAttributes) {
 			Name2Attribute.Add(Attribute.AttributeName, Attribute);
 		}
 	}

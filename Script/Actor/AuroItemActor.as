@@ -24,7 +24,7 @@ class AAuroItemActor : AActor
 		FSDataItem Item = SData::GetItem(ItemID);
 		AuraUtil::ApplyGameplayEffect(this, OtherActor, Item.GameplayEffectClass, ActorLevel);
 
-		UAuraGameInstanceSubsystem::Get().EventMgr.OnItemPickedUpEvent.Broadcast(ItemID);
+		AuraUtil::GameInstance().EventMgr.OnItemPickedUpEvent.Broadcast(ItemID);
 
 		DestroyActor();
 	}

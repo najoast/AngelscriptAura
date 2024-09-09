@@ -1,6 +1,6 @@
 /*
 Usage:
-	UAuraGameInstanceSubsystem::Get().SDataMgr.
+	AuraUtil::GameInstance().SDataMgr.
 */
 
 class UAuraGameInstanceSubsystem : UScriptGameInstanceSubsystem

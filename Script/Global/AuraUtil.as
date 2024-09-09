@@ -23,4 +23,9 @@ namespace AuraUtil
 		}
 		return TargetASC.RemoveActiveGameplayEffect(EffectHandle, StacksToRemove);
 	}
+
+	UAuraGameInstanceSubsystem GameInstance()
+	{
+		return UAuraGameInstanceSubsystem::Get();
+	}
 }

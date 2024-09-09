@@ -27,8 +27,8 @@ class UAUW_Overlay : UAuraUserWidget
 		WBP_GlobeMana.ProgressBar_Main.WidgetStyle.FillImage = ManaBrush;
 
 		WBP_WideButton_Attributes.Button.OnClicked.AddUFunction(this, n"OnButton_AttributesClicked");
-		UAuraGameInstanceSubsystem::Get().EventMgr.OnWidgetClosedEvent.AddUFunction(this, n"OnWidgetClosed");
-		UAuraGameInstanceSubsystem::Get().EventMgr.OnAttributeChangedEvent.AddUFunction(this, n"OnAttributeChanged");
+		AuraUtil::GameInstance().EventMgr.OnWidgetClosedEvent.AddUFunction(this, n"OnWidgetClosed");
+		AuraUtil::GameInstance().EventMgr.OnAttributeChangedEvent.AddUFunction(this, n"OnAttributeChanged");
 	}
 
 	// void OnWidgetControllerSet() override

@@ -12,7 +12,7 @@ class AAuraCharacter : AAuraCharacterBase
 	UPROPERTY(DefaultComponent, Attach = "SpringArm")
 	UCameraComponent Camera;
 
-	UPlayerModuleMgr PlayerModuleMgr = UPlayerModuleMgr(this);
+	UPlayerModuleMgr PlayerModuleMgr;
 
 	// --------- ctor --------
 	default CharacterMovement.bOrientRotationToMovement = true;
@@ -36,6 +36,9 @@ class AAuraCharacter : AAuraCharacterBase
 	UFUNCTION(BlueprintOverride)
 	void BeginPlay()
 	{
+		PlayerModuleMgr = Cast<UPlayerModuleMgr>(NewObject(this, UPlayerModuleMgr::StaticClass(), n"UPlayerModuleMgr"));
+		PlayerModuleMgr.Ctor(this);
+
 		InitAbilityActorInfo();
 	}
 
@@ -49,5 +52,4 @@ class AAuraCharacter : AAuraCharacterBase
 
 		PlayerModuleMgr.Init();
 	}
-
 }

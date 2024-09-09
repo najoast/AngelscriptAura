@@ -80,7 +80,7 @@ class UAUW_AttributeMenu : UAuraUserWidget
 
 		TMap<FName, UAUW_TextValueRow> PrimaryAttributeWidgets;
 		PrimaryAttributeWidgets.Add(AuraAttributes::Strength, WBP_Strength);
-		PrimaryAttributeWidgets.Add(AuraAttributes::Intellignce, WBP_Intelligence);
+		PrimaryAttributeWidgets.Add(AuraAttributes::Intelligence, WBP_Intelligence);
 		PrimaryAttributeWidgets.Add(AuraAttributes::Resilience, WBP_Resislience);
 		PrimaryAttributeWidgets.Add(AuraAttributes::Vigor, WBP_Vigor);
 

@@ -11,8 +11,7 @@ class UAuraEventMgr : UObject
 	FOnWidgetClosed OnWidgetClosedEvent;
 	FOnAttributeChanged OnAttributeChangedEvent;
 
-	void OnAttributeSetRegistered(UAngelscriptAttributeSet NewAttributeSet)
-	{
-		
-	}
+	// void OnAttributeSetRegistered(UAngelscriptAttributeSet NewAttributeSet)
+	// {
+	// }
 }

@@ -23,13 +23,13 @@ namespace WidgetUtil
 			UserWidget.SetPositionInViewport(Position);
 		}
 		UserWidget.AddToViewport();
-		UAuraGameInstanceSubsystem::Get().EventMgr.OnWidgetOpenedEvent.Broadcast(UserWidget);
+		AuraUtil::GameInstance().EventMgr.OnWidgetOpenedEvent.Broadcast(UserWidget);
 		return UserWidget;
 	}
 
 	void CloseWidget(UUserWidget UserWidget)
 	{
-		UAuraGameInstanceSubsystem::Get().EventMgr.OnWidgetClosedEvent.Broadcast(UserWidget);
+		AuraUtil::GameInstance().EventMgr.OnWidgetClosedEvent.Broadcast(UserWidget);
 		UserWidget.RemoveFromParent();
 	}
 

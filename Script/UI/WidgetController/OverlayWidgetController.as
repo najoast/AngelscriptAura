@@ -22,7 +22,7 @@ class UOverlayWidgetController : UAuraWidgetController
 
 	void RegisterAllWidgetsEvent()
 	{
-		auto EventMgr = UAuraGameInstanceSubsystem::Get().EventMgr;
+		auto EventMgr = AuraUtil::GameInstance().EventMgr;
 		EventMgr.OnItemPickedUpEvent.AddUFunction(this, n"OnItemPickedUp");
 	}
 

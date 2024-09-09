@@ -4,17 +4,10 @@ class UPlayerGasModule : UPlayerModuleBase
 	private TMap<FName, float32> CachedAttributeValues;
 	private UAuraAttributeSet AttributeSet;
 
-	UPlayerGasModule(UPlayerModuleMgr InOwnerMgr)
-	{
-		// Super(InOwnerMgr);
-		// UPlayerModuleBase(InOwnerMgr);
-	}
-
 	void Init() override
 	{
 		Super::Init();
 
-		// TODO: Why OwnerMgr is nullptr? Ctor can't work?
 		AAuraCharacter Character = this.OwnerMgr.GetOwnerCharacter();
 		UAngelscriptAbilitySystemComponent ASC = Character.AbilitySystem;
 
@@ -49,7 +42,9 @@ class UPlayerGasModule : UPlayerModuleBase
 			return;
 		}
 
-		Print(f"OnAttributeSetRegistered {NewAttributeSet.Name}");
+		AuraAttributeSet.InitAttributesMapping();
+
+		// Print(f"OnAttributeSetRegistered {NewAttributeSet.Name}");
 
 		UAngelscriptAbilitySystemComponent ASC = this.GetASC();
 
@@ -71,7 +66,7 @@ class UPlayerGasModule : UPlayerModuleBase
 	private void OnAttributeChanged(const FAngelscriptModifiedAttribute&in AttributeChangeData)
 	{
 		CachedAttributeValues.Add(AttributeChangeData.Name, AttributeChangeData.NewValue);
-		UAuraGameInstanceSubsystem::Get().EventMgr.OnAttributeChangedEvent.Broadcast(AttributeChangeData);
+		AuraUtil::GameInstance().EventMgr.OnAttributeChangedEvent.Broadcast(AttributeChangeData);
 	}
 
 	float32 GetAttributeValue(FName AttributeName)
