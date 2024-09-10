@@ -11,7 +11,7 @@ class UAuraGameInstanceSubsystem : UScriptGameInstanceSubsystem
 	UFUNCTION(BlueprintOverride)
 	void Initialize()
 	{
-		Print("MyGame World Subsystem Initialized!");
+		// Print("MyGame World Subsystem Initialized!");
 		SDataMgr.Init();
 	}
 

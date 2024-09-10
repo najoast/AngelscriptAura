@@ -24,6 +24,17 @@ namespace AuraUtil
 		return TargetASC.RemoveActiveGameplayEffect(EffectHandle, StacksToRemove);
 	}
 
+	FGameplayAbilitySpecHandle AddGameplayAbilities(AActor TargetActor, TSubclassOf<UGameplayAbility> AbilityClass)
+	{
+		UAbilitySystemComponent TargetASC = AbilitySystem::GetAbilitySystemComponent(TargetActor);
+		if (TargetASC == nullptr) {
+			return FGameplayAbilitySpecHandle();
+		}
+
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+		return TargetASC.GiveAbilityAndActivateOnce(AbilitySpec);
+	}
+
 	UAuraGameInstanceSubsystem GameInstance()
 	{
 		return UAuraGameInstanceSubsystem::Get();

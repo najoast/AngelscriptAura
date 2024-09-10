@@ -5,8 +5,11 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 	USkeletalMeshComponent Weapon;
 	default Weapon.SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	UPROPERTY(Category = "Attributes")
+	UPROPERTY(Category = "GAS")
 	TArray<TSubclassOf<UGameplayEffect>> InitAppliedEffects;
+
+	UPROPERTY(Category = "GAS")
+	TArray<TSubclassOf<UGameplayAbility>> InitAddedAbilities;
 
 	UFUNCTION(BlueprintOverride)
 	void BeginPlay()
@@ -14,6 +17,11 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		for (auto EffectClass : InitAppliedEffects)
 		{
 			AuraUtil::ApplyGameplayEffect(this, this, EffectClass);
+		}
+
+		for (auto AbilityClass : InitAddedAbilities)
+		{
+			FGameplayAbilitySpecHandle Handle = AuraUtil::AddGameplayAbilities(this, AbilityClass);
 		}
 	}
 }
