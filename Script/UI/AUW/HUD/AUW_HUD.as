@@ -82,7 +82,7 @@ class UAUW_HUD : UAuraUserWidget
 	UFUNCTION()
 	void OnItemPickedUp(EItemID ItemID)
 	{
-		FSDataItem Item = SData::GetItem(ItemID);
+		FSDataItem Item = SDataUtil::GetItem(ItemID);
 		if (Item.ID == EItemID::None) {
 			Print(f"Item {ItemID} is not found");
 			return;

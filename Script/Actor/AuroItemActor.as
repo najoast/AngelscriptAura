@@ -21,7 +21,7 @@ class AAuroItemActor : AActor
 	UFUNCTION(BlueprintOverride)
 	void ActorBeginOverlap(AActor OtherActor)
 	{
-		FSDataItem Item = SData::GetItem(ItemID);
+		FSDataItem Item = SDataUtil::GetItem(ItemID);
 		AuraUtil::ApplyGameplayEffect(this, OtherActor, Item.GameplayEffectClass, ActorLevel);
 
 		AuraUtil::GameInstance().EventMgr.OnItemPickedUpEvent.Broadcast(ItemID);

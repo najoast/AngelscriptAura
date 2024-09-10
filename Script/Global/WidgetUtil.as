@@ -29,7 +29,7 @@ namespace WidgetUtil
 
 	UUserWidget OpenWidget(FName WidgetClassName, AAuraCharacter AuraCharacter, FVector2D Position = FVector2D::ZeroVector)
 	{
-		TSubclassOf<UUserWidget> WidgetClass = SData::GetWidgetClass(WidgetClassName);
+		TSubclassOf<UUserWidget> WidgetClass = SDataUtil::GetWidgetClass(WidgetClassName);
 		if (WidgetClass == nullptr) {
 			Print(f"Widget {WidgetClassName} is not found");
 			return nullptr;

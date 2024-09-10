@@ -17,13 +17,11 @@ class AAuraPlayerController : APlayerController
 
 	// Functions
 	UFUNCTION(BlueprintOverride)
-	void BeginPlay()
-	{
+	void BeginPlay() {
 		check(AuraContext != nullptr);
 		UEnhancedInputLocalPlayerSubsystem Subsystem = UEnhancedInputLocalPlayerSubsystem::Get(this);
 		if (Subsystem != nullptr) {
-			FModifyContextOptions Option;
-			Subsystem.AddMappingContext(AuraContext, 0, Option);
+			Subsystem.AddMappingContext(AuraContext, 0, FModifyContextOptions());
 		}
 
 		bShowMouseCursor = true;
@@ -34,13 +32,11 @@ class AAuraPlayerController : APlayerController
 	}
 
 	UFUNCTION(BlueprintOverride)
-	void Tick(float DeltaTime)
-	{
+	void Tick(float DeltaTime) {
 		CursorTrace();
 	}
 
-	void CursorTrace()
-	{
+	void CursorTrace() {
 		FHitResult HitResult;
 		GetHitResultUnderCursorByChannel(ETraceTypeQuery::Visibility, false, HitResult);
 		if (!HitResult.bBlockingHit) {
@@ -79,16 +75,22 @@ class AAuraPlayerController : APlayerController
 		}
 	}
 
-    void SetupInputComponent()
-	{
-		auto MyInputComponent = GetComponentByClass(TSubclassOf<UInputComponent>(UInputComponent::StaticClass()));
-        UEnhancedInputComponent EnhancedInput = Cast<UEnhancedInputComponent>(MyInputComponent);
+	void SetupInputComponent() {
+		auto MyInputComponent = GetComponentByClass(UEnhancedInputComponent::StaticClass());
+		UEnhancedInputComponent EnhancedInput = Cast<UEnhancedInputComponent>(MyInputComponent);
 		EnhancedInput.BindAction(MoveAction, ETriggerEvent::Triggered, FEnhancedInputActionHandlerDynamicSignature(this, n"Move"));
+
+		
+		for (auto Element : SDataUtil::GetSDataMgr().InputActionToGameplayTag) {
+			UInputAction InputAction = Element.Key;
+			EnhancedInput.BindAction(InputAction, ETriggerEvent::Started, FEnhancedInputActionHandlerDynamicSignature(this, n"OnSDataInputStarted"), );
+			EnhancedInput.BindAction(InputAction, ETriggerEvent::Triggered, FEnhancedInputActionHandlerDynamicSignature(this, n"OnSDataInputTriggered"), );
+			EnhancedInput.BindAction(InputAction, ETriggerEvent::Completed, FEnhancedInputActionHandlerDynamicSignature(this, n"OnSDataInputCompleted"), );
+		}
 	}
 
 	UFUNCTION()
-	void Move(FInputActionValue ActionValue, float32 ElapsedTime, float32 TriggeredTime, const UInputAction SourceAction)
-	{
+	void Move(FInputActionValue ActionValue, float32 ElapsedTime, float32 TriggeredTime, const UInputAction SourceAction) {
 		FRotator ControllerRotation = GetControlRotation();
 		ControllerRotation.Pitch = 0.f;
 		ControllerRotation.Roll = 0.f;
@@ -98,5 +100,21 @@ class AAuraPlayerController : APlayerController
 		APawn MyControlledPawn = GetControlledPawn();
 		MyControlledPawn.AddMovementInput(ControllerForwardVector, ActionValue.Axis2D.Y);
 		MyControlledPawn.AddMovementInput(ControllerRightVector, ActionValue.Axis2D.X);
+	}
+
+	UFUNCTION() // Pressed
+	void OnSDataInputStarted(FInputActionValue ActionValue, float32 ElapsedTime, float32 TriggeredTime, const UInputAction SourceAction) const {
+		FGameplayTag GameplayTag = SDataUtil::GetSDataMgr().InputActionToGameplayTag[SourceAction];
+		Print(f"OnSDataInputStarted {SourceAction.GetName()} Pressed, GameplayTag {GameplayTag.ToString()}");
+	}
+
+	UFUNCTION() // Held
+	void OnSDataInputTriggered(FInputActionValue ActionValue, float32 ElapsedTime, float32 TriggeredTime, const UInputAction SourceAction) const {
+		Print(f"OnSDataInputTriggered {SourceAction.GetName()} Held");
+	}
+
+	UFUNCTION() // Released
+	void OnSDataInputCompleted(FInputActionValue ActionValue, float32 ElapsedTime, float32 TriggeredTime, const UInputAction SourceAction) const {
+		Print(f"OnSDataInputCompleted {SourceAction.GetName()} Released");
 	}
 }
