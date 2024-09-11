@@ -42,6 +42,7 @@ class AAuraPlayerController : APlayerController
 	UFUNCTION(BlueprintOverride)
 	void Tick(float DeltaTime) {
 		CursorTrace();
+		ClickToMove.Tick();
 	}
 
 	void CursorTrace() {

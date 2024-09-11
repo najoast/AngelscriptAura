@@ -68,10 +68,32 @@ class UClickToMove : UObject
 				// System::DrawDebugSphere(Point, 8.f, 8, FColor::Green, 0, 5.f);
 				System::DrawDebugSphere(Point, 8, 12, FLinearColor::Purple, 30);
 			}
+			CachedDestination = NavPath.PathPoints[NavPath.PathPoints.Num() - 1];
 			bAutoRunning = true;
 		}
 
 		FollowTime = 0.f;
 		bTargeting = false;
+	}
+
+	void Tick()
+	{
+		if (!bAutoRunning) {
+			return;
+		}
+		APawn ControlledPawn = OwnerController.GetControlledPawn();
+		if (!System::IsValid(ControlledPawn)) {
+			return;
+		}
+
+		USplineComponent MovementSpline = OwnerController.MovementSpline;
+		const FVector LocationOnSpline = MovementSpline.FindLocationClosestToWorldLocation(ControlledPawn.GetActorLocation(), ESplineCoordinateSpace::World);
+		const FVector Direction = MovementSpline.FindDirectionClosestToWorldLocation(LocationOnSpline, ESplineCoordinateSpace::World);
+		ControlledPawn.AddMovementInput(Direction);
+
+		const float DistanceToDestination = (LocationOnSpline - CachedDestination).Size();
+		if (DistanceToDestination <= AutoRunAcceptanceRadius) {
+			bAutoRunning = false;
+		}
 	}
 }
