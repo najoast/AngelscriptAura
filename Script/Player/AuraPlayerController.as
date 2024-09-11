@@ -8,13 +8,14 @@ class AAuraPlayerController : APlayerController
 	UPROPERTY(Category = "Input")
 	UInputAction MoveAction;
 
-	// Ctor
-	default DefaultMouseCursor = EMouseCursor::Default;
-
 	// Members
 	AAuraEnemy LastEnemy;
 	AAuraEnemy ThisEnemy;
 	UAbilitySystemComponent AbilitySystemComponent;
+	private UClickToMove ClickToMove;
+
+	// Ctor
+	default DefaultMouseCursor = EMouseCursor::Default;
 
 	// Functions
 	UFUNCTION(BlueprintOverride)
@@ -30,6 +31,9 @@ class AAuraPlayerController : APlayerController
 		Widget::SetInputMode_GameAndUIEx(this, bHideCursorDuringCapture = false);
 
 		SetupInputComponent();
+
+		ClickToMove = Cast<UClickToMove>(NewObject(this, UClickToMove::StaticClass()));
+		ClickToMove.Ctor(this);
 	}
 
 	UFUNCTION(BlueprintOverride)
@@ -110,11 +114,15 @@ class AAuraPlayerController : APlayerController
 		}
 
 		FSDataInput Input = SDataUtil::GetSDataMgr().InputMap[SourceAction];
-		TSubclassOf<UGameplayAbility> GameplayAbility = Input.AbilityClass;
-		if (GameplayAbility != nullptr) {
-			FGameplayAbilitySpec AbilitySpec = GasUtil::MakeAbilitySpec(GameplayAbility);
-			AbilitySpec.DynamicAbilityTags.AddTag(Input.GameplayTag);
-			ASC.GiveAbility(AbilitySpec);
+		if (Input.GameplayTag == GameplayTags::Input_LMB) {
+			ClickToMove.ClickPressed();
+		} else {
+			TSubclassOf<UGameplayAbility> GameplayAbility = Input.AbilityClass;
+			if (GameplayAbility != nullptr) {
+				FGameplayAbilitySpec AbilitySpec = GasUtil::MakeAbilitySpec(GameplayAbility);
+				AbilitySpec.DynamicAbilityTags.AddTag(Input.GameplayTag);
+				ASC.GiveAbility(AbilitySpec);
+			}
 		}
 	}
 
@@ -125,19 +133,28 @@ class AAuraPlayerController : APlayerController
 			return;
 		}
 
-		/*
-			Warning: Can't iterate ActivatableAbilities in Angelscript!
-			Because it's key property `Items` is not exposed to blueprints.
-			- ASC.ActivatableAbilities.Items;
-			- ASC.GetActivatableAbilities();
-		*/
-		TSubclassOf<UGameplayAbility> GameplayAbility = SDataUtil::GetSDataMgr().InputMap[SourceAction].AbilityClass;
-		ASC.TryActivateAbilityByClass(GameplayAbility);
+		// It's ok to put this below the ASC check, because ASC is only null when the player is not controlling a character.
+		FSDataInput Input = SDataUtil::GetSDataMgr().InputMap[SourceAction];
+		if (Input.GameplayTag == GameplayTags::Input_LMB) {
+			ClickToMove.ClickHeld();
+		} else {
+			/*
+				Warning: Can't iterate ActivatableAbilities in Angelscript!
+				Because it's key property `Items` is not exposed to blueprints.
+				- ASC.ActivatableAbilities.Items;
+				- ASC.GetActivatableAbilities();
+			*/
+			ASC.TryActivateAbilityByClass(Input.AbilityClass);
+		}
 	}
 
 	UFUNCTION() // Released
 	void OnSDataInputCompleted(FInputActionValue ActionValue, float32 ElapsedTime, float32 TriggeredTime, const UInputAction SourceAction) const {
 		Print(f"OnSDataInputCompleted {SourceAction.GetName()} Released");
+		FSDataInput Input = SDataUtil::GetSDataMgr().InputMap[SourceAction];
+		if (Input.GameplayTag == GameplayTags::Input_LMB) {
+			ClickToMove.ClickReleased();
+		}
 	}
 
 	UAbilitySystemComponent GetASC() {
