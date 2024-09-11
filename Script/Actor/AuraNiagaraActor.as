@@ -33,14 +33,14 @@ class AAuraNiagaraActor : AActor
 	void ActorBeginOverlap(AActor OtherActor)
 	{
 		Print("Overlapping with: " + OtherActor.Name);
-		EffectHandle = AuraUtil::ApplyGameplayEffect(this, OtherActor, GameplayEffectClass);
+		EffectHandle = GasUtil::ApplyGameplayEffect(this, OtherActor, GameplayEffectClass);
 	}
 
 	UFUNCTION(BlueprintOverride)
 	void ActorEndOverlap(AActor OtherActor)
 	{
 		Print("No longer overlapping with: " + OtherActor.Name);
-		AuraUtil::RemoveGameplayEffect(OtherActor, EffectHandle);
+		GasUtil::RemoveGameplayEffect(OtherActor, EffectHandle);
 		EffectHandle = AuraConst::EmptyEffectHandle;
 	}
 }

@@ -16,12 +16,12 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 	{
 		for (auto EffectClass : InitAppliedEffects)
 		{
-			AuraUtil::ApplyGameplayEffect(this, this, EffectClass);
+			GasUtil::ApplyGameplayEffect(this, this, EffectClass);
 		}
 
 		for (auto AbilityClass : InitAddedAbilities)
 		{
-			FGameplayAbilitySpecHandle Handle = AuraUtil::AddGameplayAbilities(this, AbilityClass);
+			FGameplayAbilitySpecHandle Handle = GasUtil::GiveAbility(this, AbilityClass);
 		}
 	}
 }

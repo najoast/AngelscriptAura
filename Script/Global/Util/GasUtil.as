@@ -1,5 +1,4 @@
-
-namespace AuraUtil
+namespace GasUtil
 {
 	FActiveGameplayEffectHandle ApplyGameplayEffect(AActor SourceActor, AActor TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass, float32 Level = 1)
 	{
@@ -24,7 +23,7 @@ namespace AuraUtil
 		return TargetASC.RemoveActiveGameplayEffect(EffectHandle, StacksToRemove);
 	}
 
-	FGameplayAbilitySpecHandle AddGameplayAbilities(AActor TargetActor, TSubclassOf<UGameplayAbility> AbilityClass)
+	FGameplayAbilitySpecHandle GiveAbility(AActor TargetActor, TSubclassOf<UGameplayAbility> AbilityClass)
 	{
 		UAbilitySystemComponent TargetASC = AbilitySystem::GetAbilitySystemComponent(TargetActor);
 		if (TargetASC == nullptr) {
@@ -32,16 +31,12 @@ namespace AuraUtil
 		}
 
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
-		return TargetASC.GiveAbilityAndActivateOnce(AbilitySpec);
+		return TargetASC.GiveAbility(AbilitySpec);
 	}
 
-	UAuraGameInstanceSubsystem GameInstance()
+	FGameplayAbilitySpec MakeAbilitySpec(TSubclassOf<UGameplayAbility> AbilityClass, int Level = 1)
 	{
-		return UAuraGameInstanceSubsystem::Get();
-	}
-
-	UPlayerGasModule GetPlayerGasModule(AAuraCharacter Character)
-	{
-		return Cast<UPlayerGasModule>(Character.PlayerModuleMgr.GetPlayerModule(EPlayerModule::Gas));
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, Level);
+		return AbilitySpec;
 	}
 }

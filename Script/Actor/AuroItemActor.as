@@ -22,7 +22,7 @@ class AAuroItemActor : AActor
 	void ActorBeginOverlap(AActor OtherActor)
 	{
 		FSDataItem Item = SDataUtil::GetItem(ItemID);
-		AuraUtil::ApplyGameplayEffect(this, OtherActor, Item.GameplayEffectClass, ActorLevel);
+		GasUtil::ApplyGameplayEffect(this, OtherActor, Item.GameplayEffectClass, ActorLevel);
 
 		AuraUtil::GameInstance().EventMgr.OnItemPickedUpEvent.Broadcast(ItemID);
 

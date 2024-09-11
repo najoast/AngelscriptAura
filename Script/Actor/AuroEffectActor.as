@@ -37,7 +37,7 @@ class AAuroEffectActor : AActor
 		// 	DestroyActor();
 		// }
 
-		AuraUtil::ApplyGameplayEffect(this, OtherActor, GameplayEffectClass, ActorLevel);
+		GasUtil::ApplyGameplayEffect(this, OtherActor, GameplayEffectClass, ActorLevel);
 		DestroyActor();
 	}
 

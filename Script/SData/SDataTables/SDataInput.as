@@ -6,4 +6,7 @@ struct FSDataInput
 
 	UPROPERTY()
 	FGameplayTag GameplayTag;
+
+	UPROPERTY()
+	TSubclassOf<UGameplayAbility> AbilityClass;
 }
