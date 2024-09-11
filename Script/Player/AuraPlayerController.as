@@ -81,8 +81,8 @@ class AAuraPlayerController : APlayerController
 	}
 
 	void SetupInputComponent() {
-		auto MyInputComponent = GetComponentByClass(UEnhancedInputComponent::StaticClass());
-		UEnhancedInputComponent EnhancedInput = Cast<UEnhancedInputComponent>(MyInputComponent);
+		UActorComponent InputComponent = GetComponentByClass(UEnhancedInputComponent::StaticClass());
+		UEnhancedInputComponent EnhancedInput = Cast<UEnhancedInputComponent>(InputComponent);
 		EnhancedInput.BindAction(MoveAction, ETriggerEvent::Triggered, FEnhancedInputActionHandlerDynamicSignature(this, n"Move"));
 
 		for (auto Element : SDataUtil::GetSDataMgr().InputMap) {
