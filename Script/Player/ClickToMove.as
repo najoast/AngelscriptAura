@@ -13,9 +13,6 @@ class UClickToMove : UObject
 	bool bAutoRunning = false;
 	bool bTargeting = false;
 
-	UPROPERTY(DefaultComponent)
-	USplineComponent MovementSpline;
-
 	// Functions
 	void Ctor(AAuraPlayerController InOwnerController)
 	{
@@ -50,5 +47,31 @@ class UClickToMove : UObject
 
 	void ClickReleased()
 	{
+		if (bTargeting) {
+			return;
+		}
+		APawn ControlledPawn = OwnerController.GetControlledPawn();
+		if (ControlledPawn == nullptr) {
+			return;
+		}
+		if (FollowTime > ShortPressThreshold) {
+			return;
+		}
+
+		FVector PathStart = ControlledPawn.GetActorLocation();
+		UNavigationPath NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(PathStart, CachedDestination, ControlledPawn);
+		if (NavPath != nullptr && NavPath.PathPoints.Num() > 0) {
+			USplineComponent MovementSpline = OwnerController.MovementSpline;
+			MovementSpline.ClearSplinePoints();
+			for (FVector Point : NavPath.PathPoints) {
+				MovementSpline.AddSplinePoint(Point, ESplineCoordinateSpace::World);
+				// System::DrawDebugSphere(Point, 8.f, 8, FColor::Green, 0, 5.f);
+				System::DrawDebugSphere(Point, 8, 12, FLinearColor::Purple, 30);
+			}
+			bAutoRunning = true;
+		}
+
+		FollowTime = 0.f;
+		bTargeting = false;
 	}
 }

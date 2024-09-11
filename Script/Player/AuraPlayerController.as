@@ -8,6 +8,9 @@ class AAuraPlayerController : APlayerController
 	UPROPERTY(Category = "Input")
 	UInputAction MoveAction;
 
+	UPROPERTY(DefaultComponent)
+	USplineComponent MovementSpline;
+
 	// Members
 	AAuraEnemy LastEnemy;
 	AAuraEnemy ThisEnemy;
