@@ -13,6 +13,7 @@ class UAuraGameInstanceSubsystem : UScriptGameInstanceSubsystem
 	{
 		// Print("MyGame World Subsystem Initialized!");
 		SDataMgr.Init();
+		// Aura::FloorTiler(this, 1, 600, 600);
 	}
 
 	// UFUNCTION(BlueprintOverride)
