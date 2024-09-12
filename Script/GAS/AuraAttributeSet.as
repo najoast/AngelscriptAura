@@ -136,7 +136,7 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	UFUNCTION()
 	void OnRep_ReplicationTrampoline(FAngelscriptGameplayAttributeData& OldAttributeData)
 	{
-		Print(f"OnRep_ReplicationTrampoline: {OldAttributeData =}");
+		Print(f"OnRep_ReplicationTrampoline: {OldAttributeData.AttributeName =}");
 		OnRep_Attribute(OldAttributeData);
 	}
 

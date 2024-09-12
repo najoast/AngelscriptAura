@@ -1,6 +1,8 @@
 
 class AAuraPlayerController : APlayerController
 {
+	default bReplicates = true;
+
 	// Properties
 	UPROPERTY(Category = "Input")
 	UInputMappingContext AuraContext;
@@ -15,6 +17,7 @@ class AAuraPlayerController : APlayerController
 	AAuraEnemy LastEnemy;
 	AAuraEnemy ThisEnemy;
 	UAbilitySystemComponent AbilitySystemComponent;
+	FHitResult HitResult;
 	private UClickToMove ClickToMove;
 
 	// Ctor
@@ -23,6 +26,8 @@ class AAuraPlayerController : APlayerController
 	// Functions
 	UFUNCTION(BlueprintOverride)
 	void BeginPlay() {
+		Print("========================== AuraPlayerController BeginPlay ==========================");
+		// bool IsDedicatedServer = System::IsDedicatedServer();
 		check(AuraContext != nullptr);
 		UEnhancedInputLocalPlayerSubsystem Subsystem = UEnhancedInputLocalPlayerSubsystem::Get(this);
 		if (Subsystem != nullptr) {
@@ -35,18 +40,23 @@ class AAuraPlayerController : APlayerController
 
 		SetupInputComponent();
 
+		System::LogString("AuraPlayerController BeginPlay");
 		ClickToMove = Cast<UClickToMove>(NewObject(this, UClickToMove::StaticClass()));
 		ClickToMove.Ctor(this);
 	}
 
 	UFUNCTION(BlueprintOverride)
 	void Tick(float DeltaTime) {
+		// bool IsDedicatedServer = System::IsDedicatedServer();
 		CursorTrace();
-		ClickToMove.Tick();
+		// Client's ClickToMove will be null at the very beginning of the game.
+		// That means the client's Tick() will be called before the BeginPlay(). I don't know why.
+		if (ClickToMove != nullptr) {
+			ClickToMove.Tick();
+		}
 	}
 
 	void CursorTrace() {
-		FHitResult HitResult;
 		GetHitResultUnderCursorByChannel(ETraceTypeQuery::Visibility, false, HitResult);
 		if (!HitResult.bBlockingHit) {
 			return;
@@ -86,6 +96,10 @@ class AAuraPlayerController : APlayerController
 
 	void SetupInputComponent() {
 		UActorComponent InputComponent = GetComponentByClass(UEnhancedInputComponent::StaticClass());
+		if (InputComponent == nullptr) {
+			return; // server doesn't have input component
+		}
+
 		UEnhancedInputComponent EnhancedInput = Cast<UEnhancedInputComponent>(InputComponent);
 		EnhancedInput.BindAction(MoveAction, ETriggerEvent::Triggered, FEnhancedInputActionHandlerDynamicSignature(this, n"Move"));
 

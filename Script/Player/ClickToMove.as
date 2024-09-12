@@ -33,9 +33,8 @@ class UClickToMove : UObject
 
 		FollowTime += GetWorld().GetDeltaSeconds();
 
-		FHitResult HitResult;
-		if (OwnerController.GetHitResultUnderCursorByChannel(ETraceTypeQuery::Visibility, false, HitResult)) {
-			CachedDestination = HitResult.ImpactPoint;
+		if (OwnerController.HitResult.bBlockingHit) {
+			CachedDestination = OwnerController.HitResult.ImpactPoint;
 		}
 
 		APawn ControlledPawn = OwnerController.GetControlledPawn();
