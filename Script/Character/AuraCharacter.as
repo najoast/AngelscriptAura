@@ -23,10 +23,18 @@ class AAuraCharacter : AAuraCharacterBase
 	default bUseControllerRotationRoll = false;
 	default bUseControllerRotationYaw = false;
 
+	// void InitPlayerModuleMgr()
+	// {
+	// 	PlayerModuleMgr = Cast<UPlayerModuleMgr>(NewObject(this, UPlayerModuleMgr::StaticClass(), n"UPlayerModuleMgr"));
+	// 	PlayerModuleMgr.Ctor(this);
+	// 	PlayerModuleMgr.Init();
+	// }
 
 	// UFUNCTION(BlueprintOverride)
 	// void Possessed(AController NewController)
 	// {
+	// 	// Init player module manager for the server
+	// 	InitPlayerModuleMgr();
 	// }
 
 	// --------- functions ----------
@@ -34,6 +42,7 @@ class AAuraCharacter : AAuraCharacterBase
 	UFUNCTION(BlueprintOverride)
 	void BeginPlay()
 	{
+		// const bool IsDedicatedServer = System::IsDedicatedServer();
 		PlayerModuleMgr = Cast<UPlayerModuleMgr>(NewObject(this, UPlayerModuleMgr::StaticClass(), n"UPlayerModuleMgr"));
 		PlayerModuleMgr.Ctor(this);
 		PlayerModuleMgr.Init();
@@ -42,4 +51,5 @@ class AAuraCharacter : AAuraCharacterBase
 		// Because AuraAttributeSet is registered in PlayerGasModule, PlayerModuleMgr must be called before Super::BeginPlay, otherwise it will fail when Apply initial GE.
 		Super::BeginPlay();
 	}
+
 }

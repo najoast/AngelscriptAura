@@ -47,7 +47,6 @@ class AAuraPlayerController : APlayerController
 
 	UFUNCTION(BlueprintOverride)
 	void Tick(float DeltaTime) {
-		// bool IsDedicatedServer = System::IsDedicatedServer();
 		CursorTrace();
 		// Client's ClickToMove will be null at the very beginning of the game.
 		// That means the client's Tick() will be called before the BeginPlay(). I don't know why.

@@ -7,10 +7,9 @@ class AAuraHUD : AHUD
 	UPROPERTY()
 	TSubclassOf<UAuraUserWidget> HUDWidgetClass;
 
-	void InitOverlay(AAuraCharacter Character)
+	void InitHUDWidget(AAuraCharacter Character)
 	{
 		check(HUDWidgetClass != nullptr);
-
 		WidgetUtil::OpenWidgetByClass(HUDWidgetClass, Character);
 	}
 }

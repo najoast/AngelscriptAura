@@ -18,12 +18,13 @@ class UPlayerGasModule : UPlayerModuleBase
 		ASC.InitAbilityActorInfo(Character, Character);
 
 		APlayerController PlayerController = Character.GetLocalViewingPlayerController();
+		// APlayerController PlayerController = Cast<APlayerController>(Character.GetController());
 		if (PlayerController != nullptr)
 		{
 			auto AuraHUD = Cast<AAuraHUD>(PlayerController.GetHUD());
 			if (AuraHUD != nullptr)
 			{
-				AuraHUD.InitOverlay(Character);
+				AuraHUD.InitHUDWidget(Character);
 			}
 		}
 	}
