@@ -1,6 +1,8 @@
 
 class AAuraProjectile : AActor
 {
+	default bReplicates = true;
+
 	UPROPERTY(DefaultComponent, RootComponent)
 	USceneComponent SceneRoot;
 
@@ -25,6 +27,13 @@ class AAuraProjectile : AActor
 	void ActorBeginOverlap(AActor OtherActor)
 	{
 		Print("Overlapping with: " + OtherActor.Name);
+		// DestroyActor();
+		System::SetTimer(this, n"DestroyProjectile", 10.f, false);
+	}
+
+	UFUNCTION()
+	private void DestroyProjectile()
+	{
 		DestroyActor();
 	}
 }

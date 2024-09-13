@@ -93,6 +93,10 @@ class AAuraPlayerController : APlayerController
 		}
 	}
 
+	bool IsTargeting() {
+		return ThisEnemy != nullptr;
+	}
+
 	void SetupInputComponent() {
 		UActorComponent InputComponent = GetComponentByClass(UEnhancedInputComponent::StaticClass());
 		if (InputComponent == nullptr) {
@@ -131,7 +135,7 @@ class AAuraPlayerController : APlayerController
 		}
 
 		FSDataInput Input = SDataUtil::GetSDataMgr().InputMap[SourceAction];
-		if (Input.GameplayTag == GameplayTags::Input_LMB) {
+		if (ClickToMove.NeedTakeOverInput(Input.GameplayTag)) {
 			ClickToMove.ClickPressed();
 		} else {
 			TSubclassOf<UGameplayAbility> GameplayAbility = Input.AbilityClass;
@@ -152,7 +156,7 @@ class AAuraPlayerController : APlayerController
 
 		// It's ok to put this below the ASC check, because ASC is only null when the player is not controlling a character.
 		FSDataInput Input = SDataUtil::GetSDataMgr().InputMap[SourceAction];
-		if (Input.GameplayTag == GameplayTags::Input_LMB) {
+		if (ClickToMove.NeedTakeOverInput(Input.GameplayTag)) {
 			ClickToMove.ClickHeld();
 		} else {
 			/*
@@ -169,7 +173,7 @@ class AAuraPlayerController : APlayerController
 	void OnSDataInputCompleted(FInputActionValue ActionValue, float32 ElapsedTime, float32 TriggeredTime, const UInputAction SourceAction) const {
 		Print(f"OnSDataInputCompleted {SourceAction.GetName()} Released");
 		FSDataInput Input = SDataUtil::GetSDataMgr().InputMap[SourceAction];
-		if (Input.GameplayTag == GameplayTags::Input_LMB) {
+		if (ClickToMove.NeedTakeOverInput(Input.GameplayTag)) {
 			ClickToMove.ClickReleased();
 		}
 	}

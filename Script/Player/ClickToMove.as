@@ -11,7 +11,6 @@ class UClickToMove : UObject
 	FVector CachedDestination = FVector::ZeroVector;
 	float FollowTime = 0;
 	bool bAutoRunning = false;
-	bool bTargeting = false;
 
 	// Functions
 	void Ctor(AAuraPlayerController InOwnerController)
@@ -21,13 +20,12 @@ class UClickToMove : UObject
 
 	void ClickPressed()
 	{
-		bTargeting = OwnerController.ThisEnemy != nullptr;
 		bAutoRunning = false;
 	}
 
 	void ClickHeld()
 	{
-		if (bTargeting) {
+		if (OwnerController.IsTargeting()) {
 			return;
 		}
 
@@ -46,7 +44,7 @@ class UClickToMove : UObject
 
 	void ClickReleased()
 	{
-		if (bTargeting) {
+		if (OwnerController.IsTargeting()) {
 			return;
 		}
 		APawn ControlledPawn = OwnerController.GetControlledPawn();
@@ -72,7 +70,6 @@ class UClickToMove : UObject
 		}
 
 		FollowTime = 0.f;
-		bTargeting = false;
 	}
 
 	void Tick()
@@ -94,5 +91,16 @@ class UClickToMove : UObject
 		if (DistanceToDestination <= AutoRunAcceptanceRadius) {
 			bAutoRunning = false;
 		}
+	}
+
+	// 点鼠标左键时，只有在没有目标时才接管输入
+	bool NeedTakeOverInput(FGameplayTag InputTag) {
+		if (InputTag != GameplayTags::Input_LMB) {
+			return false;
+		}
+		if (OwnerController.IsTargeting()) {
+			return false;
+		}
+		return true;
 	}
 }
