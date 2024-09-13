@@ -93,14 +93,8 @@ class UClickToMove : UObject
 		}
 	}
 
-	// 点鼠标左键时，只有在没有目标时才接管输入
+	// 只有在点鼠标左键且没有目标时才接管鼠标左键点击
 	bool NeedTakeOverInput(FGameplayTag InputTag) {
-		if (InputTag != GameplayTags::Input_LMB) {
-			return false;
-		}
-		if (OwnerController.IsTargeting()) {
-			return false;
-		}
-		return true;
+		return InputTag == GameplayTags::Input_LMB && !OwnerController.IsTargeting();
 	}
 }

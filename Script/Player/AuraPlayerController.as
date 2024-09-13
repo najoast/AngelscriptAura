@@ -166,6 +166,10 @@ class AAuraPlayerController : APlayerController
 				- ASC.GetActivatableAbilities();
 			*/
 			ASC.TryActivateAbilityByClass(Input.AbilityClass);
+			ASC.ActivatableAbilities;
+			// for (auto Element : ) {
+			// 	Print(Element.AbilityClass.GetName());
+			// }
 		}
 	}
 
