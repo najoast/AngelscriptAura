@@ -138,12 +138,13 @@ class AAuraPlayerController : APlayerController
 		if (ClickToMove.NeedTakeOverInput(Input.GameplayTag)) {
 			ClickToMove.ClickPressed();
 		} else {
-			TSubclassOf<UGameplayAbility> GameplayAbility = Input.AbilityClass;
-			if (GameplayAbility != nullptr) {
-				FGameplayAbilitySpec AbilitySpec = GasUtil::MakeAbilitySpec(GameplayAbility);
-				AbilitySpec.DynamicAbilityTags.AddTag(Input.GameplayTag);
-				ASC.GiveAbility(AbilitySpec);
-			}
+			// 不能在这里一直给，而是在初始化时只给一次
+			// TSubclassOf<UGameplayAbility> GameplayAbility = Input.AbilityClass;
+			// if (GameplayAbility != nullptr) {
+			// 	FGameplayAbilitySpec AbilitySpec = GasUtil::MakeAbilitySpec(GameplayAbility);
+			// 	AbilitySpec.DynamicAbilityTags.AddTag(Input.GameplayTag);
+			// 	ASC.GiveAbility(AbilitySpec);
+			// }
 		}
 	}
 
@@ -166,10 +167,14 @@ class AAuraPlayerController : APlayerController
 				- ASC.GetActivatableAbilities();
 			*/
 			ASC.TryActivateAbilityByClass(Input.AbilityClass);
-			ASC.ActivatableAbilities;
-			// for (auto Element : ) {
-			// 	Print(Element.AbilityClass.GetName());
-			// }
+
+			TArray<FGameplayAbilitySpec> OutAbilitySpecs;
+			ASC.FindAllAbilitySpecsFromInputID(AuraConst::DefaultAbilityInputID, OutAbilitySpecs);
+			for (FGameplayAbilitySpec AbilitySpec : OutAbilitySpecs) {
+				if (!AbilitySpec.IsActive()) {
+					ASC.TryActivateAbility(AbilitySpec.Handle);
+				}
+			}
 		}
 	}
 

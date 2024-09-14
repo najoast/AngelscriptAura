@@ -23,14 +23,14 @@ namespace GasUtil
 		return TargetASC.RemoveActiveGameplayEffect(EffectHandle, StacksToRemove);
 	}
 
-	FGameplayAbilitySpecHandle GiveAbility(AActor TargetActor, TSubclassOf<UGameplayAbility> AbilityClass)
+	FGameplayAbilitySpecHandle GiveAbility(AActor TargetActor, TSubclassOf<UGameplayAbility> AbilityClass, int Level = 1, int InputID = AuraConst::DefaultAbilityInputID, UObject SourceObject = nullptr)
 	{
 		UAbilitySystemComponent TargetASC = AbilitySystem::GetAbilitySystemComponent(TargetActor);
 		if (TargetASC == nullptr) {
 			return FGameplayAbilitySpecHandle();
 		}
 
-		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, Level, InputID, SourceObject);
 		return TargetASC.GiveAbility(AbilitySpec);
 	}
 

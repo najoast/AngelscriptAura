@@ -4,4 +4,5 @@ namespace AuraConst
 	const FAngelscriptGameplayAttributeData EmptyAttributeData = FAngelscriptGameplayAttributeData();
 
 	const FName DefaultWeaponTipSocketName = n"TipSocket";
+	const int DefaultAbilityInputID = 2754;
 }

@@ -21,6 +21,8 @@ class UAGA_FireBolt : UAuraGameplayAbility
 		UAbilityTask_WaitGameplayEvent WaitGameplayEvent = AngelscriptAbilityTask::WaitGameplayEvent(this, GameplayTags::Event_Montage_FireBolt);
 		WaitGameplayEvent.EventReceived.AddUFunction(this, n"SpawnFireBoltProjectile");
 		WaitGameplayEvent.ReadyForActivation();
+
+		System::SetTimer(this, n"TimeoutEndAbility", 0.5, false);
 	}
 
 	UFUNCTION()
@@ -33,5 +35,11 @@ class UAGA_FireBolt : UAuraGameplayAbility
 				FinishSpawningActor(ProjectileActor);
 			}
 		}
+	}
+
+	UFUNCTION()
+	private void TimeoutEndAbility()
+	{
+		EndAbility();
 	}
 }
