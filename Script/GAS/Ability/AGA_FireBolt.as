@@ -7,6 +7,8 @@ class UAGA_FireBolt : UAuraGameplayAbility
 	UPROPERTY()
 	UAnimMontage AM_FireBolt;
 
+	private FVector TargetLocation;
+
 	UFUNCTION(BlueprintOverride)
 	void ActivateAbility()
 	{
@@ -32,7 +34,12 @@ class UAGA_FireBolt : UAuraGameplayAbility
 	{
 		AAuraCharacterBase AvatarActor = Cast<AAuraCharacterBase>(GetAvatarActorFromActorInfo());
 		if (AvatarActor != nullptr) {
-			AActor ProjectileActor = SpawnActor(ProjectileClass, AvatarActor.GetWeaponSocketLocation(), FRotator::ZeroRotator, n"FireBolt", true);
+			FVector SourceLocation = AvatarActor.GetWeaponSocketLocation();
+			FRotator Rotation = (TargetLocation - SourceLocation).Rotation();
+			Rotation.Pitch = 0.f;
+			AvatarActor.SetActorRotation(Rotation);
+
+			AActor ProjectileActor = SpawnActor(ProjectileClass, SourceLocation, Rotation, n"FireBolt", true);
 			if (ProjectileActor != nullptr) {
 				FinishSpawningActor(ProjectileActor);
 			}
@@ -43,6 +50,6 @@ class UAGA_FireBolt : UAuraGameplayAbility
 	UFUNCTION()
 	private void OnMouseTargetData(const FVector& Data)
 	{
-		Print(f"OnMouseTargetData {Data}");
+		TargetLocation = Data;
 	}
 }

@@ -116,6 +116,7 @@ class AAuraPlayerController : APlayerController
 
 	UFUNCTION()
 	void Move(FInputActionValue ActionValue, float32 ElapsedTime, float32 TriggeredTime, const UInputAction SourceAction) {
+		ClickToMove.StopAutoRun();
 		FRotator ControllerRotation = GetControlRotation();
 		ControllerRotation.Pitch = 0.f;
 		ControllerRotation.Roll = 0.f;

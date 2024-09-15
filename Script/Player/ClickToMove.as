@@ -18,6 +18,11 @@ class UClickToMove : UObject
 		OwnerController = InOwnerController;
 	}
 
+	void StopAutoRun()
+	{
+		bAutoRunning = false;
+	}
+
 	void ClickPressed()
 	{
 		bAutoRunning = false;
@@ -95,6 +100,10 @@ class UClickToMove : UObject
 
 	// 只有在点鼠标左键且没有目标时才接管鼠标左键点击
 	bool NeedTakeOverInput(FGameplayTag InputTag) {
-		return InputTag == GameplayTags::Input_LMB && !OwnerController.IsTargeting();
+		if (InputTag == GameplayTags::Input_LMB && !OwnerController.IsTargeting()) {
+			return true;
+		}
+		StopAutoRun();
+		return false;
 	}
 }
