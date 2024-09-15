@@ -15,14 +15,16 @@ class UAGA_FireBolt : UAuraGameplayAbility
 		}
 
 		auto MontagePlayTask = AngelscriptAbilityTask::PlayMontageAndWait(this, n"FireBolt", AM_FireBolt);
-		// MontagePlayTask.OnCompleted.AddUFunction(this, n"OnFireBoltMontageCompleted");
+		// MontagePlayTask.OnCompleted.AddUFunction(this, n"OnFireBoltMontageCompleted"); // 改到 AnimNotify 里触发了，这里触发效果不对
 		MontagePlayTask.ReadyForActivation();
 
 		UAbilityTask_WaitGameplayEvent WaitGameplayEvent = AngelscriptAbilityTask::WaitGameplayEvent(this, GameplayTags::Event_Montage_FireBolt);
 		WaitGameplayEvent.EventReceived.AddUFunction(this, n"SpawnFireBoltProjectile");
 		WaitGameplayEvent.ReadyForActivation();
 
-		System::SetTimer(this, n"TimeoutEndAbility", 0.5, false);
+		UAAT_TargetDataUnderMouse TargetDataUnderMouse = Cast<UAAT_TargetDataUnderMouse>(UAngelscriptAbilityTask::CreateAbilityTask(UAAT_TargetDataUnderMouse, this));
+		TargetDataUnderMouse.OnMouseTargetData.BindUFunction(this, n"OnMouseTargetData");
+		TargetDataUnderMouse.ReadyForActivation();
 	}
 
 	UFUNCTION()
@@ -35,11 +37,12 @@ class UAGA_FireBolt : UAuraGameplayAbility
 				FinishSpawningActor(ProjectileActor);
 			}
 		}
+		EndAbility();
 	}
 
 	UFUNCTION()
-	private void TimeoutEndAbility()
+	private void OnMouseTargetData(const FVector& Data)
 	{
-		EndAbility();
+		Print(f"OnMouseTargetData {Data}");
 	}
 }

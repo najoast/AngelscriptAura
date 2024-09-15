@@ -21,4 +21,18 @@ void UAbilitySystemComponent.GetAllAbilities(TArray<FGameplayAbilitySpecHandle>&
 
 // [AS] Returns an array with all granted ability handles that are active
 bool UAbilitySystemComponent.FindAbilitySpecFromHandle(FGameplayAbilitySpecHandle Handle, FGameplayAbilitySpec& OutSpec)
+
+```
+
+// Get PlayerController from AbilityTask
+```cpp
+class UUAT_TargetDataUnderMouse : UAngelscriptAbilityTask {
+	UFUNCTION(BlueprintOverride)
+	void Activate() {
+		UAngelscriptAbilitySystemComponent ASC = Cast<UAngelscriptAbilitySystemComponent>(GetAbilitySystemComponent());
+		if (ASC != nullptr) {
+			APlayerController PC = ASC.GetAbilityActorInfo().PlayerController;
+		}
+	}
+}
 ```
