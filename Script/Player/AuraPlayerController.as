@@ -166,13 +166,17 @@ class AAuraPlayerController : APlayerController
 				- ASC.ActivatableAbilities.Items;
 				- ASC.GetActivatableAbilities();
 			*/
-			ASC.TryActivateAbilityByClass(Input.AbilityClass);
+			// ASC.TryActivateAbilityByClass(Input.AbilityClass);
 
-			TArray<FGameplayAbilitySpec> OutAbilitySpecs;
-			ASC.FindAllAbilitySpecsFromInputID(AuraConst::DefaultAbilityInputID, OutAbilitySpecs);
-			for (FGameplayAbilitySpec AbilitySpec : OutAbilitySpecs) {
-				if (!AbilitySpec.IsActive()) {
-					ASC.TryActivateAbility(AbilitySpec.Handle);
+			// TODO: 优化两次 for 循环（提PR解决）
+			TArray<FGameplayAbilitySpecHandle> OutAbilityHandles;
+			ASC.GetAllAbilities(OutAbilityHandles);
+			for (FGameplayAbilitySpecHandle AbilitySpecHandle : OutAbilityHandles) {
+				FGameplayAbilitySpec OuterAbilitySpec;
+				if (ASC.FindAbilitySpecFromHandle(AbilitySpecHandle, OuterAbilitySpec)) {
+					if (!OuterAbilitySpec.IsActive()) {
+						ASC.TryActivateAbility(OuterAbilitySpec.Handle);
+					}
 				}
 			}
 		}
