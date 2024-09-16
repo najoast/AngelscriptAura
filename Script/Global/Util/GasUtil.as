@@ -1,5 +1,17 @@
 namespace GasUtil
 {
+	FGameplayEffectSpecHandle MakeGameplayEffectSpecHandle(AActor SourceActor, TSubclassOf<UGameplayEffect> GameplayEffectClass, float32 Level = 1)
+	{
+		check(GameplayEffectClass != nullptr);
+		UAbilitySystemComponent SourceASC = AbilitySystem::GetAbilitySystemComponent(SourceActor);
+		if (SourceASC == nullptr) {
+			return FGameplayEffectSpecHandle();
+		}
+		FGameplayEffectContextHandle EffectContextHandle = SourceASC.MakeEffectContext();
+		EffectContextHandle.AddSourceObject(SourceActor);
+		return SourceASC.MakeOutgoingSpec(GameplayEffectClass, Level, EffectContextHandle);
+	}
+
 	FActiveGameplayEffectHandle ApplyGameplayEffect(AActor SourceActor, AActor TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass, float32 Level = 1)
 	{
 		UAbilitySystemComponent TargetASC = AbilitySystem::GetAbilitySystemComponent(TargetActor);
@@ -7,7 +19,6 @@ namespace GasUtil
 			return FActiveGameplayEffectHandle();
 		}
 
-		check(GameplayEffectClass != nullptr);
 		FGameplayEffectContextHandle EffectContextHandle = TargetASC.MakeEffectContext();
 		EffectContextHandle.AddSourceObject(SourceActor);
 		FGameplayEffectSpecHandle EffectSpecHandle = TargetASC.MakeOutgoingSpec(GameplayEffectClass, Level, EffectContextHandle);

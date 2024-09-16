@@ -1,6 +1,7 @@
 
 class AAuraCharacterBase : AAngelscriptGASCharacter
 {
+	// -------------------- Properties --------------------
 	default bReplicates = true;
 	default CapsuleComponent.SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 	// Do not set collision on mesh, keep default collision. (Only use CapsuleComponent for collision)
@@ -21,8 +22,15 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 	UPROPERTY(Category = "GAS")
 	TArray<TSubclassOf<UGameplayAbility>> InitAddedAbilities;
 
+	// -------------------- Varibles --------------------
+	UGasModule GasModule;
+
+	// -------------------- Functions --------------------
 	UFUNCTION(BlueprintOverride)
 	void BeginPlay() {
+		GasModule = Cast<UGasModule>(NewObject(this, UGasModule::StaticClass(), n"UGasModule"));
+		GasModule.Init(this);
+
 		for (auto EffectClass : InitAppliedEffects) {
 			GasUtil::ApplyGameplayEffect(this, this, EffectClass);
 		}

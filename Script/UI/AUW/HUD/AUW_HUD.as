@@ -37,18 +37,18 @@ class UAUW_HUD : UAuraUserWidget
 
 	void UpdateWidgets(FAngelscriptModifiedAttribute AttributeChangeData)
 	{
-		UPlayerGasModule PlayerGasModule = AuraUtil::GetPlayerGasModule(Character);
+		UGasModule GasModule = AuraUtil::GetPlayerGasModule(Character);
 		if (AttributeChangeData.Name == AuraAttributes::Health || AttributeChangeData.Name == AuraAttributes::MaxHealth)
 		{
-			float32 Health = PlayerGasModule.GetAttributeValue(AuraAttributes::Health);
-			float32 MaxHealth = PlayerGasModule.GetAttributeValue(AuraAttributes::MaxHealth);
+			float32 Health = GasModule.GetAttributeValue(AuraAttributes::Health);
+			float32 MaxHealth = GasModule.GetAttributeValue(AuraAttributes::MaxHealth);
 			WBP_GlobeHealth.SetPercent(Health, MaxHealth);
 		}
 
 		if (AttributeChangeData.Name == AuraAttributes::Mana || AttributeChangeData.Name == AuraAttributes::MaxMana)
 		{
-			float32 Mana = PlayerGasModule.GetAttributeValue(AuraAttributes::Mana);
-			float32 MaxMana = PlayerGasModule.GetAttributeValue(AuraAttributes::MaxMana);
+			float32 Mana = GasModule.GetAttributeValue(AuraAttributes::Mana);
+			float32 MaxMana = GasModule.GetAttributeValue(AuraAttributes::MaxMana);
 			WBP_GlobeMana.SetPercent(Mana, MaxMana);
 		}
 	}

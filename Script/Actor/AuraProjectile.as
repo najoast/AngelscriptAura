@@ -1,6 +1,7 @@
 
 class AAuraProjectile : AActor
 {
+	// -------------------- Properties --------------------
 	default bReplicates = true;
 
 	UPROPERTY(DefaultComponent, RootComponent)
@@ -20,8 +21,8 @@ class AAuraProjectile : AActor
 
 	UPROPERTY(DefaultComponent)
 	UProjectileMovementComponent ProjectileMovement;
-	default ProjectileMovement.InitialSpeed = 550;
-	default ProjectileMovement.MaxSpeed = 550;
+	default ProjectileMovement.InitialSpeed = AuraConst::ProjectileMaxSpeed;
+	default ProjectileMovement.MaxSpeed = AuraConst::ProjectileMaxSpeed;
 	default ProjectileMovement.ProjectileGravityScale = 0;
 
 	UPROPERTY()
@@ -36,6 +37,10 @@ class AAuraProjectile : AActor
 	UPROPERTY()
 	UAudioComponent LoopingSoundComponent;
 
+	// -------------------- Varibles --------------------
+	FGameplayEffectSpecHandle DamageEffectSpecHandle;
+
+	// -------------------- Functions --------------------
 	UFUNCTION(BlueprintOverride)
 	void EndPlay(EEndPlayReason EndPlayReason)
 	{
@@ -50,16 +55,20 @@ class AAuraProjectile : AActor
 		SetLifeSpan(AuraConst::ProjectileLifeSpan);
 	}
 
-	// -----------------------------------------------------------------
-
 	UFUNCTION(BlueprintOverride)
 	void ActorBeginOverlap(AActor OtherActor)
 	{
-		Print("Overlapping with: " + OtherActor.Name);
-
+		// Print("Overlapping with: " + OtherActor.Name);
 		Gameplay::PlaySoundAtLocation(ImpactSound, GetActorLocation(), GetActorRotation());
 		Niagara::SpawnSystemAtLocation(ImpactEffect, GetActorLocation(), GetActorRotation());
+
+		if (DamageEffectSpecHandle.IsValid()) {
+			UAbilitySystemComponent TargetASC = AbilitySystem::GetAbilitySystemComponent(OtherActor);
+			if (TargetASC != nullptr) {
+				TargetASC.ApplyGameplayEffectSpecToSelf(DamageEffectSpecHandle);
+			}
+		}
+
 		DestroyActor();
 	}
-
 }

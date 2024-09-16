@@ -1,14 +1,20 @@
 
 class UAGA_FireBolt : UAuraGameplayAbility
 {
+	// -------------------- Properties --------------------
 	UPROPERTY()
 	TSubclassOf<AAuraProjectile> ProjectileClass;
 
 	UPROPERTY()
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
+
+	UPROPERTY()
 	UAnimMontage AM_FireBolt;
 
+	// -------------------- Varibles --------------------
 	private FVector TargetLocation;
 
+	// -------------------- Functions --------------------
 	UFUNCTION(BlueprintOverride)
 	void ActivateAbility()
 	{
@@ -38,8 +44,9 @@ class UAGA_FireBolt : UAuraGameplayAbility
 			FRotator Rotation = (TargetLocation - SourceLocation).Rotation();
 			Rotation.Pitch = 0.f;
 
-			AActor ProjectileActor = SpawnActor(ProjectileClass, SourceLocation, Rotation, n"FireBolt", true);
+			AAuraProjectile ProjectileActor = Cast<AAuraProjectile>(SpawnActor(ProjectileClass, SourceLocation, Rotation, n"FireBolt", true));
 			if (ProjectileActor != nullptr) {
+				ProjectileActor.DamageEffectSpecHandle = GasUtil::MakeGameplayEffectSpecHandle(AvatarActor, DamageEffectClass, GetAbilityLevel());
 				FinishSpawningActor(ProjectileActor);
 			}
 

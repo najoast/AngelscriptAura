@@ -180,6 +180,7 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	void ClampAttribute(FGameplayAttribute Attribute, float32& NewValue)
 	{
 		if (Attribute.AttributeName == AuraAttributes::Health) {
+			Print(f"Health OldValue: {Health.GetCurrentValue()} NewValue: {NewValue}");
 			NewValue = Math::Clamp(NewValue, float32(0), MaxHealth.GetCurrentValue());
 		} else if (Attribute.AttributeName == AuraAttributes::Mana) {
 			NewValue = Math::Clamp(NewValue, float32(0), MaxMana.GetCurrentValue());
@@ -195,6 +196,7 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 		auto& Attribute = GetAttribute(FName(EvaluatedData.Attribute.AttributeName));
 		float32 BaseValue = Attribute.GetBaseValue();
 		ClampAttribute(EvaluatedData.Attribute, BaseValue);
+
 		if (BaseValue != Attribute.GetBaseValue()) {
 			Attribute.SetBaseValue(BaseValue);
 		}

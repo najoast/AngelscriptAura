@@ -30,7 +30,7 @@ class AAuraPlayerController : APlayerController
 	// Functions
 	UFUNCTION(BlueprintOverride)
 	void BeginPlay() {
-		Print("========================== AuraPlayerController BeginPlay ==========================");
+		// Print("========================== AuraPlayerController BeginPlay ==========================");
 		// bool IsDedicatedServer = System::IsDedicatedServer();
 		check(AuraContext != nullptr);
 		UEnhancedInputLocalPlayerSubsystem Subsystem = UEnhancedInputLocalPlayerSubsystem::Get(this);
@@ -204,7 +204,7 @@ class AAuraPlayerController : APlayerController
 
 	UFUNCTION() // Released
 	void OnSDataInputCompleted(FInputActionValue ActionValue, float32 ElapsedTime, float32 TriggeredTime, const UInputAction SourceAction) const {
-		Print(f"OnSDataInputCompleted {SourceAction.GetName()} Released");
+		// Print(f"OnSDataInputCompleted {SourceAction.GetName()} Released");
 		FSDataInput Input = SDataUtil::GetSDataMgr().InputMap[SourceAction];
 		if (ClickToMove.NeedTakeOverInput(Input.GameplayTag)) {
 			ClickToMove.ClickReleased();
