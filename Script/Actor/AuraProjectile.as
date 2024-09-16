@@ -15,7 +15,7 @@ class AAuraProjectile : AActor
 	default Sphere.SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
 	UPROPERTY(DefaultComponent, Attach = SceneRoot)
-	UNiagaraComponent Niagara;
+	UNiagaraComponent NiagaraComponent;
 
 	UPROPERTY(DefaultComponent)
 	UProjectileMovementComponent ProjectileMovement;
@@ -23,17 +23,42 @@ class AAuraProjectile : AActor
 	default ProjectileMovement.MaxSpeed = 550;
 	default ProjectileMovement.ProjectileGravityScale = 0;
 
+	UPROPERTY()
+	UNiagaraSystem ImpactEffect;
+
+	UPROPERTY()
+	USoundBase ImpactSound;
+
+	UPROPERTY()
+	USoundBase LoopingSound;
+
+	UPROPERTY()
+	UAudioComponent LoopingSoundComponent;
+
+	UFUNCTION(BlueprintOverride)
+	void BeginPlay()
+	{
+		LoopingSoundComponent = Gameplay::SpawnSoundAttached(LoopingSound, GetRootComponent());
+		check(LoopingSoundComponent != nullptr);
+	}
+
+	// -----------------------------------------------------------------
+
 	UFUNCTION(BlueprintOverride)
 	void ActorBeginOverlap(AActor OtherActor)
 	{
 		Print("Overlapping with: " + OtherActor.Name);
-		// DestroyActor();
-		System::SetTimer(this, n"DestroyProjectile", 10.f, false);
-	}
+		//System::SetTimer(this, n"DestroyProjectile", 10.f, false);
 
-	UFUNCTION()
-	private void DestroyProjectile()
-	{
+		Gameplay::PlaySoundAtLocation(ImpactSound, GetActorLocation(), GetActorRotation());
+		Niagara::SpawnSystemAtLocation(ImpactEffect, GetActorLocation(), GetActorRotation());
+		LoopingSoundComponent.Stop();
 		DestroyActor();
 	}
+
+	// UFUNCTION()
+	// private void DestroyProjectile()
+	// {
+	// 	DestroyActor();
+	// }
 }
