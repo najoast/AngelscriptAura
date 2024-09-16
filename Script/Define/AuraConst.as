@@ -5,4 +5,5 @@ namespace AuraConst
 
 	const FName DefaultWeaponTipSocketName = n"TipSocket";
 	const int DefaultAbilityInputID = 2754;
+	const float ProjectileLifeSpan = 15;
 }

@@ -36,10 +36,17 @@ class AAuraProjectile : AActor
 	UAudioComponent LoopingSoundComponent;
 
 	UFUNCTION(BlueprintOverride)
+	void EndPlay(EEndPlayReason EndPlayReason)
+	{
+		LoopingSoundComponent.Stop();
+	}
+
+	UFUNCTION(BlueprintOverride)
 	void BeginPlay()
 	{
 		LoopingSoundComponent = Gameplay::SpawnSoundAttached(LoopingSound, GetRootComponent());
 		check(LoopingSoundComponent != nullptr);
+		SetLifeSpan(AuraConst::ProjectileLifeSpan);
 	}
 
 	// -----------------------------------------------------------------
@@ -48,17 +55,10 @@ class AAuraProjectile : AActor
 	void ActorBeginOverlap(AActor OtherActor)
 	{
 		Print("Overlapping with: " + OtherActor.Name);
-		//System::SetTimer(this, n"DestroyProjectile", 10.f, false);
 
 		Gameplay::PlaySoundAtLocation(ImpactSound, GetActorLocation(), GetActorRotation());
 		Niagara::SpawnSystemAtLocation(ImpactEffect, GetActorLocation(), GetActorRotation());
-		LoopingSoundComponent.Stop();
 		DestroyActor();
 	}
 
-	// UFUNCTION()
-	// private void DestroyProjectile()
-	// {
-	// 	DestroyActor();
-	// }
 }
