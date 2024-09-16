@@ -9,6 +9,7 @@ class AAuraProjectile : AActor
 	UPROPERTY(DefaultComponent, Attach = SceneRoot)
 	USphereComponent Sphere;
 	default Sphere.SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	default Sphere.SetCollisionObjectType(AuraEnum::ECC_Projectile);
 	default Sphere.SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 	default Sphere.SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Overlap);
 	default Sphere.SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Overlap);

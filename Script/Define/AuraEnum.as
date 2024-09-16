@@ -13,3 +13,9 @@ enum EItemID
 	HealthCrystal = 3,
 	ManaCrystal   = 4,
 }
+
+// Enum Alias
+namespace AuraEnum
+{
+	const ECollisionChannel ECC_Projectile = ECollisionChannel::ECC_GameTraceChannel1;
+}
