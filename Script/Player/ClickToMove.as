@@ -8,9 +8,9 @@ class UClickToMove : UObject
 	const float ShortPressThreshold = 0.5;
 	const float AutoRunAcceptanceRadius = 50;
 
-	FVector CachedDestination = FVector::ZeroVector;
-	float FollowTime = 0;
-	bool bAutoRunning = false;
+	private FVector CachedDestination = FVector::ZeroVector;
+	private float MouseHeldTime = 0;
+	private bool bAutoRunning = false;
 
 	// Functions
 	void Ctor(AAuraPlayerController InOwnerController)
@@ -34,7 +34,7 @@ class UClickToMove : UObject
 			return;
 		}
 
-		FollowTime += GetWorld().GetDeltaSeconds();
+		MouseHeldTime += GetWorld().GetDeltaSeconds();
 
 		if (OwnerController.HitResult.bBlockingHit) {
 			CachedDestination = OwnerController.HitResult.ImpactPoint;
@@ -49,17 +49,22 @@ class UClickToMove : UObject
 
 	void ClickReleased()
 	{
+		float ThisHeldTime = MouseHeldTime;
+		MouseHeldTime = 0.f;
+
 		if (OwnerController.IsTargeting()) {
 			return;
 		}
+		if (ThisHeldTime <= ShortPressThreshold) {
+			StartAutoRun();
+		}
+	}
+
+	void StartAutoRun() {
 		APawn ControlledPawn = OwnerController.GetControlledPawn();
 		if (ControlledPawn == nullptr) {
 			return;
 		}
-		if (FollowTime > ShortPressThreshold) {
-			return;
-		}
-
 		FVector PathStart = ControlledPawn.GetActorLocation();
 		UNavigationPath NavPath = UNavigationSystemV1::FindPathToLocationSynchronously(PathStart, CachedDestination, ControlledPawn);
 		if (NavPath != nullptr && NavPath.PathPoints.Num() > 0) {
@@ -73,8 +78,6 @@ class UClickToMove : UObject
 			CachedDestination = NavPath.PathPoints[NavPath.PathPoints.Num() - 1];
 			bAutoRunning = true;
 		}
-
-		FollowTime = 0.f;
 	}
 
 	void Tick()
@@ -98,9 +101,9 @@ class UClickToMove : UObject
 		}
 	}
 
-	// 只有在点鼠标左键且没有目标时才接管鼠标左键点击
+	// 只有在点鼠标左键且不能放火球时（普攻）才接管输入，从而实现“点击移动”
 	bool NeedTakeOverInput(FGameplayTag InputTag) {
-		if (InputTag == GameplayTags::Input_LMB && !OwnerController.IsTargeting()) {
+		if (InputTag == GameplayTags::Input_LMB && !OwnerController.CanCastFireBolt()) {
 			return true;
 		}
 		StopAutoRun();

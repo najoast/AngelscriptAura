@@ -22,6 +22,10 @@
 		{
 			"Name": "AngelscriptGAS",
 			"Enabled": true
+		},
+		{
+			"Name": "MotionWarping",
+			"Enabled": true
 		}
 	]
 }

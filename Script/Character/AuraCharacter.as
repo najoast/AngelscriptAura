@@ -2,9 +2,6 @@
 class AAuraCharacter : AAuraCharacterBase
 {
 	UPROPERTY(DefaultComponent)
-	USceneComponent Root;
-
-	UPROPERTY(DefaultComponent, Attach = "Root")
 	USpringArmComponent SpringArm;
 	default SpringArm.SetRelativeRotation(FRotator(-45, 0, 0));
 	default SpringArm.TargetArmLength = 850;
@@ -12,6 +9,10 @@ class AAuraCharacter : AAuraCharacterBase
 	UPROPERTY(DefaultComponent, Attach = "SpringArm")
 	UCameraComponent Camera;
 
+	UPROPERTY(DefaultComponent)
+	UMotionWarpingComponent MotionWarping;
+
+	// --------------------------------------
 	UPlayerModuleMgr PlayerModuleMgr;
 
 	// --------- ctor --------
@@ -52,4 +53,9 @@ class AAuraCharacter : AAuraCharacterBase
 		Super::BeginPlay();
 	}
 
+	void SetFacingTarget(const FVector& TargetLocation)
+	{
+		Print(f"SetFacingTarget {TargetLocation}");
+		MotionWarping.AddOrUpdateWarpTargetFromLocation(n"FacingTarget", TargetLocation);
+	}
 }

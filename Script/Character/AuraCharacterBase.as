@@ -2,6 +2,8 @@
 class AAuraCharacterBase : AAngelscriptGASCharacter
 {
 	default bReplicates = true;
+	default CapsuleComponent.SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+	default Mesh.SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
 	UPROPERTY(DefaultComponent, Category = "Combat", Attach = "CharacterMesh0", AttachSocket = "WeaponHandSocket")
 	USkeletalMeshComponent Weapon;

@@ -37,11 +37,17 @@ class UAGA_FireBolt : UAuraGameplayAbility
 			FVector SourceLocation = AvatarActor.GetWeaponSocketLocation();
 			FRotator Rotation = (TargetLocation - SourceLocation).Rotation();
 			Rotation.Pitch = 0.f;
-			AvatarActor.SetActorRotation(Rotation);
 
 			AActor ProjectileActor = SpawnActor(ProjectileClass, SourceLocation, Rotation, n"FireBolt", true);
 			if (ProjectileActor != nullptr) {
 				FinishSpawningActor(ProjectileActor);
+			}
+
+			// AvatarActor.SetActorRotation(Rotation);
+			// TODO: 解除对 AuraCharacter 的依赖, 原作者是用 C++ Interface 来解除的，但在 AS 里没有 Interface, 可以考虑把 MotionWarping 组件放到 AuraCharacterBase 里
+			AAuraCharacter AuraCharacter = Cast<AAuraCharacter>(GetAvatarActorFromActorInfo());
+			if (AuraCharacter != nullptr) {
+				AuraCharacter.SetFacingTarget(TargetLocation);
 			}
 		}
 		EndAbility();
@@ -50,6 +56,7 @@ class UAGA_FireBolt : UAuraGameplayAbility
 	UFUNCTION()
 	private void OnMouseTargetData(const FVector& Data)
 	{
+		Print(f"OnMouseTargetData {Data}");
 		TargetLocation = Data;
 	}
 }

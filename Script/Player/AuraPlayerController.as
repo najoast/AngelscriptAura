@@ -10,6 +10,9 @@ class AAuraPlayerController : APlayerController
 	UPROPERTY(Category = "Input")
 	UInputAction MoveAction;
 
+	UPROPERTY(Category = "Input")
+	UInputAction ShiftAction;
+
 	UPROPERTY(DefaultComponent)
 	USplineComponent MovementSpline;
 
@@ -19,6 +22,7 @@ class AAuraPlayerController : APlayerController
 	UAbilitySystemComponent AbilitySystemComponent;
 	FHitResult HitResult;
 	private UClickToMove ClickToMove;
+	private bool bShiftPressed = false;
 
 	// Ctor
 	default DefaultMouseCursor = EMouseCursor::Default;
@@ -97,6 +101,10 @@ class AAuraPlayerController : APlayerController
 		return ThisEnemy != nullptr;
 	}
 
+	bool CanCastFireBolt() {
+		return IsTargeting() || bShiftPressed;
+	}
+
 	void SetupInputComponent() {
 		UActorComponent InputComponent = GetComponentByClass(UEnhancedInputComponent::StaticClass());
 		if (InputComponent == nullptr) {
@@ -104,7 +112,11 @@ class AAuraPlayerController : APlayerController
 		}
 
 		UEnhancedInputComponent EnhancedInput = Cast<UEnhancedInputComponent>(InputComponent);
+		// WASD Move
 		EnhancedInput.BindAction(MoveAction, ETriggerEvent::Triggered, FEnhancedInputActionHandlerDynamicSignature(this, n"Move"));
+		// Shift
+		EnhancedInput.BindAction(ShiftAction, ETriggerEvent::Started, FEnhancedInputActionHandlerDynamicSignature(this, n"OnShiftPressed"));
+		EnhancedInput.BindAction(ShiftAction, ETriggerEvent::Completed, FEnhancedInputActionHandlerDynamicSignature(this, n"OnShiftReleased"));
 
 		for (auto Element : SDataUtil::GetSDataMgr().InputMap) {
 			UInputAction InputAction = Element.Key;
@@ -170,14 +182,21 @@ class AAuraPlayerController : APlayerController
 			// ASC.TryActivateAbilityByClass(Input.AbilityClass);
 
 			// TODO: 优化两次 for 循环（提PR解决）
-			TArray<FGameplayAbilitySpecHandle> OutAbilityHandles;
-			ASC.GetAllAbilities(OutAbilityHandles);
-			for (FGameplayAbilitySpecHandle AbilitySpecHandle : OutAbilityHandles) {
-				FGameplayAbilitySpec OuterAbilitySpec;
-				if (ASC.FindAbilitySpecFromHandle(AbilitySpecHandle, OuterAbilitySpec)) {
-					if (!OuterAbilitySpec.IsActive()) {
-						ASC.TryActivateAbility(OuterAbilitySpec.Handle);
-					}
+			// TArray<FGameplayAbilitySpecHandle> OutAbilityHandles;
+			// ASC.GetAllAbilities(OutAbilityHandles);
+			// for (FGameplayAbilitySpecHandle AbilitySpecHandle : OutAbilityHandles) {
+			// 	FGameplayAbilitySpec OuterAbilitySpec;
+			// 	if (ASC.FindAbilitySpecFromHandle(AbilitySpecHandle, OuterAbilitySpec)) {
+			// 		if (!OuterAbilitySpec.IsActive()) {
+			// 			ASC.TryActivateAbility(OuterAbilitySpec.Handle);
+			// 		}
+			// 	}
+			// }
+
+			FGameplayAbilitySpec OutSpec;
+			if (ASC.FindAbilitySpecFromClass(Input.AbilityClass, OutSpec)) {
+				if (!OutSpec.IsActive()) {
+					ASC.TryActivateAbility(OutSpec.Handle);
 				}
 			}
 		}
@@ -197,5 +216,15 @@ class AAuraPlayerController : APlayerController
 			AbilitySystemComponent = AbilitySystem::GetAbilitySystemComponent(GetControlledPawn());
 		}
 		return AbilitySystemComponent;
+	}
+
+	UFUNCTION()
+	void OnShiftPressed(FInputActionValue ActionValue, float32 ElapsedTime, float32 TriggeredTime, const UInputAction SourceAction) {
+		bShiftPressed = true;
+	}
+
+	UFUNCTION()
+	void OnShiftReleased(FInputActionValue ActionValue, float32 ElapsedTime, float32 TriggeredTime, const UInputAction SourceAction) {
+		bShiftPressed = false;
 	}
 }
