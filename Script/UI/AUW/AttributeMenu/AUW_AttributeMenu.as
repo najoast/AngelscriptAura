@@ -126,7 +126,7 @@ class UAUW_AttributeMenu : UAuraUserWidget
 
 	void InitWidgetsData()
 	{
-		UGasModule GasModule = AuraUtil::GetPlayerGasModule(Character);
+		UGasModule GasModule = AuraUtil::GetCharacterGasModule(OwnerCharacter);
 		for (auto Element : AllAttributeWidgets)
 		{
 			float32 Value = GasModule.GetAttributeValue(Element.Key);
@@ -171,7 +171,7 @@ class UAUW_AttributeMenu : UAuraUserWidget
 			return;
 		}
 
-		UGasModule GasModule = AuraUtil::GetPlayerGasModule(Character);
+		UGasModule GasModule = AuraUtil::GetCharacterGasModule(OwnerCharacter);
 		UAUW_TextValueRow TextValueRow = AllAttributeWidgets[AttributeChangeData.Name];
 		float32 Value = GasModule.GetAttributeValue(AttributeChangeData.Name);
 		TextValueRow.Text_Text.SetText(FText::FromString(f"{Value :.0}"));

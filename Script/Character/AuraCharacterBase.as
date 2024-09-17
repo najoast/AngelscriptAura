@@ -27,7 +27,8 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 
 	// -------------------- Functions --------------------
 	UFUNCTION(BlueprintOverride)
-	void BeginPlay() {
+	void BeginPlay()
+	{
 		GasModule = Cast<UGasModule>(NewObject(this, UGasModule::StaticClass(), n"UGasModule"));
 		GasModule.Init(this);
 
@@ -40,7 +41,12 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		}
 	}
 
-	FVector GetWeaponSocketLocation() {
+	FVector GetWeaponSocketLocation()
+	{
 		return Weapon.GetSocketLocation(WeaponTipSocketName);
+	}
+
+	void OnAttributeChanged(const FAngelscriptModifiedAttribute&in AttributeChangeData)
+	{// virtual empty
 	}
 }

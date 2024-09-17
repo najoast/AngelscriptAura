@@ -24,6 +24,11 @@ class AAuraCharacter : AAuraCharacterBase
 	default bUseControllerRotationRoll = false;
 	default bUseControllerRotationYaw = false;
 
+	void OnAttributeChanged(const FAngelscriptModifiedAttribute&in AttributeChangeData) override
+	{
+		AuraUtil::GameInstance().EventMgr.OnAttributeChangedEvent.Broadcast(AttributeChangeData);
+	}
+
 	// void InitPlayerModuleMgr()
 	// {
 	// 	PlayerModuleMgr = Cast<UPlayerModuleMgr>(NewObject(this, UPlayerModuleMgr::StaticClass(), n"UPlayerModuleMgr"));
@@ -48,14 +53,12 @@ class AAuraCharacter : AAuraCharacterBase
 		PlayerModuleMgr.Ctor(this);
 		PlayerModuleMgr.Init();
 
-		// 因为是在 PlayerGasModule 里注册 AuraAttributeSet 的，所以 PlayerModuleMgr 必须在 Super::BeginPlay 之前调用，否则会导致这里面在 Apply 初始 GE 时失效
-		// Because AuraAttributeSet is registered in PlayerGasModule, PlayerModuleMgr must be called before Super::BeginPlay, otherwise it will fail when Apply initial GE.
 		Super::BeginPlay();
 	}
 
 	void SetFacingTarget(const FVector& TargetLocation)
 	{
-		Print(f"SetFacingTarget {TargetLocation}");
+		// Print(f"SetFacingTarget {TargetLocation}");
 		MotionWarping.AddOrUpdateWarpTargetFromLocation(n"FacingTarget", TargetLocation);
 	}
 }

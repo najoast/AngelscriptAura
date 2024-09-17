@@ -37,7 +37,7 @@ class UAUW_HUD : UAuraUserWidget
 
 	void UpdateWidgets(FAngelscriptModifiedAttribute AttributeChangeData)
 	{
-		UGasModule GasModule = AuraUtil::GetPlayerGasModule(Character);
+		UGasModule GasModule = AuraUtil::GetCharacterGasModule(OwnerCharacter);
 		if (AttributeChangeData.Name == AuraAttributes::Health || AttributeChangeData.Name == AuraAttributes::MaxHealth)
 		{
 			float32 Health = GasModule.GetAttributeValue(AuraAttributes::Health);
@@ -56,7 +56,7 @@ class UAUW_HUD : UAuraUserWidget
 	UFUNCTION()
 	void OnButton_AttributesClicked()
 	{
-		UAUW_AttributeMenu AttributeMenu = Cast<UAUW_AttributeMenu>(WidgetUtil::OpenWidget(n"AttributeMenu", Character, FVector2D(30, 30)));
+		UAUW_AttributeMenu AttributeMenu = Cast<UAUW_AttributeMenu>(WidgetUtil::OpenWidget(n"AttributeMenu", OwnerCharacter, FVector2D(30, 30)));
 		if (AttributeMenu != nullptr)
 		{
 			// AttributeMenu
@@ -88,9 +88,9 @@ class UAUW_HUD : UAuraUserWidget
 			return;
 		}
 
-		APlayerController PlayerController = Character.GetLocalViewingPlayerController();
+		APlayerController PlayerController = OwnerCharacter.GetLocalViewingPlayerController();
 		FVector2D Position = WidgetUtil::GetViewportPositionByRatio(PlayerController, 0.5);
-		UAUW_PickupMsg AUW_PickupMsg = Cast<UAUW_PickupMsg>(WidgetUtil::OpenWidget(n"PickupMsg", Character, Position));
+		UAUW_PickupMsg AUW_PickupMsg = Cast<UAUW_PickupMsg>(WidgetUtil::OpenWidget(n"PickupMsg", OwnerCharacter, Position));
 		if (AUW_PickupMsg != nullptr) {
 			AUW_PickupMsg.Image_Icon.SetBrushFromTexture(Item.Icon);
 			FText Text = FText::FromString(f"Picked up a {Item.Name}");

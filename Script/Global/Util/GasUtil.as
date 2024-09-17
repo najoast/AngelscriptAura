@@ -12,6 +12,7 @@ namespace GasUtil
 		return SourceASC.MakeOutgoingSpec(GameplayEffectClass, Level, EffectContextHandle);
 	}
 
+	// TODO: 搞清楚为什么这里面调用 MakeGameplayEffectSpecHandle 生成 SpecHandle 后，整个 GE 就不生效了
 	FActiveGameplayEffectHandle ApplyGameplayEffect(AActor SourceActor, AActor TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass, float32 Level = 1)
 	{
 		UAbilitySystemComponent TargetASC = AbilitySystem::GetAbilitySystemComponent(TargetActor);

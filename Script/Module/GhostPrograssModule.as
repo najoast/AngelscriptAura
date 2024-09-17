@@ -15,25 +15,26 @@
 		- 处理逻辑同 1.2
 */
 
-class UAUW_GlobeProgressBar : UAuraUserWidget
+class UGhostPrograssModule : UObject
 {
-	UPROPERTY(BindWidget)
-	UProgressBar ProgressBar_Main;
-
-	UPROPERTY(BindWidget)
-	UProgressBar ProgressBar_Ghost;
-
-	UPROPERTY(BindWidget)
-	UTextBlock Text_Value;
-
-	// -------------------------------------
+	private UProgressBar ProgressBar_Main;
+	private UProgressBar ProgressBar_Ghost;
 	private float32 Value;
 	private float32 MaxValue;
 	private float32 Percent;
-	private const float32 ChaseSpeed = 0.1f;
+
+	void Init(UProgressBar InProgressBar_Main, UProgressBar InProgressBar_Ghost)
+	{
+		ProgressBar_Main = InProgressBar_Main;
+		ProgressBar_Ghost = InProgressBar_Ghost;
+	}
 
 	void SetPercent(float32 NewValue, float32 NewMaxValue)
 	{
+		if (NewMaxValue == 0) {
+			Print(f"NewMaxValue {NewMaxValue} is zero");
+			return;
+		}
 		if (NewValue == Value && NewMaxValue == MaxValue) {
 			return;
 		}
@@ -41,8 +42,6 @@ class UAUW_GlobeProgressBar : UAuraUserWidget
 		Value = NewValue;
 		MaxValue = NewMaxValue;
 		Percent = NewValue / MaxValue;
-
-		Text_Value.SetText(FText::FromString(f"{Value :.0}/{MaxValue :.0}"));
 
 		float32 NewPercent = NewValue / NewMaxValue;
 
@@ -64,7 +63,6 @@ class UAUW_GlobeProgressBar : UAuraUserWidget
 		}
 	}
 
-	UFUNCTION(BlueprintOverride)
 	void Tick(FGeometry MyGeometry, float InDeltaTime)
 	{
 		float32 MainPercent = ProgressBar_Main.Percent;
@@ -75,27 +73,11 @@ class UAUW_GlobeProgressBar : UAuraUserWidget
 		}
 
 		UProgressBar ChasingProgressBar = (MainPercent != Percent) ? ProgressBar_Main : ProgressBar_Ghost;
-		float32 DeltePercent = ChaseSpeed * float32(InDeltaTime);
+		float32 DeltePercent = AuraConst::GhostProgressChaseSpeed * float32(InDeltaTime);
 		if (ChasingProgressBar.Percent < Percent) {
 			ChasingProgressBar.SetPercent(Math::Min(ChasingProgressBar.Percent + DeltePercent, Percent));
 		} else {
 			ChasingProgressBar.SetPercent(Math::Max(ChasingProgressBar.Percent - DeltePercent, Percent));
-		}
-	}
-
-	UFUNCTION(BlueprintOverride)
-	void OnMouseEnter(FGeometry MyGeometry, FPointerEvent MouseEvent)
-	{
-		if (!MouseEvent.GetEffectingButton().IsValid()) {
-			Text_Value.SetVisibility(ESlateVisibility::Visible);
-		}
-	}
-
-	UFUNCTION(BlueprintOverride)
-	void OnMouseLeave(FPointerEvent MouseEvent)
-	{
-		if (!MouseEvent.GetEffectingButton().IsValid()) {
-			Text_Value.SetVisibility(ESlateVisibility::Collapsed);
 		}
 	}
 }

@@ -44,7 +44,9 @@ class AAuraProjectile : AActor
 	UFUNCTION(BlueprintOverride)
 	void EndPlay(EEndPlayReason EndPlayReason)
 	{
-		LoopingSoundComponent.Stop();
+		if (LoopingSoundComponent != nullptr) {
+			LoopingSoundComponent.Stop();
+		}
 	}
 
 	UFUNCTION(BlueprintOverride)

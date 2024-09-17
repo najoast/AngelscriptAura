@@ -6,7 +6,7 @@ namespace WidgetUtil
 
 	// delegate void PreOpenWidgetDelegate(UUserWidget Widget);
 
-	UUserWidget OpenWidgetByClass(TSubclassOf<UUserWidget> WidgetClass, AAuraCharacter AuraCharacter, FVector2D Position = FVector2D::ZeroVector)
+	UUserWidget OpenWidgetByClass(TSubclassOf<UUserWidget> WidgetClass, AAuraCharacterBase AuraCharacter, FVector2D Position = FVector2D::ZeroVector)
 	{
 		UUserWidget UserWidget = WidgetBlueprint::CreateWidget(WidgetClass, AuraCharacter.GetLocalViewingPlayerController());
 		if (UserWidget == nullptr) {
@@ -27,7 +27,7 @@ namespace WidgetUtil
 		return UserWidget;
 	}
 
-	UUserWidget OpenWidget(FName WidgetClassName, AAuraCharacter AuraCharacter, FVector2D Position = FVector2D::ZeroVector)
+	UUserWidget OpenWidget(FName WidgetClassName, AAuraCharacterBase AuraCharacter, FVector2D Position = FVector2D::ZeroVector)
 	{
 		TSubclassOf<UUserWidget> WidgetClass = SDataUtil::GetWidgetClass(WidgetClassName);
 		if (WidgetClass == nullptr) {
@@ -49,5 +49,16 @@ namespace WidgetUtil
 		int SizeX = 0, SizeY = 0;
 		PlayerController.GetViewportSize(SizeX, SizeY);
 		return FVector2D(float(SizeX)*PositionRatio, float(SizeY)*PositionRatio);
+	}
+
+	UAuraUserWidget CreateEnemyWidget(TSubclassOf<UUserWidget> WidgetClass, AAuraCharacterBase Player, AAuraCharacterBase Enemy)
+	{
+		UAuraUserWidget AuraUserWidget = Cast<UAuraUserWidget>(WidgetBlueprint::CreateWidget(WidgetClass, Player.GetLocalViewingPlayerController()));
+		if (AuraUserWidget == nullptr) {
+			Print(f"Failed to create UserWidget {WidgetClass}");
+			return nullptr;
+		}
+		AuraUserWidget.OwnerCharacter = Enemy;
+		return AuraUserWidget;
 	}
 }

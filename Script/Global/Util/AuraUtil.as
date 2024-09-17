@@ -6,7 +6,7 @@ namespace AuraUtil
 		return UAuraGameInstanceSubsystem::Get();
 	}
 
-	UGasModule GetPlayerGasModule(AAuraCharacter Character)
+	UGasModule GetCharacterGasModule(AAuraCharacterBase Character)
 	{
 		return Character.GasModule;
 		// return Cast<UPlayerGasModule>(Character.PlayerModuleMgr.GetPlayerModule(EPlayerModule::Gas));

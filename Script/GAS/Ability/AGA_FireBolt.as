@@ -63,7 +63,7 @@ class UAGA_FireBolt : UAuraGameplayAbility
 	UFUNCTION()
 	private void OnMouseTargetData(const FVector& Data)
 	{
-		Print(f"OnMouseTargetData {Data}");
+		// Print(f"OnMouseTargetData {Data}");
 		TargetLocation = Data;
 	}
 }

@@ -56,7 +56,7 @@ class UGasModule : UObject
 	private void OnAttributeChanged(const FAngelscriptModifiedAttribute&in AttributeChangeData)
 	{
 		CachedAttributeValues.Add(AttributeChangeData.Name, AttributeChangeData.NewValue);
-		AuraUtil::GameInstance().EventMgr.OnAttributeChangedEvent.Broadcast(AttributeChangeData);
+		OwnerCharacter.OnAttributeChanged(AttributeChangeData);
 	}
 
 	float32 GetAttributeValue(FName AttributeName)

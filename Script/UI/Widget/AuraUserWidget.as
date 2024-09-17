@@ -1,11 +1,11 @@
 
 class UAuraUserWidget : UUserWidget
 {
-	AAuraCharacter Character;
+	AAuraCharacterBase OwnerCharacter;
 
-	void Ctor(AAuraCharacter InCharacter)
+	void Ctor(AAuraCharacterBase InCharacter)
 	{
-		Character = InCharacter;
+		OwnerCharacter = InCharacter;
 		OnCtor();
 	}
 
@@ -15,16 +15,16 @@ class UAuraUserWidget : UUserWidget
 
 	APlayerController GetPlayerController()
 	{
-		return Character.GetLocalViewingPlayerController();
+		return OwnerCharacter.GetLocalViewingPlayerController();
 	}
 
 	APlayerState GetPlayerState()
 	{
-		return Character.PlayerState;
+		return OwnerCharacter.PlayerState;
 	}
 
 	UAngelscriptAbilitySystemComponent GetAbilitySystemComponent()
 	{
-		return Character.AbilitySystem;
+		return OwnerCharacter.AbilitySystem;
 	}
 }
