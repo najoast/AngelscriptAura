@@ -3,23 +3,25 @@ namespace AuraAttributes
 {
 	// Primary Attributes
 	const FName Strength     = n"Strength"; // 力量
+	const FName Dexterity    = n"Dexterity"; // 敏捷
 	const FName Intelligence = n"Intelligence"; // 智力
-	const FName Resilience   = n"Resilience"; // 抗性
-	const FName Vigor        = n"Vigor"; // 精力
+	const FName Vitality     = n"Vitality"; // 体质
 
 	// Secondary Attributes
+	const FName AttackPower     = n"AttackPower"; // 攻击力
+	const FName MinAttackPower  = n"MinAttackPower"; // 最小攻击力
+	const FName MaxAttackPower  = n"MaxAttackPower"; // 最大攻击力
+	const FName MagicPower      = n"MagicPower"; // 魔法攻击力
+	const FName MinMagicPower   = n"MinMagicPower"; // 最小魔法攻击力
+	const FName MaxMagicPower   = n"MaxMagicPower"; // 最大魔法攻击力
+	const FName Defense         = n"Defense"; // 防御力
+	const FName MagicResistance = n"MagicResistance"; // 法抗性
+	const FName Accuracy        = n"Accuracy"; // 命中率
+	const FName Evasion         = n"Evasion"; // 闪避率
+	const FName CriticalChance  = n"CriticalChance"; // 暴击率
+	const FName CriticalDamage  = n"CriticalDamage"; // 暴击伤害
 
-	//  Defense Attributes
-	const FName Armor            = n"Armor"; // 护甲
-	const FName ArmorPenetration = n"ArmorPenetration"; // 护甲穿透
-	const FName BlockChance      = n"BlockChance";
-
-	//  Attack Attributes
-	const FName CriticalHitChance     = n"CriticalHitChance"; // 暴击率
-	const FName CriticalHitDamage     = n"CriticalHitDamage"; // 暴击伤害
-	const FName CriticalHitResistance = n"CriticalHitResistance"; // 暴击抗性
-
-	//  Vital Attributes
+	// Vital Attributes
 	const FName Health      = n"Health";
 	const FName MaxHealth   = n"MaxHealth";
 	const FName HealthRegen = n"HealthRegen"; // 生命回复
@@ -39,37 +41,52 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	FAngelscriptGameplayAttributeData Strength;
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Primary Attributes")
+	FAngelscriptGameplayAttributeData Dexterity;
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Primary Attributes")
 	FAngelscriptGameplayAttributeData Intelligence;
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Primary Attributes")
-	FAngelscriptGameplayAttributeData Resilience;
-
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Primary Attributes")
-	FAngelscriptGameplayAttributeData Vigor;
+	FAngelscriptGameplayAttributeData Vitality;
 
 	// Secondary Attributes
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Secondary Attributes")
+	FAngelscriptGameplayAttributeData AttackPower;
 
-	//  Defense Attributes
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Defense Attributes")
-	FAngelscriptGameplayAttributeData Armor;
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Secondary Attributes")
+	FAngelscriptGameplayAttributeData MinAttackPower;
 
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Defense Attributes")
-	FAngelscriptGameplayAttributeData ArmorPenetration;
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Secondary Attributes")
+	FAngelscriptGameplayAttributeData MaxAttackPower;
 
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Defense Attributes")
-	FAngelscriptGameplayAttributeData BlockChance;
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Secondary Attributes")
+	FAngelscriptGameplayAttributeData MagicPower;
 
-	//  Attack Attributes
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Attack Attributes")
-	FAngelscriptGameplayAttributeData CriticalHitChance;
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Secondary Attributes")
+	FAngelscriptGameplayAttributeData MinMagicPower;
 
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Attack Attributes")
-	FAngelscriptGameplayAttributeData CriticalHitDamage;
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Secondary Attributes")
+	FAngelscriptGameplayAttributeData MaxMagicPower;
 
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Attack Attributes")
-	FAngelscriptGameplayAttributeData CriticalHitResistance;
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Secondary Attributes")
+	FAngelscriptGameplayAttributeData Defense;
 
-	//  Vital Attributes
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Secondary Attributes")
+	FAngelscriptGameplayAttributeData MagicResistance;
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Secondary Attributes")
+	FAngelscriptGameplayAttributeData Accuracy;
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Secondary Attributes")
+	FAngelscriptGameplayAttributeData Evasion;
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Secondary Attributes")
+	FAngelscriptGameplayAttributeData CriticalChance;
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Secondary Attributes")
+	FAngelscriptGameplayAttributeData CriticalDamage;
+
+	// Vital Attributes
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
 	FAngelscriptGameplayAttributeData Health;
 
@@ -104,16 +121,24 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	void InitAttributesMapping()
 	{
 		PrimaryAttributes.Add(Strength);
+		PrimaryAttributes.Add(Dexterity);
 		PrimaryAttributes.Add(Intelligence);
-		PrimaryAttributes.Add(Resilience);
-		PrimaryAttributes.Add(Vigor);
+		PrimaryAttributes.Add(Vitality);
 
-		SecondaryAttributes.Add(Armor);
-		SecondaryAttributes.Add(ArmorPenetration);
-		SecondaryAttributes.Add(BlockChance);
-		SecondaryAttributes.Add(CriticalHitChance);
-		SecondaryAttributes.Add(CriticalHitDamage);
-		SecondaryAttributes.Add(CriticalHitResistance);
+		SecondaryAttributes.Add(AttackPower);
+		SecondaryAttributes.Add(MinAttackPower);
+		SecondaryAttributes.Add(MaxAttackPower);
+		SecondaryAttributes.Add(MagicPower);
+		SecondaryAttributes.Add(MinMagicPower);
+		SecondaryAttributes.Add(MaxMagicPower);
+
+		SecondaryAttributes.Add(Defense);
+		SecondaryAttributes.Add(MagicResistance);
+		SecondaryAttributes.Add(Accuracy);
+		SecondaryAttributes.Add(Evasion);
+		SecondaryAttributes.Add(CriticalChance);
+		SecondaryAttributes.Add(CriticalDamage);
+
 		SecondaryAttributes.Add(MaxHealth);
 		SecondaryAttributes.Add(HealthRegen);
 		SecondaryAttributes.Add(MaxMana);
