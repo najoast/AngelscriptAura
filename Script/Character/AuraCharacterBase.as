@@ -17,10 +17,11 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 	FName WeaponTipSocketName = AuraConst::DefaultWeaponTipSocketName;
 
 	UPROPERTY(Category = "GAS")
-	TArray<TSubclassOf<UGameplayEffect>> InitAppliedEffects;
-
-	UPROPERTY(Category = "GAS")
 	TArray<TSubclassOf<UGameplayAbility>> InitAddedAbilities;
+
+	// TODO: 职业先放在这里，后面交给玩家选择
+	UPROPERTY()
+	ECharacterClass CharacterClass = ECharacterClass::Mage;
 
 	// -------------------- Varibles --------------------
 	UGasModule GasModule;
@@ -32,8 +33,11 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		GasModule = Cast<UGasModule>(NewObject(this, UGasModule::StaticClass(), n"UGasModule"));
 		GasModule.Init(this);
 
-		for (auto EffectClass : InitAppliedEffects) {
-			GasUtil::ApplyGameplayEffect(this, this, EffectClass);
+		FSDataCharacterClass SDataCharacterClass = AuraUtil::GetSDataMgr().CharacterClassMap[CharacterClass];
+		if (SDataCharacterClass.AttributeEffects.Num() > 0) {
+			for (auto EffectClass : SDataCharacterClass.AttributeEffects) {
+				GasUtil::ApplyGameplayEffect(this, this, EffectClass);
+			}
 		}
 
 		for (auto AbilityClass : InitAddedAbilities) {

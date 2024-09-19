@@ -1,33 +1,38 @@
 
 namespace AuraAttributes
 {
-	// Primary Attributes
+	// 1 Primary Attributes
 	const FName Strength     = n"Strength"; // 力量
 	const FName Dexterity    = n"Dexterity"; // 敏捷
 	const FName Intelligence = n"Intelligence"; // 智力
 	const FName Vitality     = n"Vitality"; // 体质
 
-	// Secondary Attributes
+	// 2 Secondary Attributes
+	// 2.1 Attack Attributes
 	const FName AttackPower     = n"AttackPower"; // 攻击力
-	const FName MinAttackPower  = n"MinAttackPower"; // 最小攻击力
-	const FName MaxAttackPower  = n"MaxAttackPower"; // 最大攻击力
 	const FName MagicPower      = n"MagicPower"; // 魔法攻击力
-	const FName MinMagicPower   = n"MinMagicPower"; // 最小魔法攻击力
-	const FName MaxMagicPower   = n"MaxMagicPower"; // 最大魔法攻击力
+	const FName CriticalChance  = n"CriticalChance"; // 暴击率
+	const FName CriticalDamage  = n"CriticalDamage"; // 暴击伤害
+
+	// 2.2 Defense Attributes
 	const FName Defense         = n"Defense"; // 防御力
 	const FName MagicResistance = n"MagicResistance"; // 法抗性
 	const FName Accuracy        = n"Accuracy"; // 命中率
 	const FName Evasion         = n"Evasion"; // 闪避率
-	const FName CriticalChance  = n"CriticalChance"; // 暴击率
-	const FName CriticalDamage  = n"CriticalDamage"; // 暴击伤害
 
-	// Vital Attributes
+	// 2.3 Vital Attributes
 	const FName Health      = n"Health";
 	const FName MaxHealth   = n"MaxHealth";
 	const FName HealthRegen = n"HealthRegen"; // 生命回复
 	const FName Mana        = n"Mana";
 	const FName MaxMana     = n"MaxMana";
 	const FName ManaRegen   = n"ManaRegen"; // 法力回复
+
+	// 3 Tertiary Attributes
+	const FName MinAttackPower  = n"MinAttackPower"; // 最小攻击力
+	const FName MaxAttackPower  = n"MaxAttackPower"; // 最大攻击力
+	const FName MinMagicPower   = n"MinMagicPower"; // 最小魔法攻击力
+	const FName MaxMagicPower   = n"MaxMagicPower"; // 最大魔法攻击力
 }
 
 event void FOnGameplayEffectApplied(FGameplayEffectSpec EffectSpec, FGameplayModifierEvaluatedData EvaluatedData, UAngelscriptAbilitySystemComponent TargetASC);

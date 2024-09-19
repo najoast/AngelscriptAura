@@ -14,6 +14,14 @@ enum EItemID
 	ManaCrystal   = 4,
 }
 
+enum ECharacterClass
+{
+	None    = 0,
+	Warrior = 1,
+	Archer  = 2,
+	Mage    = 3,
+}
+
 // Enum Alias
 namespace AuraEnum
 {

@@ -6,6 +6,11 @@ namespace AuraUtil
 		return UAuraGameInstanceSubsystem::Get();
 	}
 
+	USDataMgr GetSDataMgr()
+	{
+		return GameInstance().SDataMgr;
+	}
+
 	UGasModule GetCharacterGasModule(AAuraCharacterBase Character)
 	{
 		return Character.GasModule;

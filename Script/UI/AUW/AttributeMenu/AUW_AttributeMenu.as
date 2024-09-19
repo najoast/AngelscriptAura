@@ -11,32 +11,38 @@ class UAUW_AttributeMenu : UAuraUserWidget
 	UAUW_TextValueRow WBP_Strength;
 
 	UPROPERTY(BindWidget)
+	UAUW_TextValueRow WBP_Dexterity;
+
+	UPROPERTY(BindWidget)
 	UAUW_TextValueRow WBP_Intelligence;
 
 	UPROPERTY(BindWidget)
-	UAUW_TextValueRow WBP_Resislience;
-
-	UPROPERTY(BindWidget)
-	UAUW_TextValueRow WBP_Vigor;
+	UAUW_TextValueRow WBP_Vitality;
 
 	// Secondary Attributes
 	UPROPERTY(BindWidget)
-	UAUW_TextValueRow WBP_Armor;
+	UAUW_TextValueRow WBP_AttackPower;
 
 	UPROPERTY(BindWidget)
-	UAUW_TextValueRow WBP_ArmorPenetration;
+	UAUW_TextValueRow WBP_MagicPower;
 
 	UPROPERTY(BindWidget)
-	UAUW_TextValueRow WBP_BlockChance;
+	UAUW_TextValueRow WBP_CriticalChance;
 
 	UPROPERTY(BindWidget)
-	UAUW_TextValueRow WBP_CriticalHitChance;
+	UAUW_TextValueRow WBP_CriticalDamage;
 
 	UPROPERTY(BindWidget)
-	UAUW_TextValueRow WBP_CriticalHitDamage;
+	UAUW_TextValueRow WBP_Defense;
 
 	UPROPERTY(BindWidget)
-	UAUW_TextValueRow WBP_CriticalHitResistance;
+	UAUW_TextValueRow WBP_MagicResistance;
+
+	UPROPERTY(BindWidget)
+	UAUW_TextValueRow WBP_Accuracy;
+
+	UPROPERTY(BindWidget)
+	UAUW_TextValueRow WBP_Evasion;
 
 	UPROPERTY(BindWidget)
 	UAUW_TextValueRow WBP_MaxHealth;
@@ -50,12 +56,6 @@ class UAUW_AttributeMenu : UAuraUserWidget
 	UPROPERTY(BindWidget)
 	UAUW_TextValueRow WBP_ManaRegen;
 
-	// Vital Attributes
-	// UPROPERTY(BindWidget)
-	// UAUW_VitalProgress WBP_Health;
-
-	// UPROPERTY(BindWidget)
-	// UAUW_VitalProgress WBP_Mana;
 
 	UPROPERTY(BindWidget)
 	UAUW_Button WBP_Button_Close;
@@ -82,17 +82,19 @@ class UAUW_AttributeMenu : UAuraUserWidget
 		WBP_AttributePoints.Text_Text.Text = FText::FromString("Attribute Points");
 
 		PrimaryAttributeWidgets.Add(AuraAttributes::Strength, WBP_Strength);
+		PrimaryAttributeWidgets.Add(AuraAttributes::Dexterity, WBP_Dexterity);
 		PrimaryAttributeWidgets.Add(AuraAttributes::Intelligence, WBP_Intelligence);
-		PrimaryAttributeWidgets.Add(AuraAttributes::Resilience, WBP_Resislience);
-		PrimaryAttributeWidgets.Add(AuraAttributes::Vigor, WBP_Vigor);
+		PrimaryAttributeWidgets.Add(AuraAttributes::Vitality, WBP_Vitality);
 
-		SecondaryAttributeWidgets.Add(AuraAttributes::Armor, WBP_Armor);
-		SecondaryAttributeWidgets.Add(AuraAttributes::ArmorPenetration, WBP_ArmorPenetration);
-		SecondaryAttributeWidgets.Add(AuraAttributes::BlockChance, WBP_BlockChance);
-		SecondaryAttributeWidgets.Add(AuraAttributes::CriticalHitChance, WBP_CriticalHitChance);
-		SecondaryAttributeWidgets.Add(AuraAttributes::CriticalHitDamage, WBP_CriticalHitDamage);
-		SecondaryAttributeWidgets.Add(AuraAttributes::CriticalHitResistance, WBP_CriticalHitResistance);
-		SecondaryAttributeWidgets.Add(AuraAttributes::MaxHealth, WBP_MaxHealth);
+		SecondaryAttributeWidgets.Add(AuraAttributes::AttackPower, WBP_AttackPower);
+		SecondaryAttributeWidgets.Add(AuraAttributes::MagicPower, WBP_MagicPower);
+		SecondaryAttributeWidgets.Add(AuraAttributes::CriticalChance, WBP_CriticalChance);
+		SecondaryAttributeWidgets.Add(AuraAttributes::CriticalDamage, WBP_CriticalDamage);
+		SecondaryAttributeWidgets.Add(AuraAttributes::Defense, WBP_Defense);
+		SecondaryAttributeWidgets.Add(AuraAttributes::MagicResistance, WBP_MagicResistance);
+		SecondaryAttributeWidgets.Add(AuraAttributes::Accuracy, WBP_Accuracy);
+		SecondaryAttributeWidgets.Add(AuraAttributes::Evasion, WBP_Evasion);
+		SecondaryAttributeWidgets.Add(AuraAttributes::MaxHealth, WBP_Evasion);
 		SecondaryAttributeWidgets.Add(AuraAttributes::HealthRegen, WBP_HealthRegen);
 		SecondaryAttributeWidgets.Add(AuraAttributes::MaxMana, WBP_MaxMana);
 		SecondaryAttributeWidgets.Add(AuraAttributes::ManaRegen, WBP_ManaRegen);
@@ -129,8 +131,18 @@ class UAUW_AttributeMenu : UAuraUserWidget
 		UGasModule GasModule = AuraUtil::GetCharacterGasModule(OwnerCharacter);
 		for (auto Element : AllAttributeWidgets)
 		{
-			float32 Value = GasModule.GetAttributeValue(Element.Key);
-			Element.Value.WBP_FramedValue.Text_Value.SetText(FText::FromString(f"{Value :.0}"));
+			if (Element.Key == AuraAttributes::AttackPower) {
+				float32 MinAttackPower = GasModule.GetAttributeValue(AuraAttributes::MinAttackPower);
+				float32 MaxAttackPower = GasModule.GetAttributeValue(AuraAttributes::MaxAttackPower);
+				Element.Value.WBP_FramedValue.Text_Value.SetText(FText::FromString(f"{MinAttackPower :.0} - {MaxAttackPower :.0}"));
+			} else if (Element.Key == AuraAttributes::MagicPower) {
+				float32 MinMagicPower = GasModule.GetAttributeValue(AuraAttributes::MinMagicPower);
+				float32 MaxMagicPower = GasModule.GetAttributeValue(AuraAttributes::MaxMagicPower);
+				Element.Value.WBP_FramedValue.Text_Value.SetText(FText::FromString(f"{MinMagicPower :.0} - {MaxMagicPower :.0}"));
+			} else {
+				float32 Value = GasModule.GetAttributeValue(Element.Key);
+				Element.Value.WBP_FramedValue.Text_Value.SetText(FText::FromString(f"{Value :.0}"));
+			}
 		}
 	}
 
@@ -147,21 +159,21 @@ class UAUW_AttributeMenu : UAuraUserWidget
 	}
 
 	UFUNCTION()
+	void OnButton_AddDexterityClicked()
+	{
+		Print("OnButton_AddDexterityClicked");
+	}
+
+	UFUNCTION()
 	void OnButton_AddIntelligenceClicked()
 	{
 		Print("OnButton_AddIntelligenceClicked");
 	}
 
 	UFUNCTION()
-	void OnButton_AddResilienceClicked()
+	void OnButton_AddVitalityClicked()
 	{
-		Print("OnButton_AddResilienceClicked");
-	}
-
-	UFUNCTION()
-	void OnButton_AddVigorClicked()
-	{
-		Print("OnButton_AddVigorClicked");
+		Print("OnButton_AddVitalityClicked");
 	}
 
 	UFUNCTION()
