@@ -56,9 +56,11 @@ class UAUW_AttributeMenu : UAuraUserWidget
 	UPROPERTY(BindWidget)
 	UAUW_TextValueRow WBP_ManaRegen;
 
-
 	UPROPERTY(BindWidget)
 	UAUW_Button WBP_Button_Close;
+
+	UPROPERTY()
+	TArray<TSubclassOf<UGameplayEffect>> AddPointEffects;
 
 	// ------------------------ Member Variables ------------------------
 	TMap<FName, UAUW_TextValueRow> PrimaryAttributeWidgets;
@@ -129,20 +131,24 @@ class UAUW_AttributeMenu : UAuraUserWidget
 	void InitWidgetsData()
 	{
 		UGasModule GasModule = AuraUtil::GetCharacterGasModule(OwnerCharacter);
-		for (auto Element : AllAttributeWidgets)
-		{
-			if (Element.Key == AuraAttributes::AttackPower) {
-				float32 MinAttackPower = GasModule.GetAttributeValue(AuraAttributes::MinAttackPower);
-				float32 MaxAttackPower = GasModule.GetAttributeValue(AuraAttributes::MaxAttackPower);
-				Element.Value.WBP_FramedValue.Text_Value.SetText(FText::FromString(f"{MinAttackPower :.0} - {MaxAttackPower :.0}"));
-			} else if (Element.Key == AuraAttributes::MagicPower) {
-				float32 MinMagicPower = GasModule.GetAttributeValue(AuraAttributes::MinMagicPower);
-				float32 MaxMagicPower = GasModule.GetAttributeValue(AuraAttributes::MaxMagicPower);
-				Element.Value.WBP_FramedValue.Text_Value.SetText(FText::FromString(f"{MinMagicPower :.0} - {MaxMagicPower :.0}"));
-			} else {
-				float32 Value = GasModule.GetAttributeValue(Element.Key);
-				Element.Value.WBP_FramedValue.Text_Value.SetText(FText::FromString(f"{Value :.0}"));
-			}
+		for (auto Element : AllAttributeWidgets) {
+			UpdateWidgetData(GasModule, Element.Key, Element.Value);
+		}
+	}
+
+	void UpdateWidgetData(UGasModule GasModule, FName AttributeName, UAUW_TextValueRow TextValueRow)
+	{
+		if (AttributeName == AuraAttributes::AttackPower) {
+			float32 MinAttackPower = GasModule.GetAttributeValue(AuraAttributes::MinAttackPower);
+			float32 MaxAttackPower = GasModule.GetAttributeValue(AuraAttributes::MaxAttackPower);
+			TextValueRow.WBP_FramedValue.Text_Value.SetText(FText::FromString(f"{MinAttackPower :.0} - {MaxAttackPower :.0}"));
+		} else if (AttributeName == AuraAttributes::MagicPower) {
+			float32 MinMagicPower = GasModule.GetAttributeValue(AuraAttributes::MinMagicPower);
+			float32 MaxMagicPower = GasModule.GetAttributeValue(AuraAttributes::MaxMagicPower);
+			TextValueRow.WBP_FramedValue.Text_Value.SetText(FText::FromString(f"{MinMagicPower :.0} - {MaxMagicPower :.0}"));
+		} else {
+			float32 Value = GasModule.GetAttributeValue(AttributeName);
+			TextValueRow.WBP_FramedValue.Text_Value.SetText(FText::FromString(f"{Value :.0}"));
 		}
 	}
 
@@ -156,24 +162,28 @@ class UAUW_AttributeMenu : UAuraUserWidget
 	void OnButton_AddStrengthClicked()
 	{
 		Print("OnButton_AddStrengthClicked");
+		GasUtil::ApplyGameplayEffect(OwnerCharacter, OwnerCharacter, AddPointEffects[0]);
 	}
 
 	UFUNCTION()
 	void OnButton_AddDexterityClicked()
 	{
 		Print("OnButton_AddDexterityClicked");
+		GasUtil::ApplyGameplayEffect(OwnerCharacter, OwnerCharacter, AddPointEffects[1]);
 	}
 
 	UFUNCTION()
 	void OnButton_AddIntelligenceClicked()
 	{
 		Print("OnButton_AddIntelligenceClicked");
+		GasUtil::ApplyGameplayEffect(OwnerCharacter, OwnerCharacter, AddPointEffects[2]);
 	}
 
 	UFUNCTION()
 	void OnButton_AddVitalityClicked()
 	{
 		Print("OnButton_AddVitalityClicked");
+		GasUtil::ApplyGameplayEffect(OwnerCharacter, OwnerCharacter, AddPointEffects[3]);
 	}
 
 	UFUNCTION()
@@ -183,9 +193,8 @@ class UAUW_AttributeMenu : UAuraUserWidget
 			return;
 		}
 
-		UGasModule GasModule = AuraUtil::GetCharacterGasModule(OwnerCharacter);
 		UAUW_TextValueRow TextValueRow = AllAttributeWidgets[AttributeChangeData.Name];
-		float32 Value = GasModule.GetAttributeValue(AttributeChangeData.Name);
-		TextValueRow.Text_Text.SetText(FText::FromString(f"{Value :.0}"));
+		UGasModule GasModule = AuraUtil::GetCharacterGasModule(OwnerCharacter);
+		UpdateWidgetData(GasModule, AttributeChangeData.Name, TextValueRow);
 	}
 }
