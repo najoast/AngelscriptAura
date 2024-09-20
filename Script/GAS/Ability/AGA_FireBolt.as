@@ -46,7 +46,10 @@ class UAGA_FireBolt : UAuraGameplayAbility
 
 			AAuraProjectile ProjectileActor = Cast<AAuraProjectile>(SpawnActor(ProjectileClass, SourceLocation, Rotation, n"FireBolt", true));
 			if (ProjectileActor != nullptr) {
-				ProjectileActor.DamageEffectSpecHandle = GasUtil::MakeGameplayEffectSpecHandle(AvatarActor, DamageEffectClass, GetAbilityLevel());
+				FGameplayEffectSpecHandle SpecHandle = GasUtil::MakeGameplayEffectSpecHandle(AvatarActor, DamageEffectClass, GetAbilityLevel());
+				// SpecHandle.GetSpec().SetByCallerTagMagnitudes.Add(GameplayTags::Damage, 30);
+				SpecHandle.GetSpec().SetByCallerMagnitude(GameplayTags::Damage, 30);
+				ProjectileActor.DamageEffectSpecHandle = SpecHandle;
 				FinishSpawningActor(ProjectileActor);
 			}
 
