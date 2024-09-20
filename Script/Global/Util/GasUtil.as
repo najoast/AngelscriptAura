@@ -51,4 +51,22 @@ namespace GasUtil
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, Level);
 		return AbilitySpec;
 	}
+
+	AAuraCharacterBase GetAvatarCharacterFromASC(UAngelscriptAbilitySystemComponent ASC)
+	{
+		AActor AvatarActor = ASC.AbilityActorInfo.GetAvatarActor();
+		if (AvatarActor == nullptr) {
+			return nullptr;
+		}
+		return Cast<AAuraCharacterBase>(AvatarActor);
+	}
+
+	AAuraCharacterBase GetAvatarCharacterFromAbility(UGameplayAbility Ability)
+	{
+		AActor AvatarActor = Ability.GetAvatarActorFromActorInfo();
+		if (AvatarActor == nullptr) {
+			return nullptr;
+		}
+		return Cast<AAuraCharacterBase>(AvatarActor);
+	}
 }

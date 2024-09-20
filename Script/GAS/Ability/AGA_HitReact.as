@@ -12,12 +12,12 @@ class UAGA_HitReact : UAuraGameplayAbility
 			return;
 		}
 
-		AAuraCharacterBase AvatarActor = Cast<AAuraCharacterBase>(GetAvatarActorFromActorInfo());
+		AAuraCharacterBase AvatarActor = GasUtil::GetAvatarCharacterFromAbility(this);
 		// TODO: 限制移动
 
 		// 被击中后，播放受击动画，限制移动，动画播放完毕后，再恢复移动
 		UAbilityTask_PlayMontageAndWait MontagePlayTask = AngelscriptAbilityTask::PlayMontageAndWait(this, NAME_None, AvatarActor.GetHitReactMontage());
-		MontagePlayTask.OnCompleted.AddUFunction(this, n"OnHitReactMontageCompleted");
+		MontagePlayTask.OnBlendOut.AddUFunction(this, n"OnHitReactMontageCompleted");
 		MontagePlayTask.ReadyForActivation();
 	}
 
@@ -26,5 +26,10 @@ class UAGA_HitReact : UAuraGameplayAbility
 	{
 		Print("OnHitReactMontageCompleted");
 		EndAbility();
+
+		AAuraCharacterBase AvatarActor = GasUtil::GetAvatarCharacterFromAbility(this);
+		if (AvatarActor.IsDead()) {
+			AvatarActor.DestroyActor();
+		}
 	}
 }

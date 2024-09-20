@@ -65,10 +65,15 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 
 	UAnimMontage GetHitReactMontage()
 	{
-		return AuraUtil::GetSDataMgr().CharacterMap[CharacterID].HitReactMontage;
+		FSDataCharacter SDataCharacter = AuraUtil::GetSDataMgr().CharacterMap[CharacterID];
+		if (IsDead()) {
+			return SDataCharacter.DeathMontage;
+		} else {
+			return SDataCharacter.HitReactMontage;
+		}
 	}
 
-	void PlayHitReactMontage()
+	void TryPlayHitReactMontage()
 	{
 		FGameplayAbilitySpec OutSpec;
 		if (AbilitySystem.FindAbilitySpecFromClass(UAGA_HitReact, OutSpec)) {
@@ -76,5 +81,10 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 				AbilitySystem.TryActivateAbility(OutSpec.Handle);
 			}
 		}
+	}
+
+	bool IsDead()
+	{
+		return GasModule.GetAttributeValue(AuraAttributes::Health) <= 0;
 	}
 }

@@ -68,11 +68,6 @@ class AAuraProjectile : AActor
 			UAbilitySystemComponent TargetASC = AbilitySystem::GetAbilitySystemComponent(OtherActor);
 			if (TargetASC != nullptr) {
 				TargetASC.ApplyGameplayEffectSpecToSelf(DamageEffectSpecHandle);
-
-				AAuraCharacterBase TargetAvatarActor = Cast<AAuraCharacterBase>(OtherActor);
-				if (TargetAvatarActor != nullptr) {
-					TargetAvatarActor.PlayHitReactMontage();
-				}
 			}
 		}
 
