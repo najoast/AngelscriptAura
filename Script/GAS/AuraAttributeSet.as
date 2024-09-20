@@ -235,14 +235,17 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	{
 		// TODO: 没有C++里的 ATTRIBUTE_ACCESSORS ，没有 SetNumericAttributeBase, 没有 FActiveGameplayEffectsContainer::SetAttributeBaseValue, 搞不了一点
 		if (EvaluatedData.Attribute.AttributeName == AuraAttributes::IncomingDamage) {
-			float32 IncomingDamage = EvaluatedData.GetMagnitude();
-			EvaluatedData.SetMagnitude(0);
-			if (IncomingDamage > 0) {
-				const float NewHealth = Health.GetCurrentValue() - IncomingDamage;
-				// TargetASC.SetMagnitude()
-				// TargetASC.
+			float32 IncomingDamageMagnitude = EvaluatedData.GetMagnitude();
+			// EvaluatedData.SetMagnitude(0);
+			TargetASC.SetAttributeBaseValue(this.Class, AuraAttributes::IncomingDamage, 0);
+			if (IncomingDamageMagnitude > 0) {
+				// TODO: 检查下为什么所有二级属性 BaseValue 都是 0，MMC的问题？ 所以这里 MaxHealth 不得不用 GetCurrentValue
+				const float NewHealth = Math::Clamp(Health.GetBaseValue() - IncomingDamageMagnitude, 0, MaxHealth.GetCurrentValue());
+				TargetASC.SetAttributeBaseValue(this.Class, AuraAttributes::Health, NewHealth);
+				if (NewHealth == 0) {
+					Print(f"Target is dead");
+				}
 			}
-			// EvaluatedData.Attribute.SetCurrentValue(IncomingDamage);
 		}
 	}
 
@@ -255,7 +258,8 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 		ClampAttribute(EvaluatedData.Attribute, BaseValue);
 
 		if (BaseValue != Attribute.GetBaseValue()) {
-			Attribute.SetBaseValue(BaseValue);
+			// Attribute.SetBaseValue(BaseValue);
+			this.SetAttributeValue(Attribute.AttributeName, BaseValue);
 		}
 
 		// Print(f"PostGameplayEffectExecute: {EffectSpec =}");
@@ -265,6 +269,14 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 		// This event is broadcasted by OnGameplayEffectAppliedDelegateToSelf.Brocast() in the course.
 		// Because there is no OnGameplayEffectAppliedDelegateToSelf in the Angelscript, so I just call this function via PostGameplayEffectExecute.
 		OnGameplayEffectAppliedEvent.Broadcast(EffectSpec, EvaluatedData, TargetASC);
+
+		ProcessMetaAttribute(EffectSpec, EvaluatedData, TargetASC);
+	}
+
+	void SetAttributeValue(FName AttributeName, float32 BaseValue)
+	{
+		UAngelscriptAbilitySystemComponent OwningASC = this.GetOwningAbilitySystemComponent();
+		OwningASC.SetAttributeBaseValue(this.Class, AttributeName, BaseValue);
 	}
 
 	// This function is just a demostration of how to retrieve ASC info in PostGameplayEffectExecute.
