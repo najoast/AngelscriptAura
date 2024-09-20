@@ -162,6 +162,7 @@ class UAUW_AttributeMenu : UAuraUserWidget
 	void OnButton_AddStrengthClicked()
 	{
 		Print("OnButton_AddStrengthClicked");
+		// AuraUtil::GetCharacterGasModule(OwnerCharacter).AddAttributeValue(AuraAttributes::Strength, 1);
 		GasUtil::ApplyGameplayEffect(OwnerCharacter, OwnerCharacter, AddPointEffects[0]);
 	}
 
@@ -169,6 +170,7 @@ class UAUW_AttributeMenu : UAuraUserWidget
 	void OnButton_AddDexterityClicked()
 	{
 		Print("OnButton_AddDexterityClicked");
+		// AuraUtil::GetCharacterGasModule(OwnerCharacter).AddAttributeValue(AuraAttributes::Dexterity, 1);
 		GasUtil::ApplyGameplayEffect(OwnerCharacter, OwnerCharacter, AddPointEffects[1]);
 	}
 
@@ -176,6 +178,7 @@ class UAUW_AttributeMenu : UAuraUserWidget
 	void OnButton_AddIntelligenceClicked()
 	{
 		Print("OnButton_AddIntelligenceClicked");
+		// AuraUtil::GetCharacterGasModule(OwnerCharacter).AddAttributeValue(AuraAttributes::Intelligence, 1);
 		GasUtil::ApplyGameplayEffect(OwnerCharacter, OwnerCharacter, AddPointEffects[2]);
 	}
 
@@ -183,6 +186,7 @@ class UAUW_AttributeMenu : UAuraUserWidget
 	void OnButton_AddVitalityClicked()
 	{
 		Print("OnButton_AddVitalityClicked");
+		// AuraUtil::GetCharacterGasModule(OwnerCharacter).AddAttributeValue(AuraAttributes::Vitality, 1);
 		GasUtil::ApplyGameplayEffect(OwnerCharacter, OwnerCharacter, AddPointEffects[3]);
 	}
 

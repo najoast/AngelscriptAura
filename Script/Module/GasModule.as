@@ -66,4 +66,19 @@ class UGasModule : UObject
 		}
 		return CachedAttributeValues[AttributeName];
 	}
+
+	// TODO: 这样直接设置不生效，不会回调到OnAttributeChanged里，导致即使最简单的对一级属性的加减，也要通过GE来实现，调查下原因
+	// void SetAttributeValue(FName AttributeName, float32 Value)
+	// {
+	// 	FAngelscriptGameplayAttributeData& AttributeData = AttributeSet.GetAttribute(AttributeName);
+	// 	AttributeData.SetBaseValue(Value);
+	// 	AttributeData.SetCurrentValue(Value);
+	// }
+
+	// void AddAttributeValue(FName AttributeName, float32 Value)
+	// {
+	// 	FAngelscriptGameplayAttributeData& AttributeData = AttributeSet.GetAttribute(AttributeName);
+	// 	AttributeData.SetBaseValue(AttributeData.GetBaseValue() + Value);
+	// 	AttributeData.SetCurrentValue(AttributeData.GetCurrentValue() + Value);
+	// }
 }

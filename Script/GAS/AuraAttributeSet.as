@@ -33,6 +33,9 @@ namespace AuraAttributes
 	const FName MaxAttackPower  = n"MaxAttackPower"; // 最大攻击力
 	const FName MinMagicPower   = n"MinMagicPower"; // 最小魔法攻击力
 	const FName MaxMagicPower   = n"MaxMagicPower"; // 最大魔法攻击力
+
+	// 4 Meta Attributes
+	const FName IncomingDamage = n"IncomingDamage";
 }
 
 event void FOnGameplayEffectApplied(FGameplayEffectSpec EffectSpec, FGameplayModifierEvaluatedData EvaluatedData, UAngelscriptAbilitySystemComponent TargetASC);
@@ -110,10 +113,15 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Vital Attributes")
 	FAngelscriptGameplayAttributeData ManaRegen;
 
+	// Meta Attributes
+	UPROPERTY(BlueprintReadOnly, Category = "Meta Attributes")
+	FAngelscriptGameplayAttributeData IncomingDamage;
+
 	// Varibles
 	private TArray<FAngelscriptGameplayAttributeData> PrimaryAttributes;
 	private TArray<FAngelscriptGameplayAttributeData> SecondaryAttributes;
 	private TArray<FAngelscriptGameplayAttributeData> VitalAttributes;
+	private TArray<FAngelscriptGameplayAttributeData> MetaAttributes;
 	private TMap<FName, FAngelscriptGameplayAttributeData> Name2Attribute;
 
 	// ======================================================================================================
@@ -152,6 +160,8 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 		VitalAttributes.Add(Health);
 		VitalAttributes.Add(Mana);
 
+		MetaAttributes.Add(IncomingDamage);
+
 		for (FAngelscriptGameplayAttributeData& Attribute : PrimaryAttributes) {
 			Name2Attribute.Add(Attribute.AttributeName, Attribute);
 		}
@@ -159,6 +169,9 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 			Name2Attribute.Add(Attribute.AttributeName, Attribute);
 		}
 		for (FAngelscriptGameplayAttributeData& Attribute : VitalAttributes) {
+			Name2Attribute.Add(Attribute.AttributeName, Attribute);
+		}
+		for (FAngelscriptGameplayAttributeData& Attribute : MetaAttributes) {
 			Name2Attribute.Add(Attribute.AttributeName, Attribute);
 		}
 	}
@@ -218,10 +231,23 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 		}
 	}
 
+	void ProcessMetaAttribute(FGameplayEffectSpec EffectSpec, FGameplayModifierEvaluatedData& EvaluatedData, UAngelscriptAbilitySystemComponent TargetASC)
+	{
+		// TODO: 没有C++里的 ATTRIBUTE_ACCESSORS ，没有 SetNumericAttributeBase, 没有 FActiveGameplayEffectsContainer::SetAttributeBaseValue, 搞不了一点
+		if (EvaluatedData.Attribute.AttributeName == AuraAttributes::IncomingDamage) {
+			float32 IncomingDamage = EvaluatedData.GetMagnitude();
+			EvaluatedData.SetMagnitude(0);
+			if (IncomingDamage > 0) {
+				const float NewHealth = Health.GetCurrentValue() - IncomingDamage;
+				// TargetASC.SetMagnitude()
+				// TargetASC.
+			}
+			// EvaluatedData.Attribute.SetCurrentValue(IncomingDamage);
+		}
+	}
+
 	UFUNCTION(BlueprintOverride)
-	void PostGameplayEffectExecute(FGameplayEffectSpec EffectSpec,
-								   FGameplayModifierEvaluatedData& EvaluatedData,
-								   UAngelscriptAbilitySystemComponent TargetASC)
+	void PostGameplayEffectExecute(FGameplayEffectSpec EffectSpec, FGameplayModifierEvaluatedData& EvaluatedData, UAngelscriptAbilitySystemComponent TargetASC)
 	{
 		// Clamp the attribute value in PostGameplayEffectExecute.
 		auto& Attribute = GetAttribute(FName(EvaluatedData.Attribute.AttributeName));
