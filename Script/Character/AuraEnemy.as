@@ -33,6 +33,8 @@ class AAuraEnemy : AAuraCharacterBase
 			HealthBarWidget.OwnerCharacter = this;
 			// HealthBarWidget.ProgressBar_HealthBar.SetPercent(1);
 		}
+
+		AbilitySystem.OnOwnedTagUpdated.AddUFunction(this, n"OnOwnedTagUpdated");
 	}
 
 	void Highlight()
@@ -47,4 +49,9 @@ class AAuraEnemy : AAuraCharacterBase
 		Weapon.RenderCustomDepth = false;
 	}
 
+	UFUNCTION()
+	private void OnOwnedTagUpdated(const FGameplayTag&in Tag, bool TagExists)
+	{
+		Print(f"OnOwnedTagUpdated: {Tag.ToString() =} {TagExists =}");
+	}
 }

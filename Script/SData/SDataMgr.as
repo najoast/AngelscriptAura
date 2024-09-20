@@ -5,6 +5,7 @@ class USDataMgr : UObject
 	UDataTable SDataWidgetClass;
 	TMap<UInputAction, FSDataInput> InputMap;
 	TMap<ECharacterClass, FSDataCharacterClass> CharacterClassMap;
+	TMap<uint16, FSDataCharacter> CharacterMap;
 
 	void Init()
 	{
@@ -12,6 +13,7 @@ class USDataMgr : UObject
 		LoadWidgetClass();
 		LoadInput();
 		LoadCharacterClass();
+		LoadCharacter();
 	}
 
 	private void LoadItem()
@@ -50,6 +52,17 @@ class USDataMgr : UObject
 		SDataCharacterClass.GetAllRows(AllCharacterClasses);
 		for (FSDataCharacterClass CharacterClass : AllCharacterClasses) {
 			CharacterClassMap.Add(CharacterClass.CharacterClass, CharacterClass);
+		}
+	}
+
+	private void LoadCharacter()
+	{
+		UDataTable SDataCharacter = Cast<UDataTable>(LoadObject(this, "/Game/SData/DT_SData_Character"));
+
+		TArray<FSDataCharacter> AllCharacters;
+		SDataCharacter.GetAllRows(AllCharacters);
+		for (FSDataCharacter Character : AllCharacters) {
+			CharacterMap.Add(Character.CharacterID, Character);
 		}
 	}
 }

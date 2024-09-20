@@ -1,3 +1,4 @@
+// Character class config
 USTRUCT()
 struct FSDataCharacterClass
 {

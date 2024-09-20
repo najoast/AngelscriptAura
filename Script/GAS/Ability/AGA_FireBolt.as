@@ -22,8 +22,8 @@ class UAGA_FireBolt : UAuraGameplayAbility
 			return;
 		}
 
-		auto MontagePlayTask = AngelscriptAbilityTask::PlayMontageAndWait(this, n"FireBolt", AM_FireBolt);
-		// MontagePlayTask.OnCompleted.AddUFunction(this, n"OnFireBoltMontageCompleted"); // 改到 AnimNotify 里触发了，这里触发效果不对
+		UAbilityTask_PlayMontageAndWait MontagePlayTask = AngelscriptAbilityTask::PlayMontageAndWait(this, n"FireBolt", AM_FireBolt);
+		// MontagePlayTask.OnCompleted.AddUFunction(this, n"SpawnFireBoltProjectile"); // 改到 AnimNotify 里触发了，这里触发效果不对
 		MontagePlayTask.ReadyForActivation();
 
 		UAbilityTask_WaitGameplayEvent WaitGameplayEvent = AngelscriptAbilityTask::WaitGameplayEvent(this, GameplayTags::Event_Montage_FireBolt);

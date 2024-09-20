@@ -19,9 +19,8 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 	UPROPERTY(Category = "GAS")
 	TArray<TSubclassOf<UGameplayAbility>> InitAddedAbilities;
 
-	// TODO: 职业先放在这里，后面交给玩家选择
 	UPROPERTY()
-	ECharacterClass CharacterClass = ECharacterClass::Mage;
+	uint16 CharacterID;
 
 	// -------------------- Varibles --------------------
 	UGasModule GasModule;
@@ -30,6 +29,13 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 	UFUNCTION(BlueprintOverride)
 	void BeginPlay()
 	{
+		check(CharacterID != 0);
+		auto CharacterMap = AuraUtil::GetSDataMgr().CharacterMap;
+		check(CharacterMap.Contains(CharacterID));
+
+		FSDataCharacter SDataCharacter = CharacterMap[CharacterID];
+		ECharacterClass CharacterClass = SDataCharacter.CharacterClass;
+
 		GasModule = Cast<UGasModule>(NewObject(this, UGasModule::StaticClass(), n"UGasModule"));
 		GasModule.Init(this);
 
@@ -43,6 +49,9 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		for (auto AbilityClass : InitAddedAbilities) {
 			FGameplayAbilitySpecHandle Handle = GasUtil::GiveAbility(this, AbilityClass);
 		}
+
+		// 玩家和怪物都有的一些 Ability // TODO: 移到 GlobalConfig 里去
+		GasUtil::GiveAbility(this, UAGA_HitReact);
 	}
 
 	FVector GetWeaponSocketLocation()
@@ -52,5 +61,20 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 
 	void OnAttributeChanged(const FAngelscriptModifiedAttribute&in AttributeChangeData)
 	{// virtual empty
+	}
+
+	UAnimMontage GetHitReactMontage()
+	{
+		return AuraUtil::GetSDataMgr().CharacterMap[CharacterID].HitReactMontage;
+	}
+
+	void PlayHitReactMontage()
+	{
+		FGameplayAbilitySpec OutSpec;
+		if (AbilitySystem.FindAbilitySpecFromClass(UAGA_HitReact, OutSpec)) {
+			if (!OutSpec.IsActive()) {
+				AbilitySystem.TryActivateAbility(OutSpec.Handle);
+			}
+		}
 	}
 }
