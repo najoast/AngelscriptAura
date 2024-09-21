@@ -22,6 +22,14 @@ enum ECharacterClass
 	Mage    = 3,
 }
 
+enum ETickerFuncType
+{
+	None = 0,
+
+	BodyDissolve   = 1,
+	WeaponDissolve = 2,
+}
+
 // Enum Alias
 namespace AuraEnum
 {

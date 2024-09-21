@@ -1,6 +1,10 @@
 
 class AAuraCharacterBase : AAngelscriptGASCharacter
 {
+	// -------------------- Const --------------------
+	const float32 DISSOLVE_TIME = 1;
+	const float32 RAGDOLL_TIME = 1.5;
+
 	// -------------------- Properties --------------------
 	default bReplicates = true;
 	default CapsuleComponent.SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
@@ -96,7 +100,38 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		AuraUtil::RagdollComponent(Weapon);
 		AuraUtil::RagdollComponent(Mesh);
 		CapsuleComponent.SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 		// LifeSpan
-		SetLifeSpan(5);
+		SetLifeSpan(RAGDOLL_TIME + DISSOLVE_TIME);
+
+		System::SetTimer(this, n"Dissolve", RAGDOLL_TIME, false);
+	}
+
+	UFUNCTION()
+	private void Dissolve()
+	{
+		FSDataCharacter SDataCharacter = AuraUtil::GetSDataMgr().CharacterMap[CharacterID];
+		if (System::IsValid(SDataCharacter.DissolveMaterial)) {
+			UMaterialInstanceDynamic MID_Dissolve = Material::CreateDynamicMaterialInstance(SDataCharacter.DissolveMaterial);
+			Mesh.SetMaterial(0, MID_Dissolve);
+
+			AuraUtil::GameInstance().TickerMgr.CreateTicker(DISSOLVE_TIME, FTickerDelegate(this, n"DissolveTick"), ETickerFuncType::BodyDissolve);
+		}
+		if (System::IsValid(SDataCharacter.WeaponDissolveMaterial)) {
+			UMaterialInstanceDynamic MID_WeaponDissolve = Material::CreateDynamicMaterialInstance(SDataCharacter.WeaponDissolveMaterial);
+			Weapon.SetMaterial(0, MID_WeaponDissolve);
+
+			AuraUtil::GameInstance().TickerMgr.CreateTicker(DISSOLVE_TIME, FTickerDelegate(this, n"DissolveTick"), ETickerFuncType::WeaponDissolve);
+		}
+	}
+
+	UFUNCTION()
+	private void DissolveTick(float DeltaTime, float Percent, ETickerFuncType FuncType, TArray<UObject> Params)
+	{
+		if (FuncType == ETickerFuncType::BodyDissolve) {
+			Mesh.SetScalarParameterValueOnMaterials(n"Dissolve", Percent);
+		} else if (FuncType == ETickerFuncType::WeaponDissolve) {
+			Weapon.SetScalarParameterValueOnMaterials(n"Dissolve", Percent);
+		}
 	}
 }

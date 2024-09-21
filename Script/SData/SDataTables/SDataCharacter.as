@@ -17,4 +17,10 @@ struct FSDataCharacter
 
 	UPROPERTY()
 	UAnimMontage DeathMontage;
+
+	UPROPERTY()
+	UMaterialInstance DissolveMaterial;
+
+	UPROPERTY()
+	UMaterialInstance WeaponDissolveMaterial;
 }

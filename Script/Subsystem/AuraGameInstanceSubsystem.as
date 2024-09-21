@@ -5,20 +5,24 @@ Usage:
 
 class UAuraGameInstanceSubsystem : UScriptGameInstanceSubsystem
 {
-	USDataMgr SDataMgr = USDataMgr();
-	UAuraEventMgr EventMgr = UAuraEventMgr();
+	USDataMgr SDataMgr;
+	UAuraEventMgr EventMgr;
+	UTickerMgr TickerMgr;
 
 	UFUNCTION(BlueprintOverride)
 	void Initialize()
 	{
-		// Print("MyGame World Subsystem Initialized!");
+		SDataMgr = Cast<USDataMgr>(NewObject(this, USDataMgr));
+		EventMgr = Cast<UAuraEventMgr>(NewObject(this, UAuraEventMgr));
+		TickerMgr = Cast<UTickerMgr>(NewObject(this, UTickerMgr));
+
 		SDataMgr.Init();
-		// Aura::FloorTiler(this, 10, 600, 600);
+		TickerMgr.Init();
 	}
 
-	// UFUNCTION(BlueprintOverride)
-	// void Tick(float DeltaTime)
-	// {
-	//     Print("Tick");
-	// }
+	UFUNCTION(BlueprintOverride)
+	void Tick(float DeltaTime)
+	{
+		TickerMgr.Tick(DeltaTime);
+	}
 }
