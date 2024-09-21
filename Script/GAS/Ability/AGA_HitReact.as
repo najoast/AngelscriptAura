@@ -15,10 +15,14 @@ class UAGA_HitReact : UAuraGameplayAbility
 		AAuraCharacterBase AvatarActor = GasUtil::GetAvatarCharacterFromAbility(this);
 		// TODO: 限制移动
 
-		// 被击中后，播放受击动画，限制移动，动画播放完毕后，再恢复移动
-		UAbilityTask_PlayMontageAndWait MontagePlayTask = AngelscriptAbilityTask::PlayMontageAndWait(this, NAME_None, AvatarActor.GetHitReactMontage());
-		MontagePlayTask.OnBlendOut.AddUFunction(this, n"OnHitReactMontageCompleted");
-		MontagePlayTask.ReadyForActivation();
+		if (AvatarActor.IsDead()) {
+			AvatarActor.Die();
+		} else {
+			// 被击中后，播放受击动画，限制移动，动画播放完毕后，再恢复移动
+			UAbilityTask_PlayMontageAndWait MontagePlayTask = AngelscriptAbilityTask::PlayMontageAndWait(this, NAME_None, AvatarActor.GetHitReactMontage());
+			MontagePlayTask.OnBlendOut.AddUFunction(this, n"OnHitReactMontageCompleted");
+			MontagePlayTask.ReadyForActivation();
+		}
 	}
 
 	UFUNCTION()
@@ -27,9 +31,9 @@ class UAGA_HitReact : UAuraGameplayAbility
 		Print("OnHitReactMontageCompleted");
 		EndAbility();
 
-		AAuraCharacterBase AvatarActor = GasUtil::GetAvatarCharacterFromAbility(this);
-		if (AvatarActor.IsDead()) {
-			AvatarActor.DestroyActor();
-		}
+		// AAuraCharacterBase AvatarActor = GasUtil::GetAvatarCharacterFromAbility(this);
+		// if (AvatarActor.IsDead()) {
+		// 	AvatarActor.DestroyActor();
+		// }
 	}
 }

@@ -66,11 +66,12 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 	UAnimMontage GetHitReactMontage()
 	{
 		FSDataCharacter SDataCharacter = AuraUtil::GetSDataMgr().CharacterMap[CharacterID];
-		if (IsDead()) {
-			return SDataCharacter.DeathMontage;
-		} else {
-			return SDataCharacter.HitReactMontage;
-		}
+		return SDataCharacter.HitReactMontage;
+		// if (IsDead()) {
+		// 	return SDataCharacter.DeathMontage;
+		// } else {
+		// 	return SDataCharacter.HitReactMontage;
+		// }
 	}
 
 	void TryPlayHitReactMontage()
@@ -86,5 +87,16 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 	bool IsDead()
 	{
 		return GasModule.GetAttributeValue(AuraAttributes::Health) <= 0;
+	}
+
+	void Die()
+	{
+		// Ragdoll Die
+		Weapon.DetachFromComponent(EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, true);
+		AuraUtil::RagdollComponent(Weapon);
+		AuraUtil::RagdollComponent(Mesh);
+		CapsuleComponent.SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		// LifeSpan
+		SetLifeSpan(5);
 	}
 }
