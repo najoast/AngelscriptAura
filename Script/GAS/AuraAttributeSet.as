@@ -244,7 +244,7 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 				// Hit or Death React
 				AAuraCharacterBase AvatarActor = GasUtil::GetAvatarCharacterFromASC(TargetASC);
 				if (AvatarActor != nullptr) {
-					AvatarActor.TryPlayHitReactMontage();
+					AvatarActor.BeHit(this.GetOwningActor(), IncomingDamageMagnitude);
 				}
 			}
 		}

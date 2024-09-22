@@ -2,7 +2,7 @@
 class AAuraCharacterBase : AAngelscriptGASCharacter
 {
 	// -------------------- Const --------------------
-	const float32 DISSOLVE_TIME = 1;
+	const float32 DISSOLVE_TIME = 2;
 	const float32 RAGDOLL_TIME = 1.5;
 
 	// -------------------- Properties --------------------
@@ -25,6 +25,9 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 
 	UPROPERTY()
 	uint16 CharacterID;
+
+	UPROPERTY()
+	TSubclassOf<UWidgetComponent> DamageComponentClass;
 
 	// -------------------- Varibles --------------------
 	UGasModule GasModule;
@@ -76,6 +79,12 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		// } else {
 		// 	return SDataCharacter.HitReactMontage;
 		// }
+	}
+
+	void BeHit(AActor Attacker, float32 IncomingDamage)
+	{
+		ShowDamageNumber(IncomingDamage);
+		TryPlayHitReactMontage();
 	}
 
 	void TryPlayHitReactMontage()
@@ -133,5 +142,34 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		} else if (FuncType == ETickerFuncType::WeaponDissolve) {
 			Weapon.SetScalarParameterValueOnMaterials(n"Dissolve", Percent);
 		}
+	}
+
+	void ShowDamageNumber(float DamageAmount, FLinearColor DamageColor = FLinearColor::White)
+	{
+		// AUW_FloatText
+		// TSubclassOf<UUserWidget> WidgetClass = SDataUtil::GetWidgetClass(n"FloatText");
+		// UUserWidget UserWidget = WidgetBlueprint::CreateWidget(WidgetClass, GetLocalViewingPlayerController());
+		// UAUW_FloatText AUW_FloatText = Cast<UAUW_FloatText>(UserWidget);
+		// if (AUW_FloatText == nullptr) {
+		// 	Print(f"Failed to create UserWidget {WidgetClass}");
+		// 	return;
+		// }
+		// AUW_FloatText.Text_FloatText.SetText(FText::AsNumber(DamageAmount, FNumberFormattingOptions()));
+		// AUW_FloatText.Text_FloatText.SetColorAndOpacity(DamageColor);
+
+		// UWidgetComponent DamageComponent = NewObject(this, UWidgetComponent);
+		UWidgetComponent DamageComponent = this.CreateComponent(DamageComponentClass);
+		UAUW_FloatText AUW_FloatText = Cast<UAUW_FloatText>(DamageComponent.GetWidget());
+		if (AUW_FloatText == nullptr) {
+			return;
+		}
+
+		AUW_FloatText.Ctor(this);
+		AUW_FloatText.OwnerWidgetComponent = DamageComponent;
+		AUW_FloatText.Text_FloatText.SetText(FText::AsNumber(DamageAmount, FNumberFormattingOptions()));
+		AUW_FloatText.Text_FloatText.SetColorAndOpacity(DamageColor);
+
+		DamageComponent.AttachToComponent(GetRootComponent(), NAME_None, EAttachmentRule::KeepRelative);
+		DamageComponent.DetachFromComponent(EDetachmentRule::KeepWorld);
 	}
 }

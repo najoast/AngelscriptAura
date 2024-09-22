@@ -12,8 +12,7 @@ class UAUW_PickupMsg : UAuraUserWidget
 
 	void OnCtor() override
 	{
-		if (Anim_FadeExit != nullptr)
-		{
+		if (Anim_FadeExit != nullptr) {
 			PlayAnimation(Anim_FadeExit);
 		}
 	}
@@ -21,8 +20,7 @@ class UAUW_PickupMsg : UAuraUserWidget
 	UFUNCTION(BlueprintOverride)
 	void OnAnimationFinished(const UWidgetAnimation Animation)
 	{
-		if (Animation == Anim_FadeExit)
-		{
+		if (Animation == Anim_FadeExit) {
 			RemoveFromParent();
 		}
 	}
