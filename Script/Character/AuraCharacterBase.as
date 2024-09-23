@@ -81,14 +81,28 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		// }
 	}
 
-	void BeHit(AActor Attacker, float32 IncomingDamage)
+	void BeHit(float32 Damage, EDamageType DamageType)
 	{
-		if (IncomingDamage > 0) {
-			ShowFloatText(FText::AsNumber(IncomingDamage, FNumberFormattingOptions()));
-			TryPlayHitReactMontage();
-		} else if (IncomingDamage == 0) {
+		if (DamageType == EDamageType::Miss) {
 			ShowFloatText(FText::FromString("Miss"), FLinearColor::Gray);
+			return;
 		}
+
+		if (Damage <= 0) {
+			return;
+		}
+
+		// 飘字
+		FLinearColor DamageColor = FLinearColor::White;
+		if (DamageType == EDamageType::Critical) {
+			DamageColor = FLinearColor::Red;
+		} else if (DamageType == EDamageType::Lucky) {
+			DamageColor = FLinearColor::Green;
+		}
+		ShowFloatText(FText::AsNumber(Damage, FNumberFormattingOptions()), DamageColor);
+		
+		// 受击动画
+		TryPlayHitReactMontage();
 	}
 
 	void TryPlayHitReactMontage()

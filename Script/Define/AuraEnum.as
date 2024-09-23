@@ -30,6 +30,14 @@ enum ETickerFuncType
 	WeaponDissolve = 2,
 }
 
+enum EDamageType
+{
+	None = 0,
+	Miss = 1,
+	Lucky = 2,
+	Critical = 3,
+}
+
 // Enum Alias
 namespace AuraEnum
 {
