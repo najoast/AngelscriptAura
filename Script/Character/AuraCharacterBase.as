@@ -83,8 +83,12 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 
 	void BeHit(AActor Attacker, float32 IncomingDamage)
 	{
-		ShowDamageNumber(IncomingDamage);
-		TryPlayHitReactMontage();
+		if (IncomingDamage > 0) {
+			ShowFloatText(FText::AsNumber(IncomingDamage, FNumberFormattingOptions()));
+			TryPlayHitReactMontage();
+		} else if (IncomingDamage == 0) {
+			ShowFloatText(FText::FromString("Miss"), FLinearColor::Gray);
+		}
 	}
 
 	void TryPlayHitReactMontage()
@@ -144,32 +148,20 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		}
 	}
 
-	void ShowDamageNumber(float DamageAmount, FLinearColor DamageColor = FLinearColor::White)
+	void ShowFloatText(FText Text, FLinearColor Color = FLinearColor::White)
 	{
-		// AUW_FloatText
-		// TSubclassOf<UUserWidget> WidgetClass = SDataUtil::GetWidgetClass(n"FloatText");
-		// UUserWidget UserWidget = WidgetBlueprint::CreateWidget(WidgetClass, GetLocalViewingPlayerController());
-		// UAUW_FloatText AUW_FloatText = Cast<UAUW_FloatText>(UserWidget);
-		// if (AUW_FloatText == nullptr) {
-		// 	Print(f"Failed to create UserWidget {WidgetClass}");
-		// 	return;
-		// }
-		// AUW_FloatText.Text_FloatText.SetText(FText::AsNumber(DamageAmount, FNumberFormattingOptions()));
-		// AUW_FloatText.Text_FloatText.SetColorAndOpacity(DamageColor);
-
-		// UWidgetComponent DamageComponent = NewObject(this, UWidgetComponent);
-		UWidgetComponent DamageComponent = this.CreateComponent(DamageComponentClass);
-		UAUW_FloatText AUW_FloatText = Cast<UAUW_FloatText>(DamageComponent.GetWidget());
+		UWidgetComponent FloatTextComponent = this.CreateComponent(DamageComponentClass);
+		UAUW_FloatText AUW_FloatText = Cast<UAUW_FloatText>(FloatTextComponent.GetWidget());
 		if (AUW_FloatText == nullptr) {
 			return;
 		}
 
 		AUW_FloatText.Ctor(this);
-		AUW_FloatText.OwnerWidgetComponent = DamageComponent;
-		AUW_FloatText.Text_FloatText.SetText(FText::AsNumber(DamageAmount, FNumberFormattingOptions()));
-		AUW_FloatText.Text_FloatText.SetColorAndOpacity(DamageColor);
+		AUW_FloatText.OwnerWidgetComponent = FloatTextComponent;
+		AUW_FloatText.Text_FloatText.SetText(Text);
+		AUW_FloatText.Text_FloatText.SetColorAndOpacity(Color);
 
-		DamageComponent.AttachToComponent(GetRootComponent(), NAME_None, EAttachmentRule::KeepRelative);
-		DamageComponent.DetachFromComponent(EDetachmentRule::KeepWorld);
+		FloatTextComponent.AttachToComponent(GetRootComponent(), NAME_None, EAttachmentRule::KeepRelative);
+		FloatTextComponent.DetachFromComponent(EDetachmentRule::KeepWorld);
 	}
 }
