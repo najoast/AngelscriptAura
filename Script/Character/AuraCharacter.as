@@ -23,6 +23,7 @@ class AAuraCharacter : AAuraCharacterBase
 	default bUseControllerRotationPitch = false;
 	default bUseControllerRotationRoll = false;
 	default bUseControllerRotationYaw = false;
+	default Tags.Add(AuraConst::PlayerTag);
 
 	void OnAttributeChanged(const FAngelscriptModifiedAttribute&in AttributeChangeData) override
 	{

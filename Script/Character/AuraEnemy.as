@@ -5,8 +5,13 @@ class AAuraEnemy : AAuraCharacterBase
 	UPROPERTY(DefaultComponent)
 	UWidgetComponent HealthBar;
 
+	UPROPERTY()
+	UBehaviorTree BehaviorTree;
+
 	default CapsuleComponent.SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
 	default CapsuleComponent.SetCollisionResponseToChannel(AuraEnum::ECC_Projectile, ECollisionResponse::ECR_Overlap);
+	default Tags.Add(AuraConst::EnemyTag);
+	// default CharacterMovement.MaxSpeed = 120;
 
 	// -------------------- Variables --------------------
 
@@ -53,5 +58,16 @@ class AAuraEnemy : AAuraCharacterBase
 	private void OnOwnedTagUpdated(const FGameplayTag&in Tag, bool TagExists)
 	{
 		Print(f"OnOwnedTagUpdated: {Tag.ToString() =} {TagExists =}");
+	}
+
+	UFUNCTION(BlueprintOverride)
+	void Possessed(AController NewController)
+	{
+		if (HasAuthority()) {
+			AAuraAIController AIController = Cast<AAuraAIController>(GetController());
+			if (AIController != nullptr) {
+				AIController.RunBehaviorTree(BehaviorTree);
+			}
+		}
 	}
 }

@@ -4,6 +4,9 @@ namespace AuraConst
 	const FAngelscriptGameplayAttributeData EmptyAttributeData = FAngelscriptGameplayAttributeData();
 
 	const FName DefaultWeaponTipSocketName = n"TipSocket";
+	const FName PlayerTag = n"Player";
+	const FName EnemyTag = n"Enemy";
+
 	const int DefaultAbilityInputID = 2754;
 	const float ProjectileLifeSpan = 15;
 	const int ProjectileMaxSpeed = 550;
