@@ -31,6 +31,9 @@ class UAGA_HitReact : UAuraGameplayAbility
 		Print("OnHitReactMontageCompleted");
 		EndAbility();
 
+		AActor AvatarActor = GetAvatarActorFromActorInfo();
+		AIHelper::GetBlackboard(AvatarActor).SetValueAsBool(AuraConst::AI_Blackboard_Key_IsHitReacting, false);
+
 		// AAuraCharacterBase AvatarActor = GasUtil::GetAvatarCharacterFromAbility(this);
 		// if (AvatarActor.IsDead()) {
 		// 	AvatarActor.DestroyActor();

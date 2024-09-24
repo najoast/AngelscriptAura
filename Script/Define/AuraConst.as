@@ -7,6 +7,8 @@ namespace AuraConst
 	const FName PlayerTag = n"Player";
 	const FName EnemyTag = n"Enemy";
 
+	const FName AI_Blackboard_Key_IsHitReacting = n"IsHitReacting";
+
 	const int DefaultAbilityInputID = 2754;
 	const float ProjectileLifeSpan = 15;
 	const int ProjectileMaxSpeed = 550;

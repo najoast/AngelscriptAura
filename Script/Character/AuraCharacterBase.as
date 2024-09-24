@@ -102,17 +102,20 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		ShowFloatText(FText::AsNumber(Damage, FNumberFormattingOptions()), DamageColor);
 		
 		// 受击动画
-		TryPlayHitReactMontage();
+		if (TryPlayHitReactMontage()) {
+			AIHelper::GetBlackboard(Controller).SetValueAsBool(AuraConst::AI_Blackboard_Key_IsHitReacting, true);
+		}
 	}
 
-	void TryPlayHitReactMontage()
+	bool TryPlayHitReactMontage()
 	{
 		FGameplayAbilitySpec OutSpec;
 		if (AbilitySystem.FindAbilitySpecFromClass(UAGA_HitReact, OutSpec)) {
 			if (!OutSpec.IsActive()) {
-				AbilitySystem.TryActivateAbility(OutSpec.Handle);
+				return AbilitySystem.TryActivateAbility(OutSpec.Handle);
 			}
 		}
+		return false;
 	}
 
 	bool IsDead()

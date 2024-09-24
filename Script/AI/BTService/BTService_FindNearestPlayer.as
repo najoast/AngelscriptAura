@@ -1,6 +1,17 @@
 
 class UBTService_FindNearestPlayer : UBTService_BlueprintBase
 {
+	private UBlackboardKeyType_Object ObjectObject = Cast<UBlackboardKeyType_Object>(NewObject(Class.DefaultObject, UBlackboardKeyType_Object, n"ObjectType"));
+	private UBlackboardKeyType_Bool BoolType = Cast<UBlackboardKeyType_Bool>(NewObject(Class.DefaultObject, UBlackboardKeyType_Bool, n"BoolType"));
+
+	UPROPERTY()
+	FBlackboardKeySelector TargetToFollow;
+	default TargetToFollow.AllowedTypes.Add(ObjectObject);
+
+	UPROPERTY()
+	FBlackboardKeySelector IsHitReacting;
+	default IsHitReacting.AllowedTypes.Add(BoolType);
+
 	UFUNCTION(BlueprintOverride)
 	void TickAI(AAIController OwnerController, APawn ControlledPawn, float DeltaSeconds)
 	{
@@ -36,10 +47,7 @@ class UBTService_FindNearestPlayer : UBTService_BlueprintBase
 			}
 		}
 
-		// if (NearestPlayer.GetActorLocation().Distance(ControlledPawn.GetActorLocation()) < 500) {
-		// 	return;
-		// }
-
-		AIHelper::SimpleMoveToActor(OwnerController, NearestPlayer);
+		// AIHelper::SimpleMoveToActor(OwnerController, NearestPlayer);
+		AIHelper::GetBlackboard(OwnerController).SetValueAsObject(TargetToFollow.SelectedKeyName, NearestPlayer);
 	}
 }
