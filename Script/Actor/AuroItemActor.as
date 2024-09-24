@@ -21,6 +21,10 @@ class AAuroItemActor : AActor
 	UFUNCTION(BlueprintOverride)
 	void ActorBeginOverlap(AActor OtherActor)
 	{
+		if (OtherActor.ActorHasTag(AuraConst::EnemyTag)) {
+			return;
+		}
+
 		FSDataItem Item = SDataUtil::GetItem(ItemID);
 		GasUtil::ApplyGameplayEffect(this, OtherActor, Item.GameplayEffectClass, ActorLevel);
 

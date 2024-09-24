@@ -5,7 +5,6 @@ class UBTService_FindNearestPlayer : UBTService_BlueprintBase
 	void TickAI(AAIController OwnerController, APawn ControlledPawn, float DeltaSeconds)
 	{
 		Print(f"{ControlledPawn.GetName()} is TickAI");
-		// GetAllActorsOfClassWithTag(AuraConst::PlayerTag);
 
 		if (ControlledPawn.ActorHasTag(AuraConst::PlayerTag)) {
 			Print("Player does not need to find a player");
@@ -21,15 +20,25 @@ class UBTService_FindNearestPlayer : UBTService_BlueprintBase
 		}
 
 		// Find the nearest player
-		float NearestDistance = 10000;
-		AActor NearestPlayer = Players[0];
-		for (int i = 1; i < Players.Num(); i++) {
-			float Distance = Players[i].GetActorLocation().Distance(NearestPlayer.GetActorLocation());
-			if (Distance < NearestDistance) {
-				NearestDistance = Distance;
-				NearestPlayer = Players[i];
+		AActor NearestPlayer = nullptr;
+
+		if (Players.Num() == 1) {
+			NearestPlayer = Players[0];
+		} else {
+			float NearestDistance = 10000;
+			NearestPlayer = Players[0];
+			for (int i = 1; i < Players.Num(); i++) {
+				float Distance = Players[i].GetActorLocation().Distance(NearestPlayer.GetActorLocation());
+				if (Distance < NearestDistance) {
+					NearestDistance = Distance;
+					NearestPlayer = Players[i];
+				}
 			}
 		}
+
+		// if (NearestPlayer.GetActorLocation().Distance(ControlledPawn.GetActorLocation()) < 500) {
+		// 	return;
+		// }
 
 		AIHelper::SimpleMoveToActor(OwnerController, NearestPlayer);
 	}

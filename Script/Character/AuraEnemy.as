@@ -12,6 +12,10 @@ class AAuraEnemy : AAuraCharacterBase
 	default CapsuleComponent.SetCollisionResponseToChannel(AuraEnum::ECC_Projectile, ECollisionResponse::ECR_Overlap);
 	default Tags.Add(AuraConst::EnemyTag);
 	// default CharacterMovement.MaxSpeed = 120;
+	default bUseControllerRotationPitch = false;
+	default bUseControllerRotationYaw = false;
+	default bUseControllerRotationRoll = false;
+	default CharacterMovement.bUseControllerDesiredRotation = true;
 
 	// -------------------- Variables --------------------
 
