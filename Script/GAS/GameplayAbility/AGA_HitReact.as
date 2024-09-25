@@ -22,6 +22,8 @@ class UAGA_HitReact : UAuraGameplayAbility
 			UAbilityTask_PlayMontageAndWait MontagePlayTask = AngelscriptAbilityTask::PlayMontageAndWait(this, NAME_None, AvatarActor.GetHitReactMontage());
 			MontagePlayTask.OnBlendOut.AddUFunction(this, n"OnHitReactMontageCompleted");
 			MontagePlayTask.ReadyForActivation();
+
+			AvatarActor.AbilitySystem.AddLooseGameplayTag(GameplayTags::Effects_HitReact);
 		}
 	}
 
@@ -31,8 +33,8 @@ class UAGA_HitReact : UAuraGameplayAbility
 		Print("OnHitReactMontageCompleted");
 		EndAbility();
 
-		AActor AvatarActor = GetAvatarActorFromActorInfo();
-		AIHelper::GetBlackboard(AvatarActor).SetValueAsBool(AuraConst::AI_Blackboard_Key_IsHitReacting, false);
+		AAuraCharacterBase AvatarActor = GasUtil::GetAvatarCharacterFromAbility(this);
+		AvatarActor.AbilitySystem.RemoveLooseGameplayTag(GameplayTags::Effects_HitReact);
 
 		// AAuraCharacterBase AvatarActor = GasUtil::GetAvatarCharacterFromAbility(this);
 		// if (AvatarActor.IsDead()) {

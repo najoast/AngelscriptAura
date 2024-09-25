@@ -20,16 +20,6 @@ class AAuraEnemy : AAuraCharacterBase
 	// -------------------- Variables --------------------
 
 	// -------------------- Functions --------------------
-	void OnAttributeChanged(const FAngelscriptModifiedAttribute&in AttributeChangeData) override
-	{
-		if (AttributeChangeData.Name == AuraAttributes::Health) {
-			// HealthBar.ProgressBar_HealthBar.SetPercent(AttributeChangeData.NewValue / AttributeChangeData.BaseValue);
-			UAUW_HealthBar HealthBarWidget = Cast<UAUW_HealthBar>(HealthBar.GetWidget());
-			if (HealthBarWidget != nullptr) {
-				HealthBarWidget.SetPercent(GasModule.GetAttributeValue(AuraAttributes::Health), GasModule.GetAttributeValue(AuraAttributes::MaxHealth));
-			}
-		}
-	}
 
 	UFUNCTION(BlueprintOverride)
 	void BeginPlay()
@@ -61,7 +51,10 @@ class AAuraEnemy : AAuraCharacterBase
 	UFUNCTION()
 	private void OnOwnedTagUpdated(const FGameplayTag&in Tag, bool TagExists)
 	{
-		Print(f"OnOwnedTagUpdated: {Tag.ToString() =} {TagExists =}");
+		// Print(f"OnOwnedTagUpdated: {Tag.ToString() =} {TagExists =}");
+		if (Tag == GameplayTags::Effects_HitReact) {
+			AIHelper::GetBlackboard(Controller).SetValueAsBool(AuraConst::AI_Blackboard_Key_IsHitReacting, TagExists);
+		}
 	}
 
 	UFUNCTION(BlueprintOverride)
@@ -74,4 +67,16 @@ class AAuraEnemy : AAuraCharacterBase
 			}
 		}
 	}
+
+	void OnAttributeChanged(const FAngelscriptModifiedAttribute&in AttributeChangeData) override
+	{
+		if (AttributeChangeData.Name == AuraAttributes::Health) {
+			// HealthBar.ProgressBar_HealthBar.SetPercent(AttributeChangeData.NewValue / AttributeChangeData.BaseValue);
+			UAUW_HealthBar HealthBarWidget = Cast<UAUW_HealthBar>(HealthBar.GetWidget());
+			if (HealthBarWidget != nullptr) {
+				HealthBarWidget.SetPercent(GasModule.GetAttributeValue(AuraAttributes::Health), GasModule.GetAttributeValue(AuraAttributes::MaxHealth));
+			}
+		}
+	}
+
 }

@@ -15,7 +15,7 @@ class UBTService_FindNearestPlayer : UBTService_BlueprintBase
 	UFUNCTION(BlueprintOverride)
 	void TickAI(AAIController OwnerController, APawn ControlledPawn, float DeltaSeconds)
 	{
-		Print(f"{ControlledPawn.GetName()} is TickAI");
+		// Print(f"{ControlledPawn.GetName()} is TickAI");
 
 		if (ControlledPawn.ActorHasTag(AuraConst::PlayerTag)) {
 			Print("Player does not need to find a player");

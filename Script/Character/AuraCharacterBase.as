@@ -102,9 +102,7 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		ShowFloatText(FText::AsNumber(Damage, FNumberFormattingOptions()), DamageColor);
 		
 		// 受击动画
-		if (TryPlayHitReactMontage()) {
-			AIHelper::GetBlackboard(Controller).SetValueAsBool(AuraConst::AI_Blackboard_Key_IsHitReacting, true);
-		}
+		TryPlayHitReactMontage();
 	}
 
 	bool TryPlayHitReactMontage()
