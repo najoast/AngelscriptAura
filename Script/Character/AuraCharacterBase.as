@@ -179,4 +179,10 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		FloatTextComponent.AttachToComponent(GetRootComponent(), NAME_None, EAttachmentRule::KeepRelative);
 		FloatTextComponent.DetachFromComponent(EDetachmentRule::KeepWorld);
 	}
+
+	bool CanRangeAttack()
+	{
+		FSDataCharacter SDataCharacter = AuraUtil::GetSDataMgr().CharacterMap[CharacterID];
+		return SDataCharacter.CharacterClass != ECharacterClass::Warrior;
+	}
 }
