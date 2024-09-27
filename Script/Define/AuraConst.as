@@ -8,6 +8,7 @@ namespace AuraConst
 	const FName EnemyTag = n"Enemy";
 
 	const FName AI_Blackboard_Key_IsHitReacting = n"IsHitReacting";
+	const FName AI_Blackboard_Key_TargetToFollow = n"TargetToFollow";
 
 	const int DefaultAbilityInputID = 2754;
 	const float ProjectileLifeSpan = 15;

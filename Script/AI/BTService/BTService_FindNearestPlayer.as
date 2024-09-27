@@ -8,7 +8,7 @@ class UBTService_FindNearestPlayer : UBTService_BlueprintBase
 	// -------------------- Properties --------------------
 	private UBlackboardKeyType_Object ObjectObject = Cast<UBlackboardKeyType_Object>(NewObject(Class.DefaultObject, UBlackboardKeyType_Object, n"ObjectType"));
 	private UBlackboardKeyType_Bool BoolType = Cast<UBlackboardKeyType_Bool>(NewObject(Class.DefaultObject, UBlackboardKeyType_Bool, n"BoolType"));
-	private UBlackboardKeyType_Float FloatType = Cast<UBlackboardKeyType_Float>(NewObject(Class.DefaultObject, UBlackboardKeyType_Bool, n"FloatType"));
+	private UBlackboardKeyType_Float FloatType = Cast<UBlackboardKeyType_Float>(NewObject(Class.DefaultObject, UBlackboardKeyType_Float, n"FloatType"));
 
 	UPROPERTY()
 	FBlackboardKeySelector TargetToFollow;

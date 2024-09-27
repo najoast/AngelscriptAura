@@ -1,13 +1,13 @@
 
-class UABTT_Attack : UBTTask_BlueprintBase
+class UBTTask_Attack : UBTTask_BlueprintBase
 {
 	default NodeName = "TestAttack";
 
 	UFUNCTION(BlueprintOverride)
 	void ExecuteAI(AAIController OwnerController, APawn ControlledPawn)
 	{
-		Print(f"ExecuteAI: {OwnerController =}");
-		System::DrawDebugSphere(ControlledPawn.GetActorLocation(), 100, 12, FLinearColor::Red, 0.5);
+		// Print(f"ExecuteAI: {OwnerController =}");
+		System::DrawDebugSphere(ControlledPawn.GetActorLocation(), 50, 12, FLinearColor::Red, 0.5);
 		this.FinishExecute(true);
 	}
 
