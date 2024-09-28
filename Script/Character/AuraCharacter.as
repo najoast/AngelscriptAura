@@ -9,9 +9,6 @@ class AAuraCharacter : AAuraCharacterBase
 	UPROPERTY(DefaultComponent, Attach = "SpringArm")
 	UCameraComponent Camera;
 
-	UPROPERTY(DefaultComponent)
-	UMotionWarpingComponent MotionWarping;
-
 	// --------------------------------------
 	UPlayerModuleMgr PlayerModuleMgr;
 
@@ -55,11 +52,5 @@ class AAuraCharacter : AAuraCharacterBase
 		PlayerModuleMgr.Init();
 
 		Super::BeginPlay();
-	}
-
-	void SetFacingTarget(const FVector& TargetLocation)
-	{
-		// Print(f"SetFacingTarget {TargetLocation}");
-		MotionWarping.AddOrUpdateWarpTargetFromLocation(n"FacingTarget", TargetLocation);
 	}
 }

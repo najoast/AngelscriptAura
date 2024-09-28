@@ -16,6 +16,9 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 	USkeletalMeshComponent Weapon;
 	default Weapon.SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
+	UPROPERTY(DefaultComponent)
+	UMotionWarpingComponent MotionWarping;
+
 	// Name of weapon tip socket
 	UPROPERTY(Category = "Combat")
 	FName WeaponTipSocketName = AuraConst::DefaultWeaponTipSocketName;
@@ -178,5 +181,10 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 	{
 		FSDataCharacter SDataCharacter = AuraUtil::GetSDataMgr().CharacterMap[CharacterID];
 		return SDataCharacter.CharacterClass != ECharacterClass::Warrior;
+	}
+
+	void SetFacingTarget(const FVector& TargetLocation)
+	{
+		MotionWarping.AddOrUpdateWarpTargetFromLocation(n"FacingTarget", TargetLocation);
 	}
 }
