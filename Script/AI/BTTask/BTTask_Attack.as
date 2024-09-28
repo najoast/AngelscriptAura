@@ -6,9 +6,19 @@ class UBTTask_Attack : UBTTask_BlueprintBase
 	UFUNCTION(BlueprintOverride)
 	void ExecuteAI(AAIController OwnerController, APawn ControlledPawn)
 	{
-		// Print(f"ExecuteAI: {OwnerController =}");
-		System::DrawDebugSphere(ControlledPawn.GetActorLocation(), 50, 12, FLinearColor::Red, 0.5);
-		this.FinishExecute(true);
+		FinishExecute(ExectueImpl(OwnerController, ControlledPawn));
+	}
+
+	bool ExectueImpl(AAIController OwnerController, APawn ControlledPawn)
+	{
+		UAbilitySystemComponent ASC = AbilitySystem::GetAbilitySystemComponent(ControlledPawn);
+		if (ASC == nullptr) {
+			return false;
+		}
+
+		FGameplayTagContainer TagContainer;
+		TagContainer.AddTag(GameplayTags::Abilities_Attack);
+		return ASC.TryActivateAbilitiesByTag(TagContainer);
 	}
 
 	// bool Selector() {

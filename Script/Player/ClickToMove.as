@@ -72,7 +72,6 @@ class UClickToMove : UObject
 			MovementSpline.ClearSplinePoints();
 			for (FVector Point : NavPath.PathPoints) {
 				MovementSpline.AddSplinePoint(Point, ESplineCoordinateSpace::World);
-				// System::DrawDebugSphere(Point, 8.f, 8, FColor::Green, 0, 5.f);
 				System::DrawDebugSphere(Point, 8, 12, FLinearColor::Purple, 30);
 			}
 			CachedDestination = NavPath.PathPoints[NavPath.PathPoints.Num() - 1];

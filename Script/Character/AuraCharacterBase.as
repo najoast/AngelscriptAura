@@ -20,9 +20,6 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 	UPROPERTY(Category = "Combat")
 	FName WeaponTipSocketName = AuraConst::DefaultWeaponTipSocketName;
 
-	UPROPERTY(Category = "GAS")
-	TArray<TSubclassOf<UGameplayAbility>> InitAddedAbilities;
-
 	UPROPERTY()
 	uint16 CharacterID;
 
@@ -47,14 +44,11 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		GasModule.Init(this);
 
 		FSDataCharacterClass SDataCharacterClass = AuraUtil::GetSDataMgr().CharacterClassMap[CharacterClass];
-		if (SDataCharacterClass.AttributeEffects.Num() > 0) {
-			for (auto EffectClass : SDataCharacterClass.AttributeEffects) {
-				GasUtil::ApplyGameplayEffect(this, this, EffectClass);
-			}
+		for (auto EffectClass : SDataCharacterClass.AttributeEffects) {
+			GasUtil::ApplyGameplayEffect(this, this, EffectClass);
 		}
-
-		for (auto AbilityClass : InitAddedAbilities) {
-			FGameplayAbilitySpecHandle Handle = GasUtil::GiveAbility(this, AbilityClass);
+		for (auto StartupAbilityClass : SDataCharacterClass.StartupAbilities) {
+			FGameplayAbilitySpecHandle Handle = GasUtil::GiveAbility(this, StartupAbilityClass);
 		}
 
 		// 玩家和怪物都有的一些 Ability // TODO: 移到 GlobalConfig 里去
