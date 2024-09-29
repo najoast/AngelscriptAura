@@ -1,13 +1,11 @@
 // 注: 这个 GA 是挂到受击人自己身上的
 
-class UAGA_HitReact : UAuraGameplayAbility
-{
+class UAGA_HitReact : UAuraGameplayAbility {
 	// -------------------- Properties --------------------
 
 	// -------------------- Functions --------------------
 	UFUNCTION(BlueprintOverride)
-	void ActivateAbility()
-	{
+	void ActivateAbility() {
 		if (!HasAuthority()) {
 			return;
 		}
@@ -28,8 +26,7 @@ class UAGA_HitReact : UAuraGameplayAbility
 	}
 
 	UFUNCTION()
-	private void OnHitReactMontageCompleted()
-	{
+	private void OnHitReactMontageCompleted() {
 		Print("OnHitReactMontageCompleted");
 		EndAbility();
 

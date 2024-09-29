@@ -1,6 +1,5 @@
 
-class UAUW_AttributeMenu : UAuraUserWidget
-{
+class UAUW_AttributeMenu : UAuraUserWidget {
 	// ------------------------ Bind Widgets ------------------------
 
 	UPROPERTY(BindWidget)
@@ -70,8 +69,7 @@ class UAUW_AttributeMenu : UAuraUserWidget
 	// ------------------------ Functions ------------------------
 
 
-	void OnCtor() override
-	{
+	void OnCtor() override {
 		InitWidgetsDesignInfo();
 		InitWidgetsData();
 
@@ -79,8 +77,7 @@ class UAUW_AttributeMenu : UAuraUserWidget
 		AuraUtil::GameInstance().EventMgr.OnAttributeChangedEvent.AddUFunction(this, n"OnAttributeChanged");
 	}
 
-	void InitWidgetsDesignInfo()
-	{
+	void InitWidgetsDesignInfo() {
 		WBP_AttributePoints.Text_Text.Text = FText::FromString("Attribute Points");
 
 		PrimaryAttributeWidgets.Add(AuraAttributes::Strength, WBP_Strength);
@@ -128,16 +125,14 @@ class UAUW_AttributeMenu : UAuraUserWidget
 		WBP_Button_Close.Text.Text = FText::FromString("x");
 	}
 
-	void InitWidgetsData()
-	{
+	void InitWidgetsData() {
 		UGasModule GasModule = AuraUtil::GetCharacterGasModule(OwnerCharacter);
 		for (auto Element : AllAttributeWidgets) {
 			UpdateWidgetData(GasModule, Element.Key, Element.Value);
 		}
 	}
 
-	void UpdateWidgetData(UGasModule GasModule, FName AttributeName, UAUW_TextValueRow TextValueRow)
-	{
+	void UpdateWidgetData(UGasModule GasModule, FName AttributeName, UAUW_TextValueRow TextValueRow) {
 		if (AttributeName == AuraAttributes::AttackPower) {
 			float32 MinAttackPower = GasModule.GetAttributeValue(AuraAttributes::MinAttackPower);
 			float32 MaxAttackPower = GasModule.GetAttributeValue(AuraAttributes::MaxAttackPower);
@@ -153,46 +148,40 @@ class UAUW_AttributeMenu : UAuraUserWidget
 	}
 
 	UFUNCTION()
-	void OnButton_CloseClicked()
-	{
+	void OnButton_CloseClicked() {
 		WidgetUtil::CloseWidget(this);
 	}
 
 	UFUNCTION()
-	void OnButton_AddStrengthClicked()
-	{
+	void OnButton_AddStrengthClicked() {
 		Print("OnButton_AddStrengthClicked");
 		// AuraUtil::GetCharacterGasModule(OwnerCharacter).AddAttributeValue(AuraAttributes::Strength, 1);
 		GasUtil::ApplyGameplayEffect(OwnerCharacter, OwnerCharacter, AddPointEffects[0]);
 	}
 
 	UFUNCTION()
-	void OnButton_AddDexterityClicked()
-	{
+	void OnButton_AddDexterityClicked() {
 		Print("OnButton_AddDexterityClicked");
 		// AuraUtil::GetCharacterGasModule(OwnerCharacter).AddAttributeValue(AuraAttributes::Dexterity, 1);
 		GasUtil::ApplyGameplayEffect(OwnerCharacter, OwnerCharacter, AddPointEffects[1]);
 	}
 
 	UFUNCTION()
-	void OnButton_AddIntelligenceClicked()
-	{
+	void OnButton_AddIntelligenceClicked() {
 		Print("OnButton_AddIntelligenceClicked");
 		// AuraUtil::GetCharacterGasModule(OwnerCharacter).AddAttributeValue(AuraAttributes::Intelligence, 1);
 		GasUtil::ApplyGameplayEffect(OwnerCharacter, OwnerCharacter, AddPointEffects[2]);
 	}
 
 	UFUNCTION()
-	void OnButton_AddVitalityClicked()
-	{
+	void OnButton_AddVitalityClicked() {
 		Print("OnButton_AddVitalityClicked");
 		// AuraUtil::GetCharacterGasModule(OwnerCharacter).AddAttributeValue(AuraAttributes::Vitality, 1);
 		GasUtil::ApplyGameplayEffect(OwnerCharacter, OwnerCharacter, AddPointEffects[3]);
 	}
 
 	UFUNCTION()
-	private void OnAttributeChanged(FAngelscriptModifiedAttribute AttributeChangeData)
-	{
+	private void OnAttributeChanged(FAngelscriptModifiedAttribute AttributeChangeData) {
 		if (!AllAttributeWidgets.Contains(AttributeChangeData.Name)) {
 			return;
 		}

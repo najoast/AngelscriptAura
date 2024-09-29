@@ -1,6 +1,5 @@
 
-class AAuroItemActor : AActor
-{
+class AAuroItemActor : AActor {
 	UPROPERTY(DefaultComponent, RootComponent)
 	USceneComponent SceneRoot;
 
@@ -19,8 +18,7 @@ class AAuroItemActor : AActor
 	float32 ActorLevel = 1;
 
 	UFUNCTION(BlueprintOverride)
-	void ActorBeginOverlap(AActor OtherActor)
-	{
+	void ActorBeginOverlap(AActor OtherActor) {
 		if (OtherActor.ActorHasTag(AuraConst::EnemyTag)) {
 			return;
 		}

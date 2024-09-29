@@ -1,30 +1,24 @@
 
-class UAuraUserWidget : UUserWidget
-{
+class UAuraUserWidget : UUserWidget {
 	AAuraCharacterBase OwnerCharacter;
 
-	void Ctor(AAuraCharacterBase InCharacter)
-	{
+	void Ctor(AAuraCharacterBase InCharacter) {
 		OwnerCharacter = InCharacter;
 		OnCtor();
 	}
 
-	void OnCtor()
-	{
+	void OnCtor() {
 	}
 
-	APlayerController GetPlayerController()
-	{
+	APlayerController GetPlayerController() {
 		return OwnerCharacter.GetLocalViewingPlayerController();
 	}
 
-	APlayerState GetPlayerState()
-	{
+	APlayerState GetPlayerState() {
 		return OwnerCharacter.PlayerState;
 	}
 
-	UAngelscriptAbilitySystemComponent GetAbilitySystemComponent()
-	{
+	UAngelscriptAbilitySystemComponent GetAbilitySystemComponent() {
 		return OwnerCharacter.AbilitySystem;
 	}
 }

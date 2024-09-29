@@ -1,4 +1,3 @@
 
-class UAuraGameplayAbility : UAngelscriptGASAbility
-{
+class UAuraGameplayAbility : UAngelscriptGASAbility {
 }

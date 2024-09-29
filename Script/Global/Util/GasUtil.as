@@ -1,7 +1,5 @@
-namespace GasUtil
-{
-	FGameplayEffectSpecHandle MakeGameplayEffectSpecHandle(AActor SourceActor, TSubclassOf<UGameplayEffect> GameplayEffectClass, float32 Level = 1)
-	{
+namespace GasUtil {
+	FGameplayEffectSpecHandle MakeGameplayEffectSpecHandle(AActor SourceActor, TSubclassOf<UGameplayEffect> GameplayEffectClass, float32 Level = 1) {
 		check(GameplayEffectClass != nullptr);
 		UAbilitySystemComponent SourceASC = AbilitySystem::GetAbilitySystemComponent(SourceActor);
 		if (SourceASC == nullptr) {
@@ -13,8 +11,7 @@ namespace GasUtil
 	}
 
 	// TODO: 搞清楚为什么这里面调用 MakeGameplayEffectSpecHandle 生成 SpecHandle 后，整个 GE 就不生效了
-	FActiveGameplayEffectHandle ApplyGameplayEffect(AActor SourceActor, AActor TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass, float32 Level = 1)
-	{
+	FActiveGameplayEffectHandle ApplyGameplayEffect(AActor SourceActor, AActor TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass, float32 Level = 1) {
 		UAbilitySystemComponent TargetASC = AbilitySystem::GetAbilitySystemComponent(TargetActor);
 		if (TargetASC == nullptr) {
 			return FActiveGameplayEffectHandle();
@@ -26,8 +23,7 @@ namespace GasUtil
 		return TargetASC.ApplyGameplayEffectSpecToSelf(EffectSpecHandle);
 	}
 
-	bool RemoveGameplayEffect(AActor TargetActor, FActiveGameplayEffectHandle EffectHandle, int StacksToRemove = -1)
-	{
+	bool RemoveGameplayEffect(AActor TargetActor, FActiveGameplayEffectHandle EffectHandle, int StacksToRemove = -1) {
 		UAbilitySystemComponent TargetASC = AbilitySystem::GetAbilitySystemComponent(TargetActor);
 		if (TargetASC == nullptr) {
 			return false;
@@ -35,8 +31,7 @@ namespace GasUtil
 		return TargetASC.RemoveActiveGameplayEffect(EffectHandle, StacksToRemove);
 	}
 
-	FGameplayAbilitySpecHandle GiveAbility(AActor TargetActor, TSubclassOf<UGameplayAbility> AbilityClass, int Level = 1, int InputID = AuraConst::DefaultAbilityInputID, UObject SourceObject = nullptr)
-	{
+	FGameplayAbilitySpecHandle GiveAbility(AActor TargetActor, TSubclassOf<UGameplayAbility> AbilityClass, int Level = 1, int InputID = AuraConst::DefaultAbilityInputID, UObject SourceObject = nullptr) {
 		UAbilitySystemComponent TargetASC = AbilitySystem::GetAbilitySystemComponent(TargetActor);
 		if (TargetASC == nullptr) {
 			return FGameplayAbilitySpecHandle();
@@ -46,14 +41,12 @@ namespace GasUtil
 		return TargetASC.GiveAbility(AbilitySpec);
 	}
 
-	FGameplayAbilitySpec MakeAbilitySpec(TSubclassOf<UGameplayAbility> AbilityClass, int Level = 1)
-	{
+	FGameplayAbilitySpec MakeAbilitySpec(TSubclassOf<UGameplayAbility> AbilityClass, int Level = 1) {
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, Level);
 		return AbilitySpec;
 	}
 
-	AAuraCharacterBase GetAvatarCharacterFromASC(UAngelscriptAbilitySystemComponent ASC)
-	{
+	AAuraCharacterBase GetAvatarCharacterFromASC(UAngelscriptAbilitySystemComponent ASC) {
 		AActor AvatarActor = ASC.AbilityActorInfo.GetAvatarActor();
 		if (AvatarActor == nullptr) {
 			return nullptr;
@@ -61,8 +54,7 @@ namespace GasUtil
 		return Cast<AAuraCharacterBase>(AvatarActor);
 	}
 
-	AAuraCharacterBase GetAvatarCharacterFromAbility(UGameplayAbility Ability)
-	{
+	AAuraCharacterBase GetAvatarCharacterFromAbility(UGameplayAbility Ability) {
 		AActor AvatarActor = Ability.GetAvatarActorFromActorInfo();
 		if (AvatarActor == nullptr) {
 			return nullptr;

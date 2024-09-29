@@ -1,6 +1,5 @@
 
-class UAUW_PickupMsg : UAuraUserWidget
-{
+class UAUW_PickupMsg : UAuraUserWidget {
 	UPROPERTY(BindWidget)
 	UImage Image_Icon;
 
@@ -10,16 +9,14 @@ class UAUW_PickupMsg : UAuraUserWidget
 	UPROPERTY(Transient, Meta = (BindWidgetAnim), NotEditable)
 	protected UWidgetAnimation Anim_FadeExit;
 
-	void OnCtor() override
-	{
+	void OnCtor() override {
 		if (Anim_FadeExit != nullptr) {
 			PlayAnimation(Anim_FadeExit);
 		}
 	}
 
 	UFUNCTION(BlueprintOverride)
-	void OnAnimationFinished(const UWidgetAnimation Animation)
-	{
+	void OnAnimationFinished(const UWidgetAnimation Animation) {
 		if (Animation == Anim_FadeExit) {
 			RemoveFromParent();
 		}

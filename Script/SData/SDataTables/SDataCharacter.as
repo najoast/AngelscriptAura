@@ -1,8 +1,7 @@
 // All characters' config, including player and enemy
 
 USTRUCT()
-struct FSDataCharacter
-{
+struct FSDataCharacter {
 	UPROPERTY()
 	uint16 CharacterID;
 

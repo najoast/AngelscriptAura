@@ -6,8 +6,7 @@ Features:
 4. Destroy self when the gameplay effect is applied (overlapping with another actor)
 */
 
-class AAuroEffectActor : AActor
-{
+class AAuroEffectActor : AActor {
 	UPROPERTY(DefaultComponent, RootComponent)
 	USceneComponent SceneRoot;
 
@@ -25,8 +24,7 @@ class AAuroEffectActor : AActor
 	float32 ActorLevel = 1;
 
 	UFUNCTION(BlueprintOverride)
-	void ActorBeginOverlap(AActor OtherActor)
-	{
+	void ActorBeginOverlap(AActor OtherActor) {
 		Print("Overlapping with: " + OtherActor.Name);
 		// auto AngelscriptGASCharacter = Cast<AAngelscriptGASCharacter>(OtherActor);
 		// if (AngelscriptGASCharacter != nullptr)
@@ -42,8 +40,7 @@ class AAuroEffectActor : AActor
 	}
 
 	UFUNCTION(BlueprintOverride)
-	void ActorEndOverlap(AActor OtherActor)
-	{
+	void ActorEndOverlap(AActor OtherActor) {
 		// Print("No longer overlapping with: " + OtherActor.Name);
 	}
 }

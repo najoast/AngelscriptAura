@@ -1,4 +1,3 @@
 
-class AAuraGameModeBase : AGameModeBase
-{
+class AAuraGameModeBase : AGameModeBase {
 }

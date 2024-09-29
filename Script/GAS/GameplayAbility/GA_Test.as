@@ -1,23 +1,19 @@
 
-class UGA_Test : UAuraGameplayAbility
-{
+class UGA_Test : UAuraGameplayAbility {
 	UFUNCTION(BlueprintOverride)
-	void ActivateAbility()
-	{
+	void ActivateAbility() {
 		Print("ActivateAbility");
 
 		System::SetTimer(this, n"Test", 1.0f, false);
 	}
 
 	UFUNCTION(BlueprintOverride)
-	void OnEndAbility(bool bWasCancelled)
-	{
+	void OnEndAbility(bool bWasCancelled) {
 		Print(f"Test Ability Ended: {bWasCancelled =}");
 	}
 
 	UFUNCTION()
-	void Test()
-	{
+	void Test() {
 		Print("Test Latent Called");
 		EndAbility();
 	}

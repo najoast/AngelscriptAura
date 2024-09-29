@@ -1,6 +1,5 @@
 
-class UAGA_SpellBase : UAuraGameplayAbility
-{
+class UAGA_SpellBase : UAuraGameplayAbility {
 	// -------------------- Properties --------------------
 	UPROPERTY(Category = "Aura")
 	UAnimMontage AnimMontage;

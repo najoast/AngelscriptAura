@@ -1,11 +1,9 @@
 
-class UPlayerModuleMgr : UObject
-{
+class UPlayerModuleMgr : UObject {
 	private AAuraCharacter OwnerCharacter;
 	private TMap<EPlayerModule, UPlayerModuleBase> PlayerModules;
 
-	void Ctor(AAuraCharacter InOwnerCharacter)
-	{
+	void Ctor(AAuraCharacter InOwnerCharacter) {
 		if (this.World == nullptr) {
 			check(false);
 		}
@@ -18,18 +16,15 @@ class UPlayerModuleMgr : UObject
 		}
 	}
 
-	UPlayerModuleBase GetPlayerModule(EPlayerModule Module)
-	{
+	UPlayerModuleBase GetPlayerModule(EPlayerModule Module) {
 		return PlayerModules[Module];
 	}
 
-	AAuraCharacter GetOwnerCharacter()
-	{
+	AAuraCharacter GetOwnerCharacter() {
 		return OwnerCharacter;
 	}
 
-	void Init()
-	{
+	void Init() {
 		for (auto Element : PlayerModules)
 		{
 			Element.Value.Init();

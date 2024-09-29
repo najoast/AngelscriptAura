@@ -15,22 +15,19 @@
 		- 处理逻辑同 1.2
 */
 
-class UGhostPrograssModule : UObject
-{
+class UGhostPrograssModule : UObject {
 	private UProgressBar ProgressBar_Main;
 	private UProgressBar ProgressBar_Ghost;
 	private float32 Value;
 	private float32 MaxValue;
 	private float32 Percent;
 
-	void Init(UProgressBar InProgressBar_Main, UProgressBar InProgressBar_Ghost)
-	{
+	void Init(UProgressBar InProgressBar_Main, UProgressBar InProgressBar_Ghost) {
 		ProgressBar_Main = InProgressBar_Main;
 		ProgressBar_Ghost = InProgressBar_Ghost;
 	}
 
-	void SetPercent(float32 NewValue, float32 NewMaxValue)
-	{
+	void SetPercent(float32 NewValue, float32 NewMaxValue) {
 		if (NewMaxValue == 0) {
 			Print(f"NewMaxValue {NewMaxValue} is zero");
 			return;
@@ -63,8 +60,7 @@ class UGhostPrograssModule : UObject
 		}
 	}
 
-	void Tick(FGeometry MyGeometry, float InDeltaTime)
-	{
+	void Tick(FGeometry MyGeometry, float InDeltaTime) {
 		float32 MainPercent = ProgressBar_Main.Percent;
 		float32 GhostPercent = ProgressBar_Ghost.Percent;
 

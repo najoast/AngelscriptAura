@@ -1,7 +1,6 @@
 
 
-class UAUW_HUD : UAuraUserWidget
-{
+class UAUW_HUD : UAuraUserWidget {
 	// -------------------------------------
 
 	UPROPERTY(BindWidget)
@@ -15,8 +14,7 @@ class UAUW_HUD : UAuraUserWidget
 
 	// -------------------------------------
 
-	void OnCtor() override
-	{
+	void OnCtor() override {
 		FSlateBrush ManaBrush;
 		ManaBrush.ResourceObject = LoadObject(this, "/Game/Assets/UI/Globes/MI_ManaGlobe");
 		WBP_GlobeMana.ProgressBar_Main.WidgetStyle.FillImage = ManaBrush;
@@ -30,13 +28,11 @@ class UAUW_HUD : UAuraUserWidget
 
 	// https://github.com/Hazelight/UnrealEngine-Angelscript/blob/angelscript-master/Script-Examples/GASExamples/Example_GASAnimInstance.as
 	UFUNCTION()
-	private void OnAttributeChanged(FAngelscriptModifiedAttribute AttributeChangeData)
-	{
+	private void OnAttributeChanged(FAngelscriptModifiedAttribute AttributeChangeData) {
 		UpdateWidgets(AttributeChangeData);
 	}
 
-	void UpdateWidgets(FAngelscriptModifiedAttribute AttributeChangeData)
-	{
+	void UpdateWidgets(FAngelscriptModifiedAttribute AttributeChangeData) {
 		UGasModule GasModule = AuraUtil::GetCharacterGasModule(OwnerCharacter);
 		if (AttributeChangeData.Name == AuraAttributes::Health || AttributeChangeData.Name == AuraAttributes::MaxHealth)
 		{
@@ -54,8 +50,7 @@ class UAUW_HUD : UAuraUserWidget
 	}
 
 	UFUNCTION()
-	void OnButton_AttributesClicked()
-	{
+	void OnButton_AttributesClicked() {
 		UAUW_AttributeMenu AttributeMenu = Cast<UAUW_AttributeMenu>(WidgetUtil::OpenWidget(n"AttributeMenu", OwnerCharacter, FVector2D(30, 30)));
 		if (AttributeMenu != nullptr)
 		{
@@ -65,23 +60,20 @@ class UAUW_HUD : UAuraUserWidget
 	}
 
 	UFUNCTION()
-	void OnWidgetClosed(UUserWidget UserWidget)
-	{
+	void OnWidgetClosed(UUserWidget UserWidget) {
 		if (UserWidget.IsA(UAUW_AttributeMenu))
 		{
 			WBP_WideButton_Attributes.SetIsEnabled(true);
 		}
 	}
 
-	void RegisterAllWidgetsEvent()
-	{
+	void RegisterAllWidgetsEvent() {
 		auto EventMgr = AuraUtil::GameInstance().EventMgr;
 		EventMgr.OnItemPickedUpEvent.AddUFunction(this, n"OnItemPickedUp");
 	}
 
 	UFUNCTION()
-	void OnItemPickedUp(EItemID ItemID)
-	{
+	void OnItemPickedUp(EItemID ItemID) {
 		FSDataItem Item = SDataUtil::GetItem(ItemID);
 		if (Item.ID == EItemID::None) {
 			Print(f"Item {ItemID} is not found");

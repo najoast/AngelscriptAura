@@ -1,7 +1,6 @@
 
 USTRUCT()
-struct FSDataItem
-{
+struct FSDataItem {
 	// The ID of the item
 	UPROPERTY()
 	EItemID ID;

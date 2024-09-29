@@ -1,19 +1,16 @@
 
-class UBTTask_GoAroundTarget : UBTTask_BlueprintBase
-{
+class UBTTask_GoAroundTarget : UBTTask_BlueprintBase {
 	UPROPERTY()
 	FBlackboardKeySelector AroundTarget;
 	private UBlackboardKeyType_Vector VectorObject = Cast<UBlackboardKeyType_Vector>(NewObject(Class.DefaultObject, UBlackboardKeyType_Vector, n"VectorType"));
 	default AroundTarget.AllowedTypes.Add(VectorObject);
 
 	UFUNCTION(BlueprintOverride)
-	void ExecuteAI(AAIController OwnerController, APawn ControlledPawn)
-	{
+	void ExecuteAI(AAIController OwnerController, APawn ControlledPawn) {
 		FinishExecute(ExecuteImpl(OwnerController, ControlledPawn));
 	}
 
-	private bool ExecuteImpl(AAIController OwnerController, APawn ControlledPawn)
-	{
+	private bool ExecuteImpl(AAIController OwnerController, APawn ControlledPawn) {
 		UBlackboardComponent BlackboardComponent = AIHelper::GetBlackboard(OwnerController);
 		AActor Target = Cast<AActor>(BlackboardComponent.GetValueAsObject(AuraConst::AI_Blackboard_Key_TargetToFollow));
 		if (Target == nullptr) {

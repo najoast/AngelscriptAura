@@ -1,6 +1,5 @@
 
-class UAGA_PlayerSpell : UAGA_SpellBase
-{
+class UAGA_PlayerSpell : UAGA_SpellBase {
 	UFUNCTION(BlueprintOverride)
 	void ActivateAbility() {
 		Super::ActivateAbility();

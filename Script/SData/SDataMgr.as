@@ -1,14 +1,12 @@
 
-class USDataMgr : UObject
-{
+class USDataMgr : UObject {
 	TMap<EItemID, FSDataItem> ItemMap;
 	UDataTable SDataWidgetClass;
 	TMap<UInputAction, FSDataInput> InputMap;
 	TMap<ECharacterClass, FSDataCharacterClass> CharacterClassMap;
 	TMap<uint16, FSDataCharacter> CharacterMap;
 
-	void Init()
-	{
+	void Init() {
 		LoadItem();
 		LoadWidgetClass();
 		LoadInput();
@@ -16,8 +14,7 @@ class USDataMgr : UObject
 		LoadCharacter();
 	}
 
-	private void LoadItem()
-	{
+	private void LoadItem() {
 		// Load /Script/Engine.DataTable'/Game/SData/DT_SData_Item.DT_SData_Item'
 		UDataTable SDataItems = Cast<UDataTable>(LoadObject(this, "/Game/SData/DT_SData_Item"));
 		
@@ -28,13 +25,11 @@ class USDataMgr : UObject
 		}
 	}
 
-	private void LoadWidgetClass()
-	{
+	private void LoadWidgetClass() {
 		SDataWidgetClass = Cast<UDataTable>(LoadObject(this, "/Game/SData/DT_SData_WidgetClass"));
 	}
 
-	private void LoadInput()
-	{
+	private void LoadInput() {
 		UDataTable SDataInput = Cast<UDataTable>(LoadObject(this, "/Game/SData/DT_SData_Input"));
 
 		TArray<FSDataInput> AllInputs;
@@ -44,8 +39,7 @@ class USDataMgr : UObject
 		}
 	}
 
-	private void LoadCharacterClass()
-	{
+	private void LoadCharacterClass() {
 		UDataTable SDataCharacterClass = Cast<UDataTable>(LoadObject(this, "/Game/SData/DT_SData_CharacterClass"));
 
 		TArray<FSDataCharacterClass> AllCharacterClasses;
@@ -55,8 +49,7 @@ class USDataMgr : UObject
 		}
 	}
 
-	private void LoadCharacter()
-	{
+	private void LoadCharacter() {
 		UDataTable SDataCharacter = Cast<UDataTable>(LoadObject(this, "/Game/SData/DT_SData_Character"));
 
 		TArray<FSDataCharacter> AllCharacters;

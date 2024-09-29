@@ -7,8 +7,7 @@
 */
 delegate void FTickerDelegate(float DeltaTime, float Percent, ETickerFuncType FuncType, TArray<UObject> Params);
 
-struct FTicker
-{
+struct FTicker {
 	int32 ID;
 	float ElapsedTime;
 	float Duration;
@@ -17,20 +16,17 @@ struct FTicker
 	TArray<UObject> Params;
 }
 
-class UTickerMgr : UObject
-{
+class UTickerMgr : UObject {
 	private TMap<int32, FTicker> Tickers;
 	private TArray<int32> ToBeRemovedTickers; // Can't remove TMap element during iteration.
 	private UIDGenerator IDGenerator;
 
-	void Init()
-	{
+	void Init() {
 		IDGenerator = Cast<UIDGenerator>(NewObject(this, UIDGenerator));
 		IDGenerator.Init(MAX_int32);
 	}
 
-	int32 CreateTicker(float Duration, FTickerDelegate OnTick, ETickerFuncType FuncType = 0, TArray<UObject> Params = TArray<UObject>())
-	{
+	int32 CreateTicker(float Duration, FTickerDelegate OnTick, ETickerFuncType FuncType = 0, TArray<UObject> Params = TArray<UObject>()) {
 		FTicker Ticker;
 		Ticker.ID = IDGenerator.NextID();
 		Ticker.ElapsedTime = 0;
@@ -42,8 +38,7 @@ class UTickerMgr : UObject
 		return Ticker.ID;
 	}
 
-	bool RemoveTicker(int32 TickerID)
-	{
+	bool RemoveTicker(int32 TickerID) {
 		if (Tickers.Contains(TickerID)) {
 			Tickers.Remove(TickerID);
 			return true;
@@ -51,8 +46,7 @@ class UTickerMgr : UObject
 		return false;
 	}
 
-	void Tick(float DeltaTime)
-	{
+	void Tick(float DeltaTime) {
 		if (Tickers.Num() == 0) {
 			return;
 		}

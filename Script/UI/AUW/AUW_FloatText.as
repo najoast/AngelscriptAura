@@ -1,6 +1,5 @@
 
-class UAUW_FloatText : UAuraUserWidget
-{
+class UAUW_FloatText : UAuraUserWidget {
 	UPROPERTY(BindWidget)
 	UTextBlock Text_FloatText;
 
@@ -9,16 +8,14 @@ class UAUW_FloatText : UAuraUserWidget
 
 	UWidgetComponent OwnerWidgetComponent;
 
-	void OnCtor() override
-	{
+	void OnCtor() override {
 		if (Anim_Float != nullptr) {
 			PlayAnimation(Anim_Float);
 		}
 	}
 
 	UFUNCTION(BlueprintOverride)
-	void OnAnimationFinished(const UWidgetAnimation Animation)
-	{
+	void OnAnimationFinished(const UWidgetAnimation Animation) {
 		if (Animation == Anim_Float) {
 			// 这个调不调应该都不影响，下面删除 DamageComponent 组件后应该会自动删除
 			// 保险起见，还是手动调一下

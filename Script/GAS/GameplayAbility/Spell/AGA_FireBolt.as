@@ -1,14 +1,12 @@
 
-class UAGA_FireBolt : UAGA_PlayerSpell
-{
+class UAGA_FireBolt : UAGA_PlayerSpell {
 	UPROPERTY(Category = "Aura")
 	TSubclassOf<AAuraProjectile> ProjectileClass;
 
 	UPROPERTY(Category = "Aura")
 	TSubclassOf<UGameplayEffect> DamageEffectClass;
 
-	protected void OnGameplayEventReceived(FGameplayEventData Payload) override
-	{
+	protected void OnGameplayEventReceived(FGameplayEventData Payload) override {
 		AAuraCharacterBase AvatarActor = Cast<AAuraCharacterBase>(GetAvatarActorFromActorInfo());
 		if (AvatarActor != nullptr) {
 			FVector SourceLocation = AvatarActor.GetWeaponSocketLocation();

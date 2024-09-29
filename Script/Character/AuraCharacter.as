@@ -1,6 +1,5 @@
 
-class AAuraCharacter : AAuraCharacterBase
-{
+class AAuraCharacter : AAuraCharacterBase {
 	UPROPERTY(DefaultComponent)
 	USpringArmComponent SpringArm;
 	default SpringArm.SetRelativeRotation(FRotator(-45, 0, 0));
@@ -22,8 +21,7 @@ class AAuraCharacter : AAuraCharacterBase
 	default bUseControllerRotationYaw = false;
 	default Tags.Add(AuraConst::PlayerTag);
 
-	void OnAttributeChanged(const FAngelscriptModifiedAttribute&in AttributeChangeData) override
-	{
+	void OnAttributeChanged(const FAngelscriptModifiedAttribute&in AttributeChangeData) override {
 		AuraUtil::GameInstance().EventMgr.OnAttributeChangedEvent.Broadcast(AttributeChangeData);
 	}
 
@@ -44,8 +42,7 @@ class AAuraCharacter : AAuraCharacterBase
 	// --------- functions ----------
 
 	UFUNCTION(BlueprintOverride)
-	void BeginPlay()
-	{
+	void BeginPlay() {
 		// const bool IsDedicatedServer = System::IsDedicatedServer();
 		PlayerModuleMgr = Cast<UPlayerModuleMgr>(NewObject(this, UPlayerModuleMgr::StaticClass(), n"UPlayerModuleMgr"));
 		PlayerModuleMgr.Ctor(this);

@@ -1,6 +1,5 @@
 
-namespace AuraAttributes
-{
+namespace AuraAttributes {
 	// 1 Primary Attributes
 	const FName Strength     = n"Strength"; // 力量
 	const FName Dexterity    = n"Dexterity"; // 敏捷
@@ -41,8 +40,7 @@ namespace AuraAttributes
 event void FOnGameplayEffectApplied(FGameplayEffectSpec EffectSpec, FGameplayModifierEvaluatedData EvaluatedData, UAngelscriptAbilitySystemComponent TargetASC);
 
 // Add GameplayAbilities/GameplayTags/GameplayTasks to Aura.Build.cs private dependencies
-class UAuraAttributeSet : UAngelscriptAttributeSet
-{
+class UAuraAttributeSet : UAngelscriptAttributeSet {
 	// =================================== Attributes ===================================
 	// Primary Attributes
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReplicationTrampoline, Category = "Primary Attributes")
@@ -131,8 +129,7 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 
 	// Functions
 
-	void InitAttributesMapping()
-	{
+	void InitAttributesMapping() {
 		PrimaryAttributes.Add(Strength);
 		PrimaryAttributes.Add(Dexterity);
 		PrimaryAttributes.Add(Intelligence);
@@ -177,14 +174,12 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	}
 
 	UFUNCTION()
-	void OnRep_ReplicationTrampoline(FAngelscriptGameplayAttributeData& OldAttributeData)
-	{
+	void OnRep_ReplicationTrampoline(FAngelscriptGameplayAttributeData& OldAttributeData) {
 		Print(f"OnRep_ReplicationTrampoline: {OldAttributeData.AttributeName =}");
 		OnRep_Attribute(OldAttributeData);
 	}
 
-	FAngelscriptGameplayAttributeData& GetAttribute(FName AttributeName)
-	{
+	FAngelscriptGameplayAttributeData& GetAttribute(FName AttributeName) {
 		if (!Name2Attribute.Contains(AttributeName)) {
 			Print(f"GetAttribute {AttributeName} is not found");
 			check(false);
@@ -192,18 +187,15 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 		return Name2Attribute[AttributeName];
 	}
 
-	const TArray<FAngelscriptGameplayAttributeData>& GetPrimaryAttributes()
-	{
+	const TArray<FAngelscriptGameplayAttributeData>& GetPrimaryAttributes() {
 		return PrimaryAttributes;
 	}
 
-	const TArray<FAngelscriptGameplayAttributeData>& GetSecondaryAttributes()
-	{
+	const TArray<FAngelscriptGameplayAttributeData>& GetSecondaryAttributes() {
 		return SecondaryAttributes;
 	}
 
-	const TMap<FName, FAngelscriptGameplayAttributeData>& GetAllAttributes()
-	{
+	const TMap<FName, FAngelscriptGameplayAttributeData>& GetAllAttributes() {
 		return Name2Attribute;
 	}
 
@@ -215,13 +207,11 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 		don't execute complex logic in this function, eg: ApplyGameplayEffect
 	*/
 	UFUNCTION(BlueprintOverride)
-	void PreAttributeChange(FGameplayAttribute Attribute, float32& NewValue)
-	{
+	void PreAttributeChange(FGameplayAttribute Attribute, float32& NewValue) {
 		ClampAttribute(Attribute, NewValue);
 	}
 
-	void ClampAttribute(FGameplayAttribute Attribute, float32& NewValue)
-	{
+	void ClampAttribute(FGameplayAttribute Attribute, float32& NewValue) {
 		if (Attribute.AttributeName == AuraAttributes::Health) {
 			// TODO: 检查一下这里为什么有时候 NewValue 会是0
 			Print(f"Health OldValue: {Health.GetCurrentValue()} NewValue: {NewValue}");
@@ -231,8 +221,7 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 		}
 	}
 
-	void ProcessMetaAttribute(FGameplayEffectSpec EffectSpec, FGameplayModifierEvaluatedData& EvaluatedData, UAngelscriptAbilitySystemComponent TargetASC)
-	{
+	void ProcessMetaAttribute(FGameplayEffectSpec EffectSpec, FGameplayModifierEvaluatedData& EvaluatedData, UAngelscriptAbilitySystemComponent TargetASC) {
 		if (EvaluatedData.Attribute.AttributeName == AuraAttributes::IncomingDamage) {
 			// Pop IncomingDamage
 			float32 IncomingDamageMagnitude = EvaluatedData.GetMagnitude();
@@ -259,8 +248,7 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 	}
 
 	UFUNCTION(BlueprintOverride)
-	void PostGameplayEffectExecute(FGameplayEffectSpec EffectSpec, FGameplayModifierEvaluatedData& EvaluatedData, UAngelscriptAbilitySystemComponent TargetASC)
-	{
+	void PostGameplayEffectExecute(FGameplayEffectSpec EffectSpec, FGameplayModifierEvaluatedData& EvaluatedData, UAngelscriptAbilitySystemComponent TargetASC) {
 		// Clamp the attribute value in PostGameplayEffectExecute.
 		auto& Attribute = GetAttribute(FName(EvaluatedData.Attribute.AttributeName));
 		float32 BaseValue = Attribute.GetBaseValue();
@@ -282,16 +270,14 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 		ProcessMetaAttribute(EffectSpec, EvaluatedData, TargetASC);
 	}
 
-	void SetAttributeValue(FName AttributeName, float32 BaseValue)
-	{
+	void SetAttributeValue(FName AttributeName, float32 BaseValue) {
 		UAngelscriptAbilitySystemComponent OwningASC = this.GetOwningAbilitySystemComponent();
 		OwningASC.SetAttributeBaseValue(this.Class, AttributeName, BaseValue);
 	}
 
 	// This function is just a demostration of how to retrieve ASC info in PostGameplayEffectExecute.
 	// Currently, there is no real gameplay logic in it.
-	void GetEffectProperties(FEffectProperties& Props, FGameplayEffectSpec EffectSpec, UAngelscriptAbilitySystemComponent TargetASC)
-	{
+	void GetEffectProperties(FEffectProperties& Props, FGameplayEffectSpec EffectSpec, UAngelscriptAbilitySystemComponent TargetASC) {
 		Props.EffectContextHandle = EffectSpec.GetContext();
 		Props.SourceASC = Cast<UAngelscriptAbilitySystemComponent>(Props.EffectContextHandle.GetOriginalInstigatorAbilitySystemComponent());
 		RetrieveASCInfo(Props.SourceASC, Props.SourceAvatarActor, Props.SourceController, Props.SourceCharacter);
@@ -299,8 +285,7 @@ class UAuraAttributeSet : UAngelscriptAttributeSet
 		RetrieveASCInfo(Props.TargetASC, Props.TargetAvatarActor, Props.TargetController, Props.TargetCharacter);
 	}
 
-	void RetrieveASCInfo(UAngelscriptAbilitySystemComponent ASC, AActor& AvatarActor, AController& Controller, ACharacter& Character)
-	{
+	void RetrieveASCInfo(UAngelscriptAbilitySystemComponent ASC, AActor& AvatarActor, AController& Controller, ACharacter& Character) {
 		if (!IsValid(ASC)) {
 			return;
 		}

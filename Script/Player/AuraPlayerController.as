@@ -1,6 +1,5 @@
 
-class AAuraPlayerController : APlayerController
-{
+class AAuraPlayerController : APlayerController {
 	default bReplicates = true;
 
 	// Properties
