@@ -69,6 +69,7 @@ class UBTService_FindNearestPlayer : UBTService_BlueprintBase {
 
 		AAuraCharacterBase ControlledCharacter = Cast<AAuraCharacterBase>(ControlledPawn);
 		if (ControlledCharacter != nullptr) {
+			ControlledCharacter.SetAttackTargetLocation(NearestPlayer.GetActorLocation());
 			BlackboardComponent.SetValueAsBool(CanRangeAttack.SelectedKeyName, ControlledCharacter.CanRangeAttack());
 		}
 	}

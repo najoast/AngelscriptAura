@@ -11,6 +11,6 @@ class UAGA_PlayerSpell : UAGA_SpellBase {
 
 	UFUNCTION()
 	private void OnMouseTargetData(const FVector& Data) {
-		TargetLocation = Data;
+		GetOwnerCharacter().SetAttackTargetLocation(Data);
 	}
 }

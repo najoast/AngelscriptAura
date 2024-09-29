@@ -6,26 +6,17 @@ class UAGA_FireBolt : UAGA_PlayerSpell {
 	UPROPERTY(Category = "Aura")
 	TSubclassOf<UGameplayEffect> DamageEffectClass;
 
-	protected void OnGameplayEventReceived(FGameplayEventData Payload) override {
-		AAuraCharacterBase AvatarActor = Cast<AAuraCharacterBase>(GetAvatarActorFromActorInfo());
-		if (AvatarActor != nullptr) {
-			FVector SourceLocation = AvatarActor.GetWeaponSocketLocation();
-			FRotator Rotation = (TargetLocation - SourceLocation).Rotation();
-			Rotation.Pitch = 0.f;
-
-			// Spawn the projectile
-			AAuraProjectile ProjectileActor = Cast<AAuraProjectile>(SpawnActor(ProjectileClass, SourceLocation, Rotation, n"FireBolt", true));
-			if (ProjectileActor != nullptr) {
-				FGameplayEffectSpecHandle SpecHandle = GasUtil::MakeGameplayEffectSpecHandle(AvatarActor, DamageEffectClass, GetAbilityLevel());
-				// SpecHandle.GetSpec().SetByCallerTagMagnitudes.Add(GameplayTags::Damage, 30);
-				SpecHandle.GetSpec().SetByCallerMagnitude(GameplayTags::Damage, 30);
-				ProjectileActor.DamageEffectSpecHandle = SpecHandle;
-				FinishSpawningActor(ProjectileActor);
-			}
-
-			// Set the facing target
-			AvatarActor.SetFacingTarget(TargetLocation);
+	bool CastSpell(AAuraCharacterBase OwnerCharacter, FVector SourceLocation, FRotator Rotation) override {
+		// Spawn the projectile
+		AAuraProjectile ProjectileActor = Cast<AAuraProjectile>(SpawnActor(ProjectileClass, SourceLocation, Rotation, n"FireBolt", true));
+		if (ProjectileActor == nullptr) {
+			return false;
 		}
-		EndAbility();
+		FGameplayEffectSpecHandle SpecHandle = GasUtil::MakeGameplayEffectSpecHandle(OwnerCharacter, DamageEffectClass, GetAbilityLevel());
+		// SpecHandle.GetSpec().SetByCallerTagMagnitudes.Add(GameplayTags::Damage, 30);
+		SpecHandle.GetSpec().SetByCallerMagnitude(GameplayTags::Damage, 30);
+		ProjectileActor.DamageEffectSpecHandle = SpecHandle;
+		FinishSpawningActor(ProjectileActor);
+		return true;
 	}
 }

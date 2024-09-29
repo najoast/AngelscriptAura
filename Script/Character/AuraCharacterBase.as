@@ -30,6 +30,7 @@ class AAuraCharacterBase : AAngelscriptGASCharacter {
 
 	// -------------------- Varibles --------------------
 	UGasModule GasModule;
+	FVector AttackTargetLocation;
 
 	// -------------------- Functions --------------------
 	UFUNCTION(BlueprintOverride)
@@ -172,5 +173,13 @@ class AAuraCharacterBase : AAngelscriptGASCharacter {
 
 	void SetFacingTarget(const FVector& TargetLocation) {
 		MotionWarping.AddOrUpdateWarpTargetFromLocation(n"FacingTarget", TargetLocation);
+	}
+
+	void SetAttackTargetLocation(const FVector& TargetLocation) {
+		AttackTargetLocation = TargetLocation;
+	}
+
+	const FVector& GetAttackTargetLocation() {
+		return AttackTargetLocation;
 	}
 }
