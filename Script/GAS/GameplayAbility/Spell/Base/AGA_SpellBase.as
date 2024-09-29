@@ -1,11 +1,17 @@
 
 class UAGA_SpellBase : UAuraGameplayAbility {
 	// -------------------- Properties --------------------
-	UPROPERTY(Category = "Aura")
+	UPROPERTY()
 	UAnimMontage AnimMontage;
 
-	UPROPERTY(Category = "Aura")
+	UPROPERTY()
 	FGameplayTag EventTag;
+
+	// UPROPERTY()
+	// bool bIsPlayerSpell = true;
+
+	UPROPERTY()
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
 
 	// -------------------- Functions --------------------
 	UFUNCTION(BlueprintOverride)
@@ -19,13 +25,22 @@ class UAGA_SpellBase : UAuraGameplayAbility {
 		// MontagePlayTask.OnCompleted.AddUFunction(this, n"SpawnFireBoltProjectile");
 		MontagePlayTask.ReadyForActivation();
 
-		UAbilityTask_WaitGameplayEvent WaitGameplayEvent = AngelscriptAbilityTask::WaitGameplayEvent(this, EventTag);
+		// AAuraCharacterBase OwnerCharacter = GetOwnerCharacter();
+		// AActor TargetActor = OwnerCharacter.GetAttackTarget();
+		AActor TargetActor = nullptr;
+		UAbilityTask_WaitGameplayEvent WaitGameplayEvent = AngelscriptAbilityTask::WaitGameplayEvent(this, EventTag, TargetActor);
 		WaitGameplayEvent.EventReceived.AddUFunction(this, n"OnGameplayEventReceived");
 		WaitGameplayEvent.ReadyForActivation();
+
+		// if (bIsPlayerSpell) {
+		// 	UAAT_TargetDataUnderMouse TargetDataUnderMouse = Cast<UAAT_TargetDataUnderMouse>(UAngelscriptAbilityTask::CreateAbilityTask(UAAT_TargetDataUnderMouse, this));
+		// 	TargetDataUnderMouse.OnMouseTargetData.BindUFunction(this, n"OnMouseTargetData");
+		// 	TargetDataUnderMouse.ReadyForActivation();
+		// }
 	}
 
 	UFUNCTION()
-	protected void OnGameplayEventReceived(FGameplayEventData Payload) {// virtual empty
+	protected void OnGameplayEventReceived(FGameplayEventData Payload) {
 		AAuraCharacterBase OwnerCharacter = GetOwnerCharacter();
 		if (OwnerCharacter != nullptr) {
 			FVector SourceLocation = OwnerCharacter.GetWeaponSocketLocation();
@@ -33,7 +48,7 @@ class UAGA_SpellBase : UAuraGameplayAbility {
 			FRotator Rotation = (TargetLocation - SourceLocation).Rotation();
 			Rotation.Pitch = 0.f;
 
-			if (CastSpell(OwnerCharacter, SourceLocation, Rotation)) {
+			if (CastSpell(Payload, OwnerCharacter, SourceLocation, Rotation)) {
 				OwnerCharacter.SetFacingTarget(TargetLocation);
 			}
 		}
@@ -42,7 +57,12 @@ class UAGA_SpellBase : UAuraGameplayAbility {
 	}
 
 	// Cast this spell, override this function to implement the spell
-	protected bool CastSpell(AAuraCharacterBase OwnerCharacter, FVector SourceLocation, FRotator Rotation) {
+	protected bool CastSpell(FGameplayEventData Payload, AAuraCharacterBase OwnerCharacter, FVector SourceLocation, FRotator Rotation) {
 		return false;
 	}
+
+	// UFUNCTION()
+	// private void OnMouseTargetData(const FVector& Data) {
+	// 	GetOwnerCharacter().SetAttackTargetLocation(Data);
+	// }
 }

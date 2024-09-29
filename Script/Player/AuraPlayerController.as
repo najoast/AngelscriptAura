@@ -16,6 +16,7 @@ class AAuraPlayerController : APlayerController {
 	USplineComponent MovementSpline;
 
 	// Members
+	AAuraCharacter OwnerCharacter;
 	AAuraEnemy LastEnemy;
 	AAuraEnemy ThisEnemy;
 	UAbilitySystemComponent AbilitySystemComponent;
@@ -46,6 +47,8 @@ class AAuraPlayerController : APlayerController {
 		System::LogString("AuraPlayerController BeginPlay");
 		ClickToMove = Cast<UClickToMove>(NewObject(this, UClickToMove::StaticClass()));
 		ClickToMove.Ctor(this);
+
+		OwnerCharacter = Cast<AAuraCharacter>(ControlledPawn);
 	}
 
 	UFUNCTION(BlueprintOverride)
@@ -79,20 +82,30 @@ class AAuraPlayerController : APlayerController {
 			#3		0		1
 			#4		1		1
 		*/
-		if (LastEnemy == nullptr && ThisEnemy == nullptr) {
-			return;
-		}
-		if (LastEnemy != nullptr && ThisEnemy == nullptr) {
-			LastEnemy.Unhighlight();
-		}
-		if (LastEnemy == nullptr && ThisEnemy != nullptr) {
-			ThisEnemy.Highlight();
-		}
-		if (LastEnemy != nullptr && ThisEnemy != nullptr) {
-			if (LastEnemy != ThisEnemy) {
+		// if (LastEnemy == nullptr && ThisEnemy == nullptr) {
+		// 	return;
+		// }
+		// if (LastEnemy != nullptr && ThisEnemy == nullptr) {
+		// 	LastEnemy.Unhighlight();
+		// }
+		// if (LastEnemy == nullptr && ThisEnemy != nullptr) {
+		// 	ThisEnemy.Highlight();
+		// }
+		// if (LastEnemy != nullptr && ThisEnemy != nullptr) {
+		// 	if (LastEnemy != ThisEnemy) {
+		// 		LastEnemy.Unhighlight();
+		// 		ThisEnemy.Highlight();
+		// 	}
+		// }
+
+		if (ThisEnemy != LastEnemy) {
+			if (LastEnemy != nullptr) {
 				LastEnemy.Unhighlight();
+			}
+			if (ThisEnemy != nullptr) {
 				ThisEnemy.Highlight();
 			}
+			OwnerCharacter.SetAttackTarget(ThisEnemy);
 		}
 	}
 

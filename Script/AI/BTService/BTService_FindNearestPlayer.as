@@ -38,8 +38,15 @@ class UBTService_FindNearestPlayer : UBTService_BlueprintBase {
 		TArray<AActor> Players;
 		Gameplay::GetAllActorsWithTag(AuraConst::PlayerTag, Players);
 
+		AAuraCharacterBase ControlledCharacter = Cast<AAuraCharacterBase>(ControlledPawn);
+		if (ControlledCharacter == nullptr) {
+			Print("Only support AuraCharacterBase");
+			return;
+		}
+
 		if (Players.Num() == 0) {
 			Print("No player found");
+			ControlledCharacter.SetAttackTarget(nullptr);
 			return;
 		}
 
@@ -63,14 +70,11 @@ class UBTService_FindNearestPlayer : UBTService_BlueprintBase {
 			}
 		}
 
+		ControlledCharacter.SetAttackTarget(NearestPlayer);
+
 		UBlackboardComponent BlackboardComponent = AIHelper::GetBlackboard(OwnerController);
 		BlackboardComponent.SetValueAsObject(TargetToFollow.SelectedKeyName, NearestPlayer);
 		BlackboardComponent.SetValueAsFloat(DistanceToTarget.SelectedKeyName, NearestDistance);
-
-		AAuraCharacterBase ControlledCharacter = Cast<AAuraCharacterBase>(ControlledPawn);
-		if (ControlledCharacter != nullptr) {
-			ControlledCharacter.SetAttackTargetLocation(NearestPlayer.GetActorLocation());
-			BlackboardComponent.SetValueAsBool(CanRangeAttack.SelectedKeyName, ControlledCharacter.CanRangeAttack());
-		}
+		BlackboardComponent.SetValueAsBool(CanRangeAttack.SelectedKeyName, ControlledCharacter.CanRangeAttack());
 	}
 }
