@@ -1,5 +1,5 @@
 
-class UAGA_FireBolt : UAGA_SpellBase
+class UAGA_FireBolt : UAGA_PlayerSpell
 {
 	UPROPERTY(Category = "Aura")
 	TSubclassOf<AAuraProjectile> ProjectileClass;

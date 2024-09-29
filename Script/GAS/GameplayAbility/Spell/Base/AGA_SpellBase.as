@@ -13,8 +13,7 @@ class UAGA_SpellBase : UAuraGameplayAbility
 
 	// -------------------- Functions --------------------
 	UFUNCTION(BlueprintOverride)
-	void ActivateAbility()
-	{
+	void ActivateAbility() {
 		if (!HasAuthority()) {
 			return;
 		}
@@ -28,20 +27,9 @@ class UAGA_SpellBase : UAuraGameplayAbility
 		WaitGameplayEvent.EventReceived.AddUFunction(this, n"OnGameplayEventReceived");
 		WaitGameplayEvent.ReadyForActivation();
 
-		UAAT_TargetDataUnderMouse TargetDataUnderMouse = Cast<UAAT_TargetDataUnderMouse>(UAngelscriptAbilityTask::CreateAbilityTask(UAAT_TargetDataUnderMouse, this));
-		TargetDataUnderMouse.OnMouseTargetData.BindUFunction(this, n"OnMouseTargetData");
-		TargetDataUnderMouse.ReadyForActivation();
 	}
 
 	UFUNCTION()
-	protected void OnGameplayEventReceived(FGameplayEventData Payload)
-	{// virtual empty
-	}
-
-	UFUNCTION()
-	private void OnMouseTargetData(const FVector& Data)
-	{
-		// Print(f"OnMouseTargetData {Data}");
-		TargetLocation = Data;
+	protected void OnGameplayEventReceived(FGameplayEventData Payload) {// virtual empty
 	}
 }
