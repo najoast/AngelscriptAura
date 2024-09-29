@@ -3,8 +3,7 @@
 1. 如果是近战怪，移动到玩家附近并发起攻击
 */
 
-class UBTService_FindNearestPlayer : UBTService_BlueprintBase
-{
+class UBTService_FindNearestPlayer : UBTService_BlueprintBase {
 	// -------------------- Properties --------------------
 	private UBlackboardKeyType_Object ObjectObject = Cast<UBlackboardKeyType_Object>(NewObject(Class.DefaultObject, UBlackboardKeyType_Object, n"ObjectType"));
 	private UBlackboardKeyType_Bool BoolType = Cast<UBlackboardKeyType_Bool>(NewObject(Class.DefaultObject, UBlackboardKeyType_Bool, n"BoolType"));
@@ -28,8 +27,7 @@ class UBTService_FindNearestPlayer : UBTService_BlueprintBase
 
 	// -------------------- Functions --------------------
 	UFUNCTION(BlueprintOverride)
-	void TickAI(AAIController OwnerController, APawn ControlledPawn, float DeltaSeconds)
-	{
+	void TickAI(AAIController OwnerController, APawn ControlledPawn, float DeltaSeconds) {
 		// Print(f"{ControlledPawn.GetName()} is TickAI");
 
 		if (ControlledPawn.ActorHasTag(AuraConst::PlayerTag)) {

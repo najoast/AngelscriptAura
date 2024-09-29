@@ -1,6 +1,5 @@
 
-class AAuraEnemy : AAuraCharacterBase
-{
+class AAuraEnemy : AAuraCharacterBase {
 	// -------------------- Properties --------------------
 	UPROPERTY(DefaultComponent)
 	UWidgetComponent HealthBar;
@@ -22,8 +21,7 @@ class AAuraEnemy : AAuraCharacterBase
 	// -------------------- Functions --------------------
 
 	UFUNCTION(BlueprintOverride)
-	void BeginPlay()
-	{
+	void BeginPlay() {
 		Super::BeginPlay();
 
 		HealthBar.AttachToComponent(GetRootComponent());
@@ -36,21 +34,18 @@ class AAuraEnemy : AAuraCharacterBase
 		AbilitySystem.OnOwnedTagUpdated.AddUFunction(this, n"OnOwnedTagUpdated");
 	}
 
-	void Highlight()
-	{
+	void Highlight() {
 		Mesh.RenderCustomDepth = true;
 		Weapon.RenderCustomDepth = true;
 	}
 
-	void Unhighlight()
-	{
+	void Unhighlight() {
 		Mesh.RenderCustomDepth = false;
 		Weapon.RenderCustomDepth = false;
 	}
 
 	UFUNCTION()
-	private void OnOwnedTagUpdated(const FGameplayTag&in Tag, bool TagExists)
-	{
+	private void OnOwnedTagUpdated(const FGameplayTag&in Tag, bool TagExists) {
 		// Print(f"OnOwnedTagUpdated: {Tag.ToString() =} {TagExists =}");
 		if (Tag == GameplayTags::Effects_HitReact) {
 			AIHelper::GetBlackboard(Controller).SetValueAsBool(AuraConst::AI_Blackboard_Key_IsHitReacting, TagExists);
@@ -58,8 +53,7 @@ class AAuraEnemy : AAuraCharacterBase
 	}
 
 	UFUNCTION(BlueprintOverride)
-	void Possessed(AController NewController)
-	{
+	void Possessed(AController NewController) {
 		if (HasAuthority()) {
 			AAuraAIController AIController = Cast<AAuraAIController>(GetController());
 			if (AIController != nullptr) {
@@ -68,8 +62,7 @@ class AAuraEnemy : AAuraCharacterBase
 		}
 	}
 
-	void OnAttributeChanged(const FAngelscriptModifiedAttribute&in AttributeChangeData) override
-	{
+	void OnAttributeChanged(const FAngelscriptModifiedAttribute&in AttributeChangeData) override {
 		if (AttributeChangeData.Name == AuraAttributes::Health) {
 			// HealthBar.ProgressBar_HealthBar.SetPercent(AttributeChangeData.NewValue / AttributeChangeData.BaseValue);
 			UAUW_HealthBar HealthBarWidget = Cast<UAUW_HealthBar>(HealthBar.GetWidget());

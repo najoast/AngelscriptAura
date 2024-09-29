@@ -7,8 +7,7 @@ Features:
 4. When another actor ends overlapping with the actor, the gameplay effect is removed
 */
 
-class AAuraNiagaraActor : AActor
-{
+class AAuraNiagaraActor : AActor {
 	UPROPERTY(DefaultComponent, RootComponent)
 	USceneComponent SceneRoot;
 
@@ -24,21 +23,18 @@ class AAuraNiagaraActor : AActor
 	FActiveGameplayEffectHandle EffectHandle;
 
 	UFUNCTION(BlueprintOverride)
-	void BeginPlay()
-	{
+	void BeginPlay() {
 		check(GameplayEffectClass != nullptr);
 	}
 
 	UFUNCTION(BlueprintOverride)
-	void ActorBeginOverlap(AActor OtherActor)
-	{
+	void ActorBeginOverlap(AActor OtherActor) {
 		Print("Overlapping with: " + OtherActor.Name);
 		EffectHandle = GasUtil::ApplyGameplayEffect(this, OtherActor, GameplayEffectClass);
 	}
 
 	UFUNCTION(BlueprintOverride)
-	void ActorEndOverlap(AActor OtherActor)
-	{
+	void ActorEndOverlap(AActor OtherActor) {
 		Print("No longer overlapping with: " + OtherActor.Name);
 		GasUtil::RemoveGameplayEffect(OtherActor, EffectHandle);
 		EffectHandle = AuraConst::EmptyEffectHandle;

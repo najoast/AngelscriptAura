@@ -1,6 +1,5 @@
 
-struct FEffectProperties
-{
+struct FEffectProperties {
 	FGameplayEffectContextHandle EffectContextHandle;
 
 	UPROPERTY()

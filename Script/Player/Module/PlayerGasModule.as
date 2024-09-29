@@ -1,11 +1,9 @@
 
-class UPlayerGasModule : UPlayerModuleBase
-{
+class UPlayerGasModule : UPlayerModuleBase {
 	// private TMap<FName, float32> CachedAttributeValues;
 	// private UAuraAttributeSet AttributeSet;
 
-	void Init() override
-	{
+	void Init() override {
 		Super::Init();
 
 		AAuraCharacter Character = this.OwnerMgr.GetOwnerCharacter();
@@ -29,8 +27,7 @@ class UPlayerGasModule : UPlayerModuleBase
 		}
 	}
 
-	UAngelscriptAbilitySystemComponent GetASC()
-	{
+	UAngelscriptAbilitySystemComponent GetASC() {
 		return this.OwnerMgr.GetOwnerCharacter().AbilitySystem;
 	}
 

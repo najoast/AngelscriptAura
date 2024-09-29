@@ -1,6 +1,5 @@
 
-class UExecCalc_Damage : UGameplayEffectExecutionCalculation
-{
+class UExecCalc_Damage : UGameplayEffectExecutionCalculation {
 	// Attacker Attributes
 	FGameplayEffectAttributeCaptureDefinition SourceMinAttackPowerDef = UAngelscriptGameplayEffectUtils::CaptureGameplayAttribute(UAuraAttributeSet::StaticClass(), AuraAttributes::MinAttackPower, EGameplayEffectAttributeCaptureSource::Source, true);
 	FGameplayEffectAttributeCaptureDefinition SourceMaxAttackPowerDef = UAngelscriptGameplayEffectUtils::CaptureGameplayAttribute(UAuraAttributeSet::StaticClass(), AuraAttributes::MaxAttackPower, EGameplayEffectAttributeCaptureSource::Source, true);
@@ -27,8 +26,7 @@ class UExecCalc_Damage : UGameplayEffectExecutionCalculation
 	default RelevantAttributesToCapture.Add(TargetMagicResistanceDef);
 
 	UFUNCTION(BlueprintOverride)
-	void Execute(FGameplayEffectCustomExecutionParameters ExecutionParams, FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
-	{
+	void Execute(FGameplayEffectCustomExecutionParameters ExecutionParams, FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const {
 		UAbilitySystemComponent SourceASC = ExecutionParams.GetSourceAbilitySystemComponent();
 		UAbilitySystemComponent TargetASC = ExecutionParams.GetTargetAbilitySystemComponent();
 
@@ -81,8 +79,7 @@ class UExecCalc_Damage : UGameplayEffectExecutionCalculation
 		SetDamage(OutExecutionOutput, Damage, DamageType);
 	}
 
-	float32 GetAttributeMagnitude(FGameplayEffectCustomExecutionParameters ExecutionParams, FGameplayEffectAttributeCaptureDefinition CaptureDef, FGameplayEffectExecutionParameters EvalParams) const
-	{
+	float32 GetAttributeMagnitude(FGameplayEffectCustomExecutionParameters ExecutionParams, FGameplayEffectAttributeCaptureDefinition CaptureDef, FGameplayEffectExecutionParameters EvalParams) const {
 		float32 AttributeMagnitude = 0;
 		if (ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(CaptureDef, EvalParams, AttributeMagnitude)) {
 			return AttributeMagnitude;
@@ -90,8 +87,7 @@ class UExecCalc_Damage : UGameplayEffectExecutionCalculation
 		return 0;
 	}
 
-	void SetDamage(FGameplayEffectCustomExecutionOutput& OutExecutionOutput, float32 Damage, EDamageType DamageType) const
-	{
+	void SetDamage(FGameplayEffectCustomExecutionOutput& OutExecutionOutput, float32 Damage, EDamageType DamageType) const {
 		FGameplayAttribute IncomingDamageAttribute = UAngelscriptAttributeSet::GetGameplayAttribute(UAuraAttributeSet::StaticClass(), AuraAttributes::IncomingDamage);
 		FGameplayModifierEvaluatedData EvaluatedData;
 		EvaluatedData.SetAttribute(IncomingDamageAttribute);

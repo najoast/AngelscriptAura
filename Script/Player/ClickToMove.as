@@ -1,7 +1,6 @@
 
 // This class provides mouse click movement function.
-class UClickToMove : UObject
-{
+class UClickToMove : UObject {
 	AAuraPlayerController OwnerController;
 
 	// Movement Variables
@@ -13,23 +12,19 @@ class UClickToMove : UObject
 	private bool bAutoRunning = false;
 
 	// Functions
-	void Ctor(AAuraPlayerController InOwnerController)
-	{
+	void Ctor(AAuraPlayerController InOwnerController) {
 		OwnerController = InOwnerController;
 	}
 
-	void StopAutoRun()
-	{
+	void StopAutoRun() {
 		bAutoRunning = false;
 	}
 
-	void ClickPressed()
-	{
+	void ClickPressed() {
 		bAutoRunning = false;
 	}
 
-	void ClickHeld()
-	{
+	void ClickHeld() {
 		if (OwnerController.IsTargeting()) {
 			return;
 		}
@@ -47,8 +42,7 @@ class UClickToMove : UObject
 		}
 	}
 
-	void ClickReleased()
-	{
+	void ClickReleased() {
 		float ThisHeldTime = MouseHeldTime;
 		MouseHeldTime = 0.f;
 
@@ -79,8 +73,7 @@ class UClickToMove : UObject
 		}
 	}
 
-	void Tick()
-	{
+	void Tick() {
 		if (!bAutoRunning) {
 			return;
 		}

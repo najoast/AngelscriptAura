@@ -1,7 +1,6 @@
 // Character class config
 USTRUCT()
-struct FSDataCharacterClass
-{
+struct FSDataCharacterClass {
 	UPROPERTY()
 	ECharacterClass CharacterClass;
 

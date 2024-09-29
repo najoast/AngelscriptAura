@@ -1,19 +1,15 @@
 
-namespace SDataUtil
-{
-	USDataMgr GetSDataMgr()
-	{
+namespace SDataUtil {
+	USDataMgr GetSDataMgr() {
 		UAuraGameInstanceSubsystem Subsystem = UAuraGameInstanceSubsystem::Get();
 		return Subsystem.SDataMgr;
 	}
 
-	FSDataItem GetItem(EItemID ItemID)
-	{
+	FSDataItem GetItem(EItemID ItemID) {
 		return GetSDataMgr().ItemMap[ItemID];
 	}
 
-	TSubclassOf<UUserWidget> GetWidgetClass(FName WidgetClassName)
-	{
+	TSubclassOf<UUserWidget> GetWidgetClass(FName WidgetClassName) {
 		FSDataWidgetClass WidgetClass;
 		if (GetSDataMgr().SDataWidgetClass.FindRow(WidgetClassName, WidgetClass))
 		{

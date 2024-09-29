@@ -1,6 +1,5 @@
 
-class AAuraProjectile : AActor
-{
+class AAuraProjectile : AActor {
 	// -------------------- Properties --------------------
 	default bReplicates = true;
 
@@ -42,24 +41,21 @@ class AAuraProjectile : AActor
 
 	// -------------------- Functions --------------------
 	UFUNCTION(BlueprintOverride)
-	void EndPlay(EEndPlayReason EndPlayReason)
-	{
+	void EndPlay(EEndPlayReason EndPlayReason) {
 		if (LoopingSoundComponent != nullptr) {
 			LoopingSoundComponent.Stop();
 		}
 	}
 
 	UFUNCTION(BlueprintOverride)
-	void BeginPlay()
-	{
+	void BeginPlay() {
 		LoopingSoundComponent = Gameplay::SpawnSoundAttached(LoopingSound, GetRootComponent());
 		check(LoopingSoundComponent != nullptr);
 		SetLifeSpan(AuraConst::ProjectileLifeSpan);
 	}
 
 	UFUNCTION(BlueprintOverride)
-	void ActorBeginOverlap(AActor OtherActor)
-	{
+	void ActorBeginOverlap(AActor OtherActor) {
 		// Print("Overlapping with: " + OtherActor.Name);
 		Gameplay::PlaySoundAtLocation(ImpactSound, GetActorLocation(), GetActorRotation());
 		Niagara::SpawnSystemAtLocation(ImpactEffect, GetActorLocation(), GetActorRotation());

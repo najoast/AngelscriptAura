@@ -1,5 +1,4 @@
-class UAUW_TextValueRow : UAuraUserWidget
-{
+class UAUW_TextValueRow : UAuraUserWidget {
 	UPROPERTY(BindWidget)
 	UTextBlock Text_Text;
 

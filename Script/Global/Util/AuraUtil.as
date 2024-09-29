@@ -1,25 +1,20 @@
 
-namespace AuraUtil
-{
-	UAuraGameInstanceSubsystem GameInstance()
-	{
+namespace AuraUtil {
+	UAuraGameInstanceSubsystem GameInstance() {
 		return UAuraGameInstanceSubsystem::Get();
 	}
 
-	USDataMgr GetSDataMgr()
-	{
+	USDataMgr GetSDataMgr() {
 		return GameInstance().SDataMgr;
 	}
 
-	UGasModule GetCharacterGasModule(AAuraCharacterBase Character)
-	{
+	UGasModule GetCharacterGasModule(AAuraCharacterBase Character) {
 		return Character.GasModule;
 		// return Cast<UPlayerGasModule>(Character.PlayerModuleMgr.GetPlayerModule(EPlayerModule::Gas));
 	}
 
 	// 使 PrimitiveComponent 模拟 Ragdoll 行为
-	void RagdollComponent(UPrimitiveComponent Component)
-	{
+	void RagdollComponent(UPrimitiveComponent Component) {
 		Component.SetSimulatePhysics(true);
 		Component.SetEnableGravity(true);
 		Component.SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);

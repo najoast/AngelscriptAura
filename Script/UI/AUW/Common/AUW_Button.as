@@ -1,6 +1,5 @@
 
-class UAUW_Button : UAuraUserWidget
-{
+class UAUW_Button : UAuraUserWidget {
 	UPROPERTY(BindWidget)
 	UButton Button;
 

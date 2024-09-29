@@ -1,6 +1,5 @@
 USTRUCT()
-struct FSDataInput
-{
+struct FSDataInput {
 	UPROPERTY()
 	UInputAction InputAction;
 

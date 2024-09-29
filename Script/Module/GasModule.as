@@ -1,6 +1,5 @@
 
-class UGasModule : UObject
-{
+class UGasModule : UObject {
 	// -------------------- Varibles --------------------
 	AAuraCharacterBase OwnerCharacter;
 
@@ -8,8 +7,7 @@ class UGasModule : UObject
 	private UAuraAttributeSet AttributeSet;
 
 	// -------------------- Functions --------------------
-	void Init(AAuraCharacterBase InOwnerCharacter)
-	{
+	void Init(AAuraCharacterBase InOwnerCharacter) {
 		OwnerCharacter = InOwnerCharacter;
 
 		UAngelscriptAbilitySystemComponent ASC = OwnerCharacter.AbilitySystem;
@@ -20,14 +18,12 @@ class UGasModule : UObject
 		ASC.InitAbilityActorInfo(OwnerCharacter, OwnerCharacter);
 	}
 
-	UAngelscriptAbilitySystemComponent GetASC()
-	{
+	UAngelscriptAbilitySystemComponent GetASC() {
 		return OwnerCharacter.AbilitySystem;
 	}
 
 	UFUNCTION()
-	void OnAttributeSetRegistered(UAngelscriptAttributeSet NewAttributeSet)
-	{
+	void OnAttributeSetRegistered(UAngelscriptAttributeSet NewAttributeSet) {
 		UAuraAttributeSet AuraAttributeSet = Cast<UAuraAttributeSet>(NewAttributeSet);
 		if (AuraAttributeSet == nullptr) {
 			Print(f"OnAttributeSetRegistered {NewAttributeSet.Name} is not UAuraAttributeSet");
@@ -53,14 +49,12 @@ class UGasModule : UObject
 	}
 
 	UFUNCTION()
-	private void OnAttributeChanged(const FAngelscriptModifiedAttribute&in AttributeChangeData)
-	{
+	private void OnAttributeChanged(const FAngelscriptModifiedAttribute&in AttributeChangeData) {
 		CachedAttributeValues.Add(AttributeChangeData.Name, AttributeChangeData.NewValue);
 		OwnerCharacter.OnAttributeChanged(AttributeChangeData);
 	}
 
-	float32 GetAttributeValue(FName AttributeName)
-	{
+	float32 GetAttributeValue(FName AttributeName) {
 		if (!CachedAttributeValues.Contains(AttributeName)) {
 			CachedAttributeValues.Add(AttributeName, AttributeSet.GetAttribute(AttributeName).GetCurrentValue());
 		}

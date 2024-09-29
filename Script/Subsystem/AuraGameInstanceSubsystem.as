@@ -3,15 +3,13 @@ Usage:
 	AuraUtil::GameInstance().SDataMgr.
 */
 
-class UAuraGameInstanceSubsystem : UScriptGameInstanceSubsystem
-{
+class UAuraGameInstanceSubsystem : UScriptGameInstanceSubsystem {
 	USDataMgr SDataMgr;
 	UAuraEventMgr EventMgr;
 	UTickerMgr TickerMgr;
 
 	UFUNCTION(BlueprintOverride)
-	void Initialize()
-	{
+	void Initialize() {
 		SDataMgr = Cast<USDataMgr>(NewObject(this, USDataMgr));
 		EventMgr = Cast<UAuraEventMgr>(NewObject(this, UAuraEventMgr));
 		TickerMgr = Cast<UTickerMgr>(NewObject(this, UTickerMgr));
@@ -21,8 +19,7 @@ class UAuraGameInstanceSubsystem : UScriptGameInstanceSubsystem
 	}
 
 	UFUNCTION(BlueprintOverride)
-	void Tick(float DeltaTime)
-	{
+	void Tick(float DeltaTime) {
 		TickerMgr.Tick(DeltaTime);
 	}
 }

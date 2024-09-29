@@ -7,8 +7,7 @@ class UAAT_TargetDataUnderMouse : UAngelscriptAbilityTask
 	FMouseTargetDataSignature OnMouseTargetData;
 
 	UFUNCTION(BlueprintOverride)
-	void Activate()
-	{
+	void Activate() {
 		UAngelscriptAbilitySystemComponent ASC = Cast<UAngelscriptAbilitySystemComponent>(GetAbilitySystemComponent());
 		if (ASC == nullptr) {
 			return;

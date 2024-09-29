@@ -1,7 +1,6 @@
 
 // MaxHealth = Vitality * 20
-class UMMC_Warrior_MaxHealth : UGameplayModMagnitudeCalculation
-{
+class UMMC_Warrior_MaxHealth : UGameplayModMagnitudeCalculation {
 	FGameplayEffectAttributeCaptureDefinition VitalityCaptureDefinition = UAngelscriptGameplayEffectUtils::CaptureGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Vitality", EGameplayEffectAttributeCaptureSource::Target, false);
 	FGameplayAttribute VitalityAttribute;
 
@@ -9,8 +8,7 @@ class UMMC_Warrior_MaxHealth : UGameplayModMagnitudeCalculation
 	default VitalityAttribute = UAngelscriptAttributeSet::GetGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Vitality");
 
 	UFUNCTION(BlueprintOverride)
-	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const
-	{
+	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const {
 		FGameplayTagContainer SourceTags = Spec.CapturedSourceTags.AggregatedTags;
 		FGameplayTagContainer TargetTags = Spec.CapturedTargetTags.AggregatedTags;
 		float32 Vitality = GetCapturedAttributeMagnitude(Spec, VitalityAttribute, SourceTags, TargetTags);
@@ -19,8 +17,7 @@ class UMMC_Warrior_MaxHealth : UGameplayModMagnitudeCalculation
 }
 
 // MaxMana = Intelligence * 5
-class UMMC_Warrior_MaxMana : UGameplayModMagnitudeCalculation
-{
+class UMMC_Warrior_MaxMana : UGameplayModMagnitudeCalculation {
 	FGameplayEffectAttributeCaptureDefinition IntelligenceCaptureDefinition = UAngelscriptGameplayEffectUtils::CaptureGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Intelligence", EGameplayEffectAttributeCaptureSource::Target, false);
 	FGameplayAttribute IntelligenceAttribute;
 
@@ -28,8 +25,7 @@ class UMMC_Warrior_MaxMana : UGameplayModMagnitudeCalculation
 	default IntelligenceAttribute = UAngelscriptAttributeSet::GetGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Intelligence");
 
 	UFUNCTION(BlueprintOverride)
-	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const
-	{
+	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const {
 		FGameplayTagContainer SourceTags = Spec.CapturedSourceTags.AggregatedTags;
 		FGameplayTagContainer TargetTags = Spec.CapturedTargetTags.AggregatedTags;
 		float32 Intelligence = GetCapturedAttributeMagnitude(Spec, IntelligenceAttribute, SourceTags, TargetTags);
@@ -38,8 +34,7 @@ class UMMC_Warrior_MaxMana : UGameplayModMagnitudeCalculation
 }
 
 // Health Regen = Vitality * 0.5
-class UMMC_Warrior_HealthRegen : UGameplayModMagnitudeCalculation
-{
+class UMMC_Warrior_HealthRegen : UGameplayModMagnitudeCalculation {
 	FGameplayEffectAttributeCaptureDefinition VitalityCaptureDefinition = UAngelscriptGameplayEffectUtils::CaptureGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Vitality", EGameplayEffectAttributeCaptureSource::Target, false);
 	FGameplayAttribute VitalityAttribute;
 
@@ -47,8 +42,7 @@ class UMMC_Warrior_HealthRegen : UGameplayModMagnitudeCalculation
 	default VitalityAttribute = UAngelscriptAttributeSet::GetGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Vitality");
 
 	UFUNCTION(BlueprintOverride)
-	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const
-	{
+	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const {
 		FGameplayTagContainer SourceTags = Spec.CapturedSourceTags.AggregatedTags;
 		FGameplayTagContainer TargetTags = Spec.CapturedTargetTags.AggregatedTags;
 		float32 Vitality = GetCapturedAttributeMagnitude(Spec, VitalityAttribute, SourceTags, TargetTags);
@@ -57,8 +51,7 @@ class UMMC_Warrior_HealthRegen : UGameplayModMagnitudeCalculation
 }
 
 // Mana Regen = Intelligence * 0.1
-class UMMC_Warrior_ManaRegen : UGameplayModMagnitudeCalculation
-{
+class UMMC_Warrior_ManaRegen : UGameplayModMagnitudeCalculation {
 	FGameplayEffectAttributeCaptureDefinition IntelligenceCaptureDefinition = UAngelscriptGameplayEffectUtils::CaptureGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Intelligence", EGameplayEffectAttributeCaptureSource::Target, false);
 	FGameplayAttribute IntelligenceAttribute;
 
@@ -66,8 +59,7 @@ class UMMC_Warrior_ManaRegen : UGameplayModMagnitudeCalculation
 	default IntelligenceAttribute = UAngelscriptAttributeSet::GetGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Intelligence");
 
 	UFUNCTION(BlueprintOverride)
-	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const
-	{
+	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const {
 		FGameplayTagContainer SourceTags = Spec.CapturedSourceTags.AggregatedTags;
 		FGameplayTagContainer TargetTags = Spec.CapturedTargetTags.AggregatedTags;
 		float32 Intelligence = GetCapturedAttributeMagnitude(Spec, IntelligenceAttribute, SourceTags, TargetTags);
@@ -76,8 +68,7 @@ class UMMC_Warrior_ManaRegen : UGameplayModMagnitudeCalculation
 }
 
 // Attack Power = Strength * 2 + Dexterity * 0.5
-class UMMC_Warrior_AttackPower : UGameplayModMagnitudeCalculation
-{
+class UMMC_Warrior_AttackPower : UGameplayModMagnitudeCalculation {
 	FGameplayEffectAttributeCaptureDefinition StrengthCaptureDefinition = UAngelscriptGameplayEffectUtils::CaptureGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Strength", EGameplayEffectAttributeCaptureSource::Target, false);
 	FGameplayEffectAttributeCaptureDefinition DexterityCaptureDefinition = UAngelscriptGameplayEffectUtils::CaptureGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Dexterity", EGameplayEffectAttributeCaptureSource::Target, false);
 	FGameplayAttribute StrengthAttribute;
@@ -89,8 +80,7 @@ class UMMC_Warrior_AttackPower : UGameplayModMagnitudeCalculation
 	default DexterityAttribute = UAngelscriptAttributeSet::GetGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Dexterity");
 
 	UFUNCTION(BlueprintOverride)
-	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const
-	{
+	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const {
 		FGameplayTagContainer SourceTags = Spec.CapturedSourceTags.AggregatedTags;
 		FGameplayTagContainer TargetTags = Spec.CapturedTargetTags.AggregatedTags;
 		float32 Strength = GetCapturedAttributeMagnitude(Spec, StrengthAttribute, SourceTags, TargetTags);
@@ -100,8 +90,7 @@ class UMMC_Warrior_AttackPower : UGameplayModMagnitudeCalculation
 }
 
 // Magic Power = Intelligence * 1.5
-class UMMC_Warrior_MagicPower : UGameplayModMagnitudeCalculation
-{
+class UMMC_Warrior_MagicPower : UGameplayModMagnitudeCalculation {
 	FGameplayEffectAttributeCaptureDefinition IntelligenceCaptureDefinition = UAngelscriptGameplayEffectUtils::CaptureGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Intelligence", EGameplayEffectAttributeCaptureSource::Target, false);
 	FGameplayAttribute IntelligenceAttribute;
 
@@ -109,8 +98,7 @@ class UMMC_Warrior_MagicPower : UGameplayModMagnitudeCalculation
 	default IntelligenceAttribute = UAngelscriptAttributeSet::GetGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Intelligence");
 
 	UFUNCTION(BlueprintOverride)
-	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const
-	{
+	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const {
 		FGameplayTagContainer SourceTags = Spec.CapturedSourceTags.AggregatedTags;
 		FGameplayTagContainer TargetTags = Spec.CapturedTargetTags.AggregatedTags;
 		float32 Intelligence = GetCapturedAttributeMagnitude(Spec, IntelligenceAttribute, SourceTags, TargetTags);
@@ -119,8 +107,7 @@ class UMMC_Warrior_MagicPower : UGameplayModMagnitudeCalculation
 }
 
 // Defense = Strength * 1.5 + Vitality * 0.5
-class UMMC_Warrior_Defense : UGameplayModMagnitudeCalculation
-{
+class UMMC_Warrior_Defense : UGameplayModMagnitudeCalculation {
 	FGameplayEffectAttributeCaptureDefinition StrengthCaptureDefinition = UAngelscriptGameplayEffectUtils::CaptureGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Strength", EGameplayEffectAttributeCaptureSource::Target, false);
 	FGameplayEffectAttributeCaptureDefinition VitalityCaptureDefinition = UAngelscriptGameplayEffectUtils::CaptureGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Vitality", EGameplayEffectAttributeCaptureSource::Target, false);
 	FGameplayAttribute StrengthAttribute;
@@ -132,8 +119,7 @@ class UMMC_Warrior_Defense : UGameplayModMagnitudeCalculation
 	default VitalityAttribute = UAngelscriptAttributeSet::GetGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Vitality");
 
 	UFUNCTION(BlueprintOverride)
-	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const
-	{
+	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const {
 		FGameplayTagContainer SourceTags = Spec.CapturedSourceTags.AggregatedTags;
 		FGameplayTagContainer TargetTags = Spec.CapturedTargetTags.AggregatedTags;
 		float32 Strength = GetCapturedAttributeMagnitude(Spec, StrengthAttribute, SourceTags, TargetTags);
@@ -143,8 +129,7 @@ class UMMC_Warrior_Defense : UGameplayModMagnitudeCalculation
 }
 
 // Accuracy = 0.5 + (Dexterity / 200)
-class UMMC_Warrior_Accuracy : UGameplayModMagnitudeCalculation
-{
+class UMMC_Warrior_Accuracy : UGameplayModMagnitudeCalculation {
 	FGameplayEffectAttributeCaptureDefinition DexterityCaptureDefinition = UAngelscriptGameplayEffectUtils::CaptureGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Dexterity", EGameplayEffectAttributeCaptureSource::Target, false);
 	FGameplayAttribute DexterityAttribute;
 
@@ -152,8 +137,7 @@ class UMMC_Warrior_Accuracy : UGameplayModMagnitudeCalculation
 	default DexterityAttribute = UAngelscriptAttributeSet::GetGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Dexterity");
 
 	UFUNCTION(BlueprintOverride)
-	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const
-	{
+	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const {
 		FGameplayTagContainer SourceTags = Spec.CapturedSourceTags.AggregatedTags;
 		FGameplayTagContainer TargetTags = Spec.CapturedTargetTags.AggregatedTags;
 		float32 Dexterity = GetCapturedAttributeMagnitude(Spec, DexterityAttribute, SourceTags, TargetTags);
@@ -162,8 +146,7 @@ class UMMC_Warrior_Accuracy : UGameplayModMagnitudeCalculation
 }
 
 // Evasion = 0.2 + (Dexterity / 200)
-class UMMC_Warrior_Evasion : UGameplayModMagnitudeCalculation
-{
+class UMMC_Warrior_Evasion : UGameplayModMagnitudeCalculation {
 	FGameplayEffectAttributeCaptureDefinition DexterityCaptureDefinition = UAngelscriptGameplayEffectUtils::CaptureGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Dexterity", EGameplayEffectAttributeCaptureSource::Target, false);
 	FGameplayAttribute DexterityAttribute;
 
@@ -171,8 +154,7 @@ class UMMC_Warrior_Evasion : UGameplayModMagnitudeCalculation
 	default DexterityAttribute = UAngelscriptAttributeSet::GetGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Dexterity");
 
 	UFUNCTION(BlueprintOverride)
-	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const
-	{
+	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const {
 		FGameplayTagContainer SourceTags = Spec.CapturedSourceTags.AggregatedTags;
 		FGameplayTagContainer TargetTags = Spec.CapturedTargetTags.AggregatedTags;
 		float32 Dexterity = GetCapturedAttributeMagnitude(Spec, DexterityAttribute, SourceTags, TargetTags);
@@ -181,8 +163,7 @@ class UMMC_Warrior_Evasion : UGameplayModMagnitudeCalculation
 }
 
 // Critical Chance = 0.05 + (Dexterity / 400) * 0.25
-class UMMC_Warrior_CriticalChance : UGameplayModMagnitudeCalculation
-{
+class UMMC_Warrior_CriticalChance : UGameplayModMagnitudeCalculation {
 	FGameplayEffectAttributeCaptureDefinition DexterityCaptureDefinition = UAngelscriptGameplayEffectUtils::CaptureGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Dexterity", EGameplayEffectAttributeCaptureSource::Target, false);
 	FGameplayAttribute DexterityAttribute;
 
@@ -190,8 +171,7 @@ class UMMC_Warrior_CriticalChance : UGameplayModMagnitudeCalculation
 	default DexterityAttribute = UAngelscriptAttributeSet::GetGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Dexterity");
 
 	UFUNCTION(BlueprintOverride)
-	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const
-	{
+	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const {
 		FGameplayTagContainer SourceTags = Spec.CapturedSourceTags.AggregatedTags;
 		FGameplayTagContainer TargetTags = Spec.CapturedTargetTags.AggregatedTags;
 		float32 Dexterity = GetCapturedAttributeMagnitude(Spec, DexterityAttribute, SourceTags, TargetTags);
@@ -200,8 +180,7 @@ class UMMC_Warrior_CriticalChance : UGameplayModMagnitudeCalculation
 }
 
 // Critical Damage = 120% + (Min(Dexterity,100) / 100) * 80%
-class UMMC_Warrior_CriticalDamage : UGameplayModMagnitudeCalculation
-{
+class UMMC_Warrior_CriticalDamage : UGameplayModMagnitudeCalculation {
 	FGameplayEffectAttributeCaptureDefinition DexterityCaptureDefinition = UAngelscriptGameplayEffectUtils::CaptureGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Dexterity", EGameplayEffectAttributeCaptureSource::Target, false);
 	FGameplayAttribute DexterityAttribute;
 
@@ -209,8 +188,7 @@ class UMMC_Warrior_CriticalDamage : UGameplayModMagnitudeCalculation
 	default DexterityAttribute = UAngelscriptAttributeSet::GetGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Dexterity");
 
 	UFUNCTION(BlueprintOverride)
-	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const
-	{
+	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const {
 		FGameplayTagContainer SourceTags = Spec.CapturedSourceTags.AggregatedTags;
 		FGameplayTagContainer TargetTags = Spec.CapturedTargetTags.AggregatedTags;
 		float32 Dexterity = GetCapturedAttributeMagnitude(Spec, DexterityAttribute, SourceTags, TargetTags);
@@ -219,8 +197,7 @@ class UMMC_Warrior_CriticalDamage : UGameplayModMagnitudeCalculation
 }
 
 // Magic Resistance = Intelligence * 0.5
-class UMMC_Warrior_MagicResistance : UGameplayModMagnitudeCalculation
-{
+class UMMC_Warrior_MagicResistance : UGameplayModMagnitudeCalculation {
 	FGameplayEffectAttributeCaptureDefinition IntelligenceCaptureDefinition = UAngelscriptGameplayEffectUtils::CaptureGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Intelligence", EGameplayEffectAttributeCaptureSource::Target, false);
 	FGameplayAttribute IntelligenceAttribute;
 
@@ -228,8 +205,7 @@ class UMMC_Warrior_MagicResistance : UGameplayModMagnitudeCalculation
 	default IntelligenceAttribute = UAngelscriptAttributeSet::GetGameplayAttribute(UAuraAttributeSet::StaticClass(), n"Intelligence");
 
 	UFUNCTION(BlueprintOverride)
-	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const
-	{
+	float32 CalculateBaseMagnitude(FGameplayEffectSpec Spec) const {
 		FGameplayTagContainer SourceTags = Spec.CapturedSourceTags.AggregatedTags;
 		FGameplayTagContainer TargetTags = Spec.CapturedTargetTags.AggregatedTags;
 		float32 Intelligence = GetCapturedAttributeMagnitude(Spec, IntelligenceAttribute, SourceTags, TargetTags);

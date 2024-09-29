@@ -1,12 +1,10 @@
 
-enum EPlayerModule
-{
+enum EPlayerModule {
 	None = 0,
 	Gas  = 1,
 }
 
-enum EItemID
-{
+enum EItemID {
 	None          = 0,
 	HealthPotion  = 1,
 	ManaPotion    = 2,
@@ -14,24 +12,21 @@ enum EItemID
 	ManaCrystal   = 4,
 }
 
-enum ECharacterClass
-{
+enum ECharacterClass {
 	None    = 0,
 	Warrior = 1,
 	Archer  = 2,
 	Mage    = 3,
 }
 
-enum ETickerFuncType
-{
+enum ETickerFuncType {
 	None = 0,
 
 	BodyDissolve   = 1,
 	WeaponDissolve = 2,
 }
 
-enum EDamageType
-{
+enum EDamageType {
 	None = 0,
 	Miss = 1,
 	Lucky = 2,
@@ -39,7 +34,6 @@ enum EDamageType
 }
 
 // Enum Alias
-namespace AuraEnum
-{
+namespace AuraEnum {
 	const ECollisionChannel ECC_Projectile = ECollisionChannel::ECC_GameTraceChannel1;
 }

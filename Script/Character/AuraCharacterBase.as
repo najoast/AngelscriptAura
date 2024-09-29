@@ -1,6 +1,5 @@
 
-class AAuraCharacterBase : AAngelscriptGASCharacter
-{
+class AAuraCharacterBase : AAngelscriptGASCharacter {
 	// -------------------- Const --------------------
 	const float32 DISSOLVE_TIME = 2;
 	const float32 RAGDOLL_TIME = 1.5;
@@ -34,8 +33,7 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 
 	// -------------------- Functions --------------------
 	UFUNCTION(BlueprintOverride)
-	void BeginPlay()
-	{
+	void BeginPlay() {
 		check(CharacterID != 0);
 		auto CharacterMap = AuraUtil::GetSDataMgr().CharacterMap;
 		check(CharacterMap.Contains(CharacterID));
@@ -58,17 +56,14 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		GasUtil::GiveAbility(this, UAGA_HitReact);
 	}
 
-	FVector GetWeaponSocketLocation()
-	{
+	FVector GetWeaponSocketLocation() {
 		return Weapon.GetSocketLocation(WeaponTipSocketName);
 	}
 
-	void OnAttributeChanged(const FAngelscriptModifiedAttribute&in AttributeChangeData)
-	{// virtual empty
+	void OnAttributeChanged(const FAngelscriptModifiedAttribute&in AttributeChangeData) {// virtual empty
 	}
 
-	UAnimMontage GetHitReactMontage()
-	{
+	UAnimMontage GetHitReactMontage() {
 		FSDataCharacter SDataCharacter = AuraUtil::GetSDataMgr().CharacterMap[CharacterID];
 		return SDataCharacter.HitReactMontage;
 		// if (IsDead()) {
@@ -78,8 +73,7 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		// }
 	}
 
-	void BeHit(float32 Damage, EDamageType DamageType)
-	{
+	void BeHit(float32 Damage, EDamageType DamageType) {
 		if (DamageType == EDamageType::Miss) {
 			ShowFloatText(FText::FromString("Miss"), FLinearColor::Gray);
 			return;
@@ -102,8 +96,7 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		TryPlayHitReactMontage();
 	}
 
-	bool TryPlayHitReactMontage()
-	{
+	bool TryPlayHitReactMontage() {
 		FGameplayAbilitySpec OutSpec;
 		if (AbilitySystem.FindAbilitySpecFromClass(UAGA_HitReact, OutSpec)) {
 			if (!OutSpec.IsActive()) {
@@ -113,13 +106,11 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		return false;
 	}
 
-	bool IsDead()
-	{
+	bool IsDead() {
 		return GasModule.GetAttributeValue(AuraAttributes::Health) <= 0;
 	}
 
-	void Die()
-	{
+	void Die() {
 		// Ragdoll Die
 		Weapon.DetachFromComponent(EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, EDetachmentRule::KeepWorld, true);
 		AuraUtil::RagdollComponent(Weapon);
@@ -133,8 +124,7 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 	}
 
 	UFUNCTION()
-	private void Dissolve()
-	{
+	private void Dissolve() {
 		FSDataCharacter SDataCharacter = AuraUtil::GetSDataMgr().CharacterMap[CharacterID];
 		if (System::IsValid(SDataCharacter.DissolveMaterial)) {
 			UMaterialInstanceDynamic MID_Dissolve = Material::CreateDynamicMaterialInstance(SDataCharacter.DissolveMaterial);
@@ -151,8 +141,7 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 	}
 
 	UFUNCTION()
-	private void DissolveTick(float DeltaTime, float Percent, ETickerFuncType FuncType, TArray<UObject> Params)
-	{
+	private void DissolveTick(float DeltaTime, float Percent, ETickerFuncType FuncType, TArray<UObject> Params) {
 		if (FuncType == ETickerFuncType::BodyDissolve) {
 			Mesh.SetScalarParameterValueOnMaterials(n"Dissolve", Percent);
 		} else if (FuncType == ETickerFuncType::WeaponDissolve) {
@@ -160,8 +149,7 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		}
 	}
 
-	void ShowFloatText(FText Text, FLinearColor Color = FLinearColor::White)
-	{
+	void ShowFloatText(FText Text, FLinearColor Color = FLinearColor::White) {
 		UWidgetComponent FloatTextComponent = this.CreateComponent(DamageComponentClass);
 		UAUW_FloatText AUW_FloatText = Cast<UAUW_FloatText>(FloatTextComponent.GetWidget());
 		if (AUW_FloatText == nullptr) {
@@ -177,14 +165,12 @@ class AAuraCharacterBase : AAngelscriptGASCharacter
 		FloatTextComponent.DetachFromComponent(EDetachmentRule::KeepWorld);
 	}
 
-	bool CanRangeAttack()
-	{
+	bool CanRangeAttack() {
 		FSDataCharacter SDataCharacter = AuraUtil::GetSDataMgr().CharacterMap[CharacterID];
 		return SDataCharacter.CharacterClass != ECharacterClass::Warrior;
 	}
 
-	void SetFacingTarget(const FVector& TargetLocation)
-	{
+	void SetFacingTarget(const FVector& TargetLocation) {
 		MotionWarping.AddOrUpdateWarpTargetFromLocation(n"FacingTarget", TargetLocation);
 	}
 }

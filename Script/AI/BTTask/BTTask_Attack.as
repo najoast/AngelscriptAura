@@ -4,13 +4,11 @@ class UBTTask_Attack : UBTTask_BlueprintBase
 	default NodeName = "TestAttack";
 
 	UFUNCTION(BlueprintOverride)
-	void ExecuteAI(AAIController OwnerController, APawn ControlledPawn)
-	{
+	void ExecuteAI(AAIController OwnerController, APawn ControlledPawn) {
 		FinishExecute(ExectueImpl(OwnerController, ControlledPawn));
 	}
 
-	bool ExectueImpl(AAIController OwnerController, APawn ControlledPawn)
-	{
+	bool ExectueImpl(AAIController OwnerController, APawn ControlledPawn) {
 		UAbilitySystemComponent ASC = AbilitySystem::GetAbilitySystemComponent(ControlledPawn);
 		if (ASC == nullptr) {
 			return false;
