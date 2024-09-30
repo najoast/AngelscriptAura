@@ -8,6 +8,8 @@ class AAuraCharacter : AAuraCharacterBase {
 	UPROPERTY(DefaultComponent, Attach = "SpringArm")
 	UCameraComponent Camera;
 
+	default CapsuleComponent.SetCollisionResponseToChannel(AuraEnum::ECC_EnemyProjectile, ECollisionResponse::ECR_Overlap);
+
 	// --------------------------------------
 	UPlayerModuleMgr PlayerModuleMgr;
 

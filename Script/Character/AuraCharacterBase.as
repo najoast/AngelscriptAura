@@ -7,6 +7,7 @@ class AAuraCharacterBase : AAngelscriptGASCharacter {
 	// -------------------- Properties --------------------
 	default bReplicates = true;
 	default CapsuleComponent.SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
+
 	// Do not set collision on mesh, keep default collision. (Only use CapsuleComponent for collision)
 	// default Mesh.SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	// default Mesh.SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
@@ -30,7 +31,6 @@ class AAuraCharacterBase : AAngelscriptGASCharacter {
 
 	// -------------------- Varibles --------------------
 	UGasModule GasModule;
-	FVector AttackTargetLocation;
 	AActor AttackTarget;
 
 	// -------------------- Functions --------------------
@@ -174,18 +174,5 @@ class AAuraCharacterBase : AAngelscriptGASCharacter {
 
 	void SetFacingTarget(const FVector& TargetLocation) {
 		MotionWarping.AddOrUpdateWarpTargetFromLocation(n"FacingTarget", TargetLocation);
-	}
-
-	const FVector& GetAttackTargetLocation() {
-		return AttackTargetLocation;
-	}
-
-	void SetAttackTarget(AActor Target) {
-		AttackTarget = Target;
-		AttackTargetLocation = Target==nullptr ? FVector::ZeroVector : Target.GetActorLocation();
-	}
-
-	AActor GetAttackTarget() {
-		return AttackTarget;
 	}
 }

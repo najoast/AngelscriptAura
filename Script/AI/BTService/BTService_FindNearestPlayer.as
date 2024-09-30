@@ -26,6 +26,12 @@ class UBTService_FindNearestPlayer : UBTService_BlueprintBase {
 	default DistanceToTarget.AllowedTypes.Add(FloatType);
 
 	// -------------------- Functions --------------------
+
+	UFUNCTION(BlueprintOverride)
+	void ActivationAI(AAIController OwnerController, APawn ControlledPawn) {
+		check(TargetToFollow.SelectedKeyName == AuraConst::AI_Blackboard_Key_TargetToFollow);
+	}
+
 	UFUNCTION(BlueprintOverride)
 	void TickAI(AAIController OwnerController, APawn ControlledPawn, float DeltaSeconds) {
 		// Print(f"{ControlledPawn.GetName()} is TickAI");
@@ -46,7 +52,6 @@ class UBTService_FindNearestPlayer : UBTService_BlueprintBase {
 
 		if (Players.Num() == 0) {
 			Print("No player found");
-			ControlledCharacter.SetAttackTarget(nullptr);
 			return;
 		}
 
@@ -69,8 +74,6 @@ class UBTService_FindNearestPlayer : UBTService_BlueprintBase {
 				}
 			}
 		}
-
-		ControlledCharacter.SetAttackTarget(NearestPlayer);
 
 		UBlackboardComponent BlackboardComponent = AIHelper::GetBlackboard(OwnerController);
 		BlackboardComponent.SetValueAsObject(TargetToFollow.SelectedKeyName, NearestPlayer);

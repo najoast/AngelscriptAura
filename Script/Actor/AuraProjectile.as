@@ -24,16 +24,16 @@ class AAuraProjectile : AActor {
 	default ProjectileMovement.MaxSpeed = AuraConst::ProjectileMaxSpeed;
 	default ProjectileMovement.ProjectileGravityScale = 0;
 
-	UPROPERTY()
+	UPROPERTY(Category = Aura)
 	UNiagaraSystem ImpactEffect;
 
-	UPROPERTY()
+	UPROPERTY(Category = Aura)
 	USoundBase ImpactSound;
 
-	UPROPERTY()
+	UPROPERTY(Category = Aura)
 	USoundBase LoopingSound;
 
-	UPROPERTY()
+	UPROPERTY(Category = Aura)
 	UAudioComponent LoopingSoundComponent;
 
 	// -------------------- Varibles --------------------

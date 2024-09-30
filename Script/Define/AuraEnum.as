@@ -36,4 +36,5 @@ enum EDamageType {
 // Enum Alias
 namespace AuraEnum {
 	const ECollisionChannel ECC_Projectile = ECollisionChannel::ECC_GameTraceChannel1;
+	const ECollisionChannel ECC_EnemyProjectile = ECollisionChannel::ECC_GameTraceChannel2;
 }

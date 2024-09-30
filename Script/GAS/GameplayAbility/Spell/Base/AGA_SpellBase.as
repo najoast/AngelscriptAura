@@ -7,8 +7,8 @@ class UAGA_SpellBase : UAuraGameplayAbility {
 	UPROPERTY()
 	FGameplayTag EventTag;
 
-	// UPROPERTY()
-	// bool bIsPlayerSpell = true;
+	UPROPERTY()
+	FVector TargetLocation;
 
 	UPROPERTY()
 	TSubclassOf<UGameplayEffect> DamageEffectClass;
@@ -25,18 +25,22 @@ class UAGA_SpellBase : UAuraGameplayAbility {
 		// MontagePlayTask.OnCompleted.AddUFunction(this, n"SpawnFireBoltProjectile");
 		MontagePlayTask.ReadyForActivation();
 
-		// AAuraCharacterBase OwnerCharacter = GetOwnerCharacter();
-		// AActor TargetActor = OwnerCharacter.GetAttackTarget();
-		AActor TargetActor = nullptr;
-		UAbilityTask_WaitGameplayEvent WaitGameplayEvent = AngelscriptAbilityTask::WaitGameplayEvent(this, EventTag, TargetActor);
+		UAbilityTask_WaitGameplayEvent WaitGameplayEvent = AngelscriptAbilityTask::WaitGameplayEvent(this, EventTag);
 		WaitGameplayEvent.EventReceived.AddUFunction(this, n"OnGameplayEventReceived");
 		WaitGameplayEvent.ReadyForActivation();
 
-		// if (bIsPlayerSpell) {
-		// 	UAAT_TargetDataUnderMouse TargetDataUnderMouse = Cast<UAAT_TargetDataUnderMouse>(UAngelscriptAbilityTask::CreateAbilityTask(UAAT_TargetDataUnderMouse, this));
-		// 	TargetDataUnderMouse.OnMouseTargetData.BindUFunction(this, n"OnMouseTargetData");
-		// 	TargetDataUnderMouse.ReadyForActivation();
-		// }
+		AActor AvatarActor = GetAvatarActorFromActorInfo();
+		if (AvatarActor.IsA(AAuraCharacter)) { // Player Character
+			UAAT_TargetDataUnderMouse TargetDataUnderMouse = Cast<UAAT_TargetDataUnderMouse>(UAngelscriptAbilityTask::CreateAbilityTask(UAAT_TargetDataUnderMouse, this));
+			TargetDataUnderMouse.OnMouseTargetData.BindUFunction(this, n"OnMouseTargetData");
+			TargetDataUnderMouse.ReadyForActivation();
+		} else { // Non-Player Character
+			UBlackboardComponent Blackboard = AIHelper::GetBlackboard(AvatarActor);
+			AActor TargetActor = Cast<AActor>(Blackboard.GetValueAsObject(AuraConst::AI_Blackboard_Key_TargetToFollow));
+			if (TargetActor != nullptr) {
+				TargetLocation = TargetActor.GetActorLocation();
+			}
+		}
 	}
 
 	UFUNCTION()
@@ -44,7 +48,6 @@ class UAGA_SpellBase : UAuraGameplayAbility {
 		AAuraCharacterBase OwnerCharacter = GetOwnerCharacter();
 		if (OwnerCharacter != nullptr) {
 			FVector SourceLocation = OwnerCharacter.GetWeaponSocketLocation();
-			const FVector& TargetLocation = OwnerCharacter.GetAttackTargetLocation();
 			FRotator Rotation = (TargetLocation - SourceLocation).Rotation();
 			Rotation.Pitch = 0.f;
 
@@ -61,8 +64,8 @@ class UAGA_SpellBase : UAuraGameplayAbility {
 		return false;
 	}
 
-	// UFUNCTION()
-	// private void OnMouseTargetData(const FVector& Data) {
-	// 	GetOwnerCharacter().SetAttackTargetLocation(Data);
-	// }
+	UFUNCTION()
+	private void OnMouseTargetData(const FVector& Data) {
+		TargetLocation = Data;
+	}
 }

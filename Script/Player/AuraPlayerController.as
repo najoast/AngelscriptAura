@@ -105,7 +105,6 @@ class AAuraPlayerController : APlayerController {
 			if (ThisEnemy != nullptr) {
 				ThisEnemy.Highlight();
 			}
-			OwnerCharacter.SetAttackTarget(ThisEnemy);
 		}
 	}
 
