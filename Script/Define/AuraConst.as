@@ -21,4 +21,5 @@ namespace AuraConst {
 	const float32 CritDamageMax = 2;
 	const int32 DamageTypeOffset = 10000000;
 	const float32 LuckyDamageRatio = 0.7; // 如果随机到伤害范围的前 X%，就算是幸运一击; 0.7 表示前 70%
+	const float32 MeleeAttackRange = 30;
 }
