@@ -13,7 +13,7 @@ class UAGA_MeleeAttack : UAGA_SpellBase {
 
 	bool CastSpell(FGameplayEventData Payload, AAuraCharacterBase OwnerCharacter, FVector SourceLocation, FRotator Rotation) override {
 		FVector AttackTargetLocation = OwnerCharacter.Weapon.GetSocketLocation(AuraConst::DefaultWeaponTipSocketName);
-		System::DrawDebugSphere(AttackTargetLocation, AuraConst::MeleeAttackRange, 12, FLinearColor::Black, 0.5);
+		// System::DrawDebugSphere(AttackTargetLocation, AuraConst::MeleeAttackRange, 12, FLinearColor::Black, 0.5);
 		
 		TArray<AActor> ActorsToIgnore;
 		ActorsToIgnore.Add(OwnerCharacter);
