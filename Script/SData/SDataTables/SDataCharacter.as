@@ -22,4 +22,7 @@ struct FSDataCharacter {
 
 	UPROPERTY()
 	UMaterialInstance WeaponDissolveMaterial;
+
+	UPROPERTY()
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 }

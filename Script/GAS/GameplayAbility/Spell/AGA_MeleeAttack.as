@@ -12,14 +12,16 @@ class UAGA_MeleeAttack : UAGA_SpellBase {
 	default MeleeAttackTypes.Add(EObjectTypeQuery::Pawn);
 
 	bool CastSpell(FGameplayEventData Payload, AAuraCharacterBase OwnerCharacter, FVector SourceLocation, FRotator Rotation) override {
-		FVector AttackTargetLocation = OwnerCharacter.Weapon.GetSocketLocation(AuraConst::DefaultWeaponTipSocketName);
+		FVector AttackTargetLocation = OwnerCharacter.GetSocketLocationByGameplayTag(GetCurrentEventTag());
 		// System::DrawDebugSphere(AttackTargetLocation, AuraConst::MeleeAttackRange, 12, FLinearColor::Black, 0.5);
 		
 		TArray<AActor> ActorsToIgnore;
 		ActorsToIgnore.Add(OwnerCharacter);
 
 		TArray<AActor> OutActors;
-		System::SphereOverlapActors(AttackTargetLocation, AuraConst::MeleeAttackRange, MeleeAttackTypes, AAuraCharacterBase::StaticClass(), ActorsToIgnore, OutActors);
+		if (!System::SphereOverlapActors(AttackTargetLocation, AuraConst::MeleeAttackRange, MeleeAttackTypes, AAuraCharacterBase::StaticClass(), ActorsToIgnore, OutActors)) {
+			return false;
+		}
 
 		for (AActor Actor : OutActors) {
 			AAuraCharacterBase TargetCharacter = Cast<AAuraCharacterBase>(Actor);

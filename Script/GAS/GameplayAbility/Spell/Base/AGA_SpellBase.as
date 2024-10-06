@@ -96,7 +96,7 @@ class UAGA_SpellBase : UAuraGameplayAbility {
 	protected void OnGameplayEventReceived(FGameplayEventData Payload) {
 		AAuraCharacterBase OwnerCharacter = GetOwnerCharacter();
 		if (OwnerCharacter != nullptr) {
-			FVector SourceLocation = OwnerCharacter.GetWeaponSocketLocation();
+			FVector SourceLocation = OwnerCharacter.GetSocketLocationByGameplayTag(GetCurrentEventTag());
 			FRotator Rotation = (TargetLocation - SourceLocation).Rotation();
 			Rotation.Pitch = 0.f;
 
@@ -116,5 +116,17 @@ class UAGA_SpellBase : UAuraGameplayAbility {
 	UFUNCTION()
 	private void OnMouseTargetData(const FVector& Data) {
 		TargetLocation = Data;
+	}
+
+	FVector GetAttackTargetLocation(AAuraCharacterBase OwnerCharacter) {
+		FGameplayTag CurrentEventTag = GetCurrentEventTag();
+		if (CurrentEventTag == GameplayTags::Montage_Attack_Weapon) {
+			return OwnerCharacter.Weapon.GetSocketLocation(AuraConst::SocketName_WeaponTip);
+		} else if (CurrentEventTag == GameplayTags::Montage_Attack_LeftHand) {
+			return OwnerCharacter.Mesh.GetSocketLocation(AuraConst::SocketName_LeftHand);
+		} else if (CurrentEventTag == GameplayTags::Montage_Attack_RightHand) {
+			return OwnerCharacter.Mesh.GetSocketLocation(AuraConst::SocketName_RightHand);
+		}
+		return FVector::ZeroVector;
 	}
 }

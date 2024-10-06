@@ -6,10 +6,10 @@ class AAuraCharacterBase : AAngelscriptGASCharacter {
 
 	// -------------------- Properties --------------------
 	default bReplicates = true;
+	default Mesh.SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	default CapsuleComponent.SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
 	// Do not set collision on mesh, keep default collision. (Only use CapsuleComponent for collision)
-	// default Mesh.SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	// default Mesh.SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
 	UPROPERTY(DefaultComponent, Category = "Combat", Attach = "CharacterMesh0", AttachSocket = "WeaponHandSocket")
@@ -18,10 +18,6 @@ class AAuraCharacterBase : AAngelscriptGASCharacter {
 
 	UPROPERTY(DefaultComponent)
 	UMotionWarpingComponent MotionWarping;
-
-	// Name of weapon tip socket
-	UPROPERTY(Category = "Combat")
-	FName WeaponTipSocketName = AuraConst::DefaultWeaponTipSocketName;
 
 	UPROPERTY()
 	uint16 CharacterID;
@@ -40,26 +36,24 @@ class AAuraCharacterBase : AAngelscriptGASCharacter {
 		auto CharacterMap = AuraUtil::GetSDataMgr().CharacterMap;
 		check(CharacterMap.Contains(CharacterID));
 
-		FSDataCharacter SDataCharacter = CharacterMap[CharacterID];
-		ECharacterClass CharacterClass = SDataCharacter.CharacterClass;
-
 		GasModule = Cast<UGasModule>(NewObject(this, UGasModule::StaticClass(), n"UGasModule"));
 		GasModule.Init(this);
 
+		// Startup Gameplay Abilities
+		FSDataCharacter SDataCharacter = CharacterMap[CharacterID];
+		for (auto StartupAbilityClass : SDataCharacter.StartupAbilities) {
+			FGameplayAbilitySpecHandle Handle = GasUtil::GiveAbility(this, StartupAbilityClass);
+		}
+
+		// Startup Gameplay Effects
+		ECharacterClass CharacterClass = SDataCharacter.CharacterClass;
 		FSDataCharacterClass SDataCharacterClass = AuraUtil::GetSDataMgr().CharacterClassMap[CharacterClass];
 		for (auto EffectClass : SDataCharacterClass.AttributeEffects) {
 			GasUtil::ApplyGameplayEffect(this, this, EffectClass);
 		}
-		for (auto StartupAbilityClass : SDataCharacterClass.StartupAbilities) {
-			FGameplayAbilitySpecHandle Handle = GasUtil::GiveAbility(this, StartupAbilityClass);
-		}
 
 		// 玩家和怪物都有的一些 Ability // TODO: 移到 GlobalConfig 里去
 		GasUtil::GiveAbility(this, UAGA_HitReact);
-	}
-
-	FVector GetWeaponSocketLocation() {
-		return Weapon.GetSocketLocation(WeaponTipSocketName);
 	}
 
 	void OnAttributeChanged(const FAngelscriptModifiedAttribute&in AttributeChangeData) {// virtual empty
@@ -174,5 +168,16 @@ class AAuraCharacterBase : AAngelscriptGASCharacter {
 
 	void SetFacingTarget(const FVector& TargetLocation) {
 		MotionWarping.AddOrUpdateWarpTargetFromLocation(n"FacingTarget", TargetLocation);
+	}
+
+	FVector GetSocketLocationByGameplayTag(FGameplayTag GameplayTag) {
+		if (GameplayTag == GameplayTags::Montage_Attack_Weapon) {
+			return Weapon.GetSocketLocation(AuraConst::SocketName_WeaponTip);
+		} else if (GameplayTag == GameplayTags::Montage_Attack_LeftHand) {
+			return Mesh.GetSocketLocation(AuraConst::SocketName_LeftHand);
+		} else if (GameplayTag == GameplayTags::Montage_Attack_RightHand) {
+			return Mesh.GetSocketLocation(AuraConst::SocketName_RightHand);
+		}
+		return FVector::ZeroVector;
 	}
 }

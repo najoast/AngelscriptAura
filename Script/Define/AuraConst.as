@@ -2,7 +2,11 @@ namespace AuraConst {
 	const FActiveGameplayEffectHandle EmptyEffectHandle = FActiveGameplayEffectHandle();
 	const FAngelscriptGameplayAttributeData EmptyAttributeData = FAngelscriptGameplayAttributeData();
 
-	const FName DefaultWeaponTipSocketName = n"TipSocket";
+	const FName SocketName_WeaponTip = n"WeaponTipSocket";
+	const FName SocketName_WeaponTail = n"WeaponTailSocket";
+	const FName SocketName_LeftHand = n"LeftHandSocket";
+	const FName SocketName_RightHand = n"RightHandSocket";
+
 	const FName PlayerTag = n"Player";
 	const FName EnemyTag = n"Enemy";
 

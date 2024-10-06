@@ -6,7 +6,4 @@ struct FSDataCharacterClass {
 
 	UPROPERTY()
 	TArray<TSubclassOf<UGameplayEffect>> AttributeEffects;
-
-	UPROPERTY()
-	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 }
