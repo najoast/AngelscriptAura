@@ -15,9 +15,6 @@ class AAuraProjectile : AActor {
 	default Sphere.SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldStatic, ECollisionResponse::ECR_Overlap);
 	default Sphere.SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Overlap);
 
-	UPROPERTY(DefaultComponent, Attach = SceneRoot)
-	UNiagaraComponent NiagaraComponent;
-
 	UPROPERTY(DefaultComponent)
 	UProjectileMovementComponent ProjectileMovement;
 	default ProjectileMovement.InitialSpeed = AuraConst::ProjectileMaxSpeed;
