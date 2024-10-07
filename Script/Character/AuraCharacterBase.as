@@ -12,7 +12,7 @@ class AAuraCharacterBase : AAngelscriptGASCharacter {
 	// Do not set collision on mesh, keep default collision. (Only use CapsuleComponent for collision)
 	// default Mesh.SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
-	UPROPERTY(DefaultComponent, Category = "Combat", Attach = "CharacterMesh0", AttachSocket = "WeaponHandSocket")
+	UPROPERTY(DefaultComponent, BlueprintReadOnly, Category = "Combat", Attach = "CharacterMesh0", AttachSocket = "WeaponHandSocket")
 	USkeletalMeshComponent Weapon;
 	default Weapon.SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
