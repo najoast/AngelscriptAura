@@ -13,6 +13,8 @@ class UAGA_SpellBase : UAuraGameplayAbility {
 	UPROPERTY(Category = Aura)
 	TSubclassOf<UGameplayEffect> DamageEffectClass;
 
+	default InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+
 	// -------------------- Varibles --------------------
 	TArray<FGameplayTag> AttackMontageKeys;
 	TArray<UAnimMontage> AttackMontageValues;
@@ -70,8 +72,7 @@ class UAGA_SpellBase : UAuraGameplayAbility {
 		}
 
 		UAbilityTask_PlayMontageAndWait MontagePlayTask = AngelscriptAbilityTask::PlayMontageAndWait(this, n"AnimMontage", GetNextAnimMontage());
-		// Also can be triggered with OnCompleted, but this is not the effect we want. So we use AnimNotify instead.
-		// MontagePlayTask.OnCompleted.AddUFunction(this, n"SpawnFireBoltProjectile");
+		MontagePlayTask.OnCompleted.AddUFunction(this, n"OnMontageCompleted");
 		MontagePlayTask.ReadyForActivation();
 
 		UAbilityTask_WaitGameplayEvent WaitGameplayEvent = AngelscriptAbilityTask::WaitGameplayEvent(this, GetCurrentEventTag());
@@ -93,6 +94,11 @@ class UAGA_SpellBase : UAuraGameplayAbility {
 	}
 
 	UFUNCTION()
+	void OnMontageCompleted() {
+		EndAbility();
+	}
+
+	UFUNCTION()
 	protected void OnGameplayEventReceived(FGameplayEventData Payload) {
 		AAuraCharacterBase OwnerCharacter = GetOwnerCharacter();
 		if (OwnerCharacter != nullptr) {
@@ -104,8 +110,6 @@ class UAGA_SpellBase : UAuraGameplayAbility {
 				OwnerCharacter.SetFacingTarget(TargetLocation);
 			}
 		}
-
-		EndAbility();
 	}
 
 	// Cast this spell, override this function to implement the spell

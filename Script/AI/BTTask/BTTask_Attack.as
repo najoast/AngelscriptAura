@@ -1,6 +1,6 @@
 
 class UBTTask_Attack : UBTTask_BlueprintBase {
-	default NodeName = "TestAttack";
+	default NodeName = "Attack";
 
 	UFUNCTION(BlueprintOverride)
 	void ExecuteAI(AAIController OwnerController, APawn ControlledPawn) {
