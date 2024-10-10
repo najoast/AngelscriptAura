@@ -3,7 +3,7 @@ class AAuraCharacter : AAuraCharacterBase {
 	UPROPERTY(DefaultComponent)
 	USpringArmComponent SpringArm;
 	default SpringArm.SetRelativeRotation(FRotator(-45, 0, 0));
-	default SpringArm.TargetArmLength = 450;
+	default SpringArm.TargetArmLength = 850;
 
 	UPROPERTY(DefaultComponent, Attach = "SpringArm")
 	UCameraComponent Camera;
