@@ -4,7 +4,7 @@ class AAuraEnemy : AAuraCharacterBase {
 	UPROPERTY(DefaultComponent)
 	UWidgetComponent HealthBar;
 
-	UPROPERTY()
+	UPROPERTY(Category = Aura)
 	UBehaviorTree BehaviorTree;
 
 	default CapsuleComponent.SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);

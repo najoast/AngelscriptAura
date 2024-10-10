@@ -19,10 +19,10 @@ class AAuraCharacterBase : AAngelscriptGASCharacter {
 	UPROPERTY(DefaultComponent)
 	UMotionWarpingComponent MotionWarping;
 
-	UPROPERTY()
+	UPROPERTY(Category = Aura)
 	uint16 CharacterID;
 
-	UPROPERTY()
+	UPROPERTY(Category = Aura)
 	TSubclassOf<UWidgetComponent> DamageComponentClass;
 
 	// -------------------- Varibles --------------------
