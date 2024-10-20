@@ -1,8 +1,19 @@
 
+struct FAttackCosmetic {
+	UPROPERTY()
+	FGameplayTag AttackMontageTag;
+
+	UPROPERTY()
+	UAnimMontage AttackMontage;
+
+	UPROPERTY()
+	USoundBase ImpactSound;
+}
+
 class UAGA_SpellBase : UAuraGameplayAbility {
 	// -------------------- Properties --------------------
 	UPROPERTY(Category = Aura)
-	TMap<FGameplayTag, UAnimMontage> AttackMontageMap;
+	TArray<FAttackCosmetic> AttackCosmetics;
 
 	UPROPERTY(Category = Aura)
 	EAttackMontageSelectionType AttackMontageSelectionType;
@@ -16,53 +27,75 @@ class UAGA_SpellBase : UAuraGameplayAbility {
 	default InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 
 	// -------------------- Varibles --------------------
-	TArray<FGameplayTag> AttackMontageKeys;
-	TArray<UAnimMontage> AttackMontageValues;
+	// TArray<FGameplayTag> AttackMontageKeys;
+	// TArray<UAnimMontage> AttackMontageValues;
 	// TODO: Fix void GetValues(TArray<K>& OutValues) in Bind_TMap.cpp, this should be TArray<V> (Request a PR)
 	// default AttackMontageMap.GetKeys(AttackMontageKeys);
 	// default AttackMontageMap.GetValues(AttackMontageValues);
-	int AttackMontageIndex = 0;
+	int AttackCosmeticIndex = 0;
 
 	// -------------------- Functions --------------------
 
 	UAnimMontage GetNextAnimMontage() {
-		if (AttackMontageValues.Num() == 0) {
-			check(AttackMontageMap.Num() > 0);
-			for (auto& KeyValue : AttackMontageMap) {
-				AttackMontageKeys.Add(KeyValue.Key);
-				AttackMontageValues.Add(KeyValue.Value);
-			}
-		}
-
-		int NumOfValues = AttackMontageValues.Num();
-		if (NumOfValues == 1) {
-			return AttackMontageValues[0];
+		int NumOfCosmetics = AttackCosmetics.Num();
+		if (NumOfCosmetics == 1) {
+			return AttackCosmetics[0].AttackMontage;
 		}
 
 		// Select the next montage
 		int NextIndex = 0;
 		switch (AttackMontageSelectionType) {
 			case EAttackMontageSelectionType::Random:
-				NextIndex = Math::RandRange(0, NumOfValues - 1);
+				NextIndex = Math::RandRange(0, NumOfCosmetics - 1);
 				break;
 			case EAttackMontageSelectionType::Iterative:
-				NextIndex = (AttackMontageIndex + 1) % NumOfValues;
+				NextIndex = (AttackCosmeticIndex + 1) % NumOfCosmetics;
 				break;
 			default:
 				check(false);
 				break;
 		}
 
-		AttackMontageIndex = NextIndex;
-		return AttackMontageValues[NextIndex];
+		AttackCosmeticIndex = NextIndex;
+		return AttackCosmetics[NextIndex].AttackMontage;
+	}
+
+	FAttackCosmetic SelectNextAttackCosmetic() {
+		int NumOfCosmetics = AttackCosmetics.Num();
+		if (NumOfCosmetics == 1) {
+			return AttackCosmetics[0];
+		}
+
+		int NextIndex = 0;
+		switch (AttackMontageSelectionType) {
+			case EAttackMontageSelectionType::Random:
+				NextIndex = Math::RandRange(0, NumOfCosmetics - 1);
+				break;
+			case EAttackMontageSelectionType::Iterative:
+				NextIndex = (AttackCosmeticIndex + 1) % NumOfCosmetics;
+				break;
+			default:
+				check(false);
+				break;
+		}
+
+		AttackCosmeticIndex = NextIndex;
+		return AttackCosmetics[AttackCosmeticIndex];
+	}
+
+	FAttackCosmetic GetCurrentAttackCosmetic() {
+		if (AttackCosmetics.Num() == 1) {
+			return AttackCosmetics[0];
+		}
+		return AttackCosmetics[AttackCosmeticIndex];
 	}
 
 	FGameplayTag GetCurrentEventTag() {
-		if (AttackMontageKeys.Num() == 1) {
-			return AttackMontageKeys[0];
-		}
+		return GetCurrentAttackCosmetic().AttackMontageTag;
+	}
 
-		return AttackMontageKeys[AttackMontageIndex];
+	USoundBase GetCurrentImpactSound() {
+		return GetCurrentAttackCosmetic().ImpactSound;
 	}
 
 	UFUNCTION(BlueprintOverride)
@@ -71,11 +104,13 @@ class UAGA_SpellBase : UAuraGameplayAbility {
 			return;
 		}
 
-		UAbilityTask_PlayMontageAndWait MontagePlayTask = AngelscriptAbilityTask::PlayMontageAndWait(this, n"AnimMontage", GetNextAnimMontage());
+		FAttackCosmetic AttackCosmetic = SelectNextAttackCosmetic();
+
+		UAbilityTask_PlayMontageAndWait MontagePlayTask = AngelscriptAbilityTask::PlayMontageAndWait(this, n"AnimMontage", AttackCosmetic.AttackMontage);
 		MontagePlayTask.OnCompleted.AddUFunction(this, n"OnMontageCompleted");
 		MontagePlayTask.ReadyForActivation();
 
-		UAbilityTask_WaitGameplayEvent WaitGameplayEvent = AngelscriptAbilityTask::WaitGameplayEvent(this, GetCurrentEventTag());
+		UAbilityTask_WaitGameplayEvent WaitGameplayEvent = AngelscriptAbilityTask::WaitGameplayEvent(this, AttackCosmetic.AttackMontageTag);
 		WaitGameplayEvent.EventReceived.AddUFunction(this, n"OnGameplayEventReceived");
 		WaitGameplayEvent.ReadyForActivation();
 
@@ -107,6 +142,10 @@ class UAGA_SpellBase : UAuraGameplayAbility {
 			Rotation.Pitch = 0.f;
 
 			if (CastSpell(Payload, OwnerCharacter, SourceLocation, Rotation)) {
+				USoundBase ImpactSound = GetCurrentImpactSound();
+				if (ImpactSound != nullptr) {
+					Gameplay::PlaySoundAtLocation(GetCurrentImpactSound(), SourceLocation, Rotation);
+				}
 				OwnerCharacter.SetFacingTarget(TargetLocation);
 			}
 		}

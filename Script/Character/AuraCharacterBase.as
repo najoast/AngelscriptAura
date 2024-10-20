@@ -90,6 +90,11 @@ class AAuraCharacterBase : AAngelscriptGASCharacter {
 		
 		// 受击动画
 		TryPlayHitReactMontage();
+		// 受击特效
+		FSDataCharacter SDataCharacter = AuraUtil::GetSDataMgr().CharacterMap[CharacterID];
+		if (SDataCharacter.ImpactEffect != nullptr) {
+			Niagara::SpawnSystemAtLocation(SDataCharacter.ImpactEffect, GetActorLocation(), GetActorRotation());
+		}
 	}
 
 	bool TryPlayHitReactMontage() {

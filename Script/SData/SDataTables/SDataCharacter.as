@@ -25,4 +25,7 @@ struct FSDataCharacter {
 
 	UPROPERTY()
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
+
+	UPROPERTY()
+	UNiagaraSystem ImpactEffect; // Effects after being hit
 }
